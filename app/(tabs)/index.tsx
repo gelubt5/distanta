@@ -1,7 +1,9 @@
-import { StyleSheet, View, Platform, Text, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Platform, Text, ActivityIndicator, Linking, Alert, BackHandler } from 'react-native';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system/legacy';
-import { useEffect, useState } from 'react';
+// import * as MediaLibrary from 'expo-media-library'; // Uncomment when building standalone app for saving to gallery
+import * as Location from 'expo-location';
+import { useEffect, useState, useRef } from 'react';
 
 // All web assets that need to be copied
 const webAssets: Record<string, any> = {
@@ -56,16 +58,106 @@ export default function HomeScreen() {
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState<string>('Initializing...');
   const [showSpinner, setShowSpinner] = useState(false);
+  const webViewRef = useRef<any>(null);
 
   // Handle messages from WebView
-  const handleWebViewMessage = (event: any) => {
+  const handleWebViewMessage = async (event: any) => {
     const message = event.nativeEvent.data;
     if (message === 'showSpinner') {
       setShowSpinner(true);
     } else if (message === 'hideSpinner') {
       setShowSpinner(false);
+    } else if (message.startsWith('createFolder:')) {
+      // Create folder in app's document directory
+      // Note: For saving to device's public Pictures folder, use MediaLibrary when saving actual files
+      const folderPath = message.replace('createFolder:', '');
+      const fullPath = FileSystem.documentDirectory + folderPath;
+      try {
+        const dirInfo = await FileSystem.getInfoAsync(fullPath);
+        if (!dirInfo.exists) {
+          await FileSystem.makeDirectoryAsync(fullPath, { intermediates: true });
+          console.log('Created folder:', fullPath);
+        } else {
+          console.log('Folder already exists:', fullPath);
+        }
+      } catch (err) {
+        console.error('Failed to create folder:', folderPath, err);
+      }
+    } else if (message.startsWith('openUrl:')) {
+      // Open URL in external browser/app
+      const url = message.replace('openUrl:', '');
+      try {
+        await Linking.openURL(url);
+      } catch (err) {
+        console.error('Failed to open URL:', url, err);
+      }
+    } else if (message === 'checkGPS') {
+      // Check if location services are enabled and request permission
+      try {
+        const enabled = await Location.hasServicesEnabledAsync();
+        if (!enabled) {
+          Alert.alert(
+            'GPS Required',
+            'Please enable GPS/Location services to use this app.',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Open Settings', onPress: () => Linking.openSettings() }
+            ]
+          );
+          return;
+        }
+        
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert(
+            'Permission Required',
+            'Location permission is required to use this app.',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Open Settings', onPress: () => Linking.openSettings() }
+            ]
+          );
+        } else {
+          console.log('Location permission granted');
+        }
+      } catch (err) {
+        console.error('Failed to check GPS:', err);
+      }
+    } else if (message === 'showExitDialog') {
+      // Show exit confirmation dialog
+      Alert.alert(
+        'Exit App?',
+        'Are you sure you want to exit?',
+        [
+          { text: 'No', style: 'cancel' },
+          { text: 'Yes', onPress: () => BackHandler.exitApp() }
+        ]
+      );
     }
   };
+
+  // Handle Android hardware back button
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      const backAction = () => {
+        // Inject JavaScript to trigger back navigation in WebView
+        if (webViewRef.current) {
+          webViewRef.current.injectJavaScript(`
+            if (typeof goBack === 'function') {
+              goBack();
+            } else {
+              history.back();
+            }
+            true;
+          `);
+        }
+        return true; // Prevent default back behavior
+      };
+
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+      return () => backHandler.remove();
+    }
+  }, []);
 
   useEffect(() => {
     if (Platform.OS !== 'web') {
@@ -166,6 +258,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <WebView
+        ref={webViewRef}
         source={{ uri: webDir + 'distanta.html' }}
         style={styles.webview}
         originWhitelist={['*']}

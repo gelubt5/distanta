@@ -63,26 +63,38 @@
 
   </script>
   <script>
-   
-    
-  
-
-    // var path2 = app.GetSpecialFolder("Pictures") + "/" + "Locations";
-    // if (!app.FolderExists(path2))
-    //   app.MakeFolder(path2);
-    // var path2 = app.GetSpecialFolder("Pictures") + "/" + "Routes";
-    // if (!app.FolderExists(path2))
-    //   app.MakeFolder(path2);
+    // Create Pictures/Locations and Pictures/Routes folders in app device
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage('createFolder:Pictures/Locations');
+      window.ReactNativeWebView.postMessage('createFolder:Pictures/Routes');
+    }
   </script>
 
   <script>
-    // function activeazagpsul() {
-    //   var locEnabled = app.IsLocationEnabled('GPS');
-    //   if (locEnabled == true) {
-    //   } else {
-    //     alert('Activeaza GPS-ul');
-    //   }
-    // }
+    // Check if GPS/Location is enabled and prompt user to activate it
+    function activeazagpsul() {
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage('checkGPS');
+      } else {
+        // Fallback for web - try to get location
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            function(position) {
+              console.log('GPS is enabled');
+            },
+            function(error) {
+              if (error.code === error.PERMISSION_DENIED) {
+                alert('Please enable GPS/Location services');
+              }
+            }
+          );
+        } else {
+          alert('Geolocation is not supported by this browser');
+        }
+      }
+    }
+    // Check GPS on page load
+    activeazagpsul();
     function reset() {
       $('#email').val("");
       $('#parola').val("");
@@ -694,9 +706,9 @@
           <ul style='font-size:17px;'>
             <li>
 
-              <!-- <a style="display:block;width:100%;" class="waves-effect waves-light btn"
-                onclick="app.OpenUrl('https://chat.whatsapp.com/JZReZyZwpmo4qq7JO5bKmZ');return false;">
-                <script> -->
+              <a style="display:block;width:100%;" class="waves-effect waves-light btn"
+                onclick="if(window.ReactNativeWebView){window.ReactNativeWebView.postMessage('openUrl:https://chat.whatsapp.com/JZReZyZwpmo4qq7JO5bKmZ');}else{window.open('https://chat.whatsapp.com/JZReZyZwpmo4qq7JO5bKmZ','_blank');}return false;">
+                <script>
                   document.write(language.whatsappgroup);
                 </script>
               </a>

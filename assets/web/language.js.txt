@@ -236,7 +236,7 @@ var lang = {
     },
     "en":
     {
-        "titlu": "Dist",
+        "titlu": "Distance",
         "footer": "Distance",
         "buton1": "Distance from curent <br />location to another address",
         "buton2": "Distance between two addresses",

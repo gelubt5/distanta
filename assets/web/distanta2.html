@@ -3,7 +3,7 @@
 <head>
 	<title>Distanta</title>
 	<meta name="viewport" content="width=device-width">
-	<script src='file:///android_asset/app.js'></script>
+	
 	<!-- Compiled and minified CSS -->
 	<link href="font.css" rel="stylesheet">
 	<link rel="stylesheet" href="materialize.min.css">
@@ -18,7 +18,7 @@
 		//   location.reload();alert();
 		//   return false;
 		// });
-		app.HideProgress();
+		//app.HideProgress();
 		var that = new XMLHttpRequest();
 		that.open('GET', 'http://google.com', false);
 		try {
@@ -28,9 +28,7 @@
 				alert("Nu esti conectat la internet!!!");
 			}
 		}
-		app.SetOnError(function () {
-
-		});
+		
 
 	</script>
 
@@ -48,26 +46,27 @@
 		}
 	</script>
 	<script>
-		function OnStart() {
-			app.EnableBackKey(false);
-		}
-		app.SetOnKey(OnKey);
-		function yesNo_OnTouch(result) {
-			if (result == "Yes") app.Exit();
-		}
-		function OnKey(action, name, code, extra) {
-			if (code == 4 && action == "Up") {
-				var yesNo = app.CreateYesNoDialog("Exit App?");
-				yesNo.SetOnTouch(yesNo_OnTouch);
-				yesNo.Show();
+		// Handle back button - show exit confirmation dialog
+		function exit() {
+			if (window.ReactNativeWebView) {
+				window.ReactNativeWebView.postMessage('showExitDialog');
+			} else {
+				if (confirm("Exit App?")) {
+					window.close();
+				}
 			}
 		}
-		function exit() {
-			var yesNo = app.CreateYesNoDialog("Exit App?");
-			yesNo.SetOnTouch(yesNo_OnTouch);
-			yesNo.Show();
-		}
-
+		
+		// Disable default back behavior and show exit dialog
+		window.addEventListener('popstate', function(event) {
+			event.preventDefault();
+			exit();
+			// Push state again to prevent actual navigation
+			history.pushState(null, null, window.location.href);
+		});
+		
+		// Push initial state to enable popstate handling
+		history.pushState(null, null, window.location.href);
 	</script>
 	<script>
 
@@ -88,12 +87,26 @@
 	</script>
 	<script>
 		function activeazagpsul() {
-			var locEnabled = app.IsLocationEnabled('GPS');
-			if (locEnabled == true) {
-			} else {
-				alert(language.activeazagpsul);
-			}
-		}
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage('checkGPS');
+      } else {
+        // Fallback for web - try to get location
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            function(position) {
+              console.log('GPS is enabled');
+            },
+            function(error) {
+              if (error.code === error.PERMISSION_DENIED) {
+                alert('Please enable GPS/Location services');
+              }
+            }
+          );
+        } else {
+          alert('Geolocation is not supported by this browser');
+        }
+      }
+    }
 
 		function logare() {
 			var email = localStorage.getItem("email");
@@ -496,7 +509,7 @@
 	</script>
 </head>
 
-<body style="background-color:white;" onload="app.Start();activeazagpsul();detaliicont();">
+<body style="background-color:white;" onload="activeazagpsul();detaliicont();">
 	<div id="fb-root"></div>
 	<nav class="light-blue lighten-3 ">
 		<div class="nav-wrapper">
