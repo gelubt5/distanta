@@ -1,0 +1,1148 @@
+<html>
+
+<head>
+
+    <title>Mobile tutorial - Leaflet</title>
+    <script src='file:///android_asset/app.js'></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="leaflet.css" />
+    <script src="leaflet.js"></script>
+    <link rel="stylesheet" href="Control.Geocoder.css" />
+    <script src="Control.Geocoder.js"></script>
+    <script src="language.js"></script>
+    <link href="font.css" rel="stylesheet">
+    <link rel="stylesheet" href="materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+    <script src="dom-to-image.min.js"></script>
+    <script>
+        //  window.addEventListener("error", function (e) {
+        //   location.reload();alert();
+        //   return false;
+        // });
+        var that = new XMLHttpRequest();
+        that.open('GET', 'http://google.com', false);
+        try {
+            that.send();
+        } catch (exception) {
+            if (exception.name == 'NetworkError') {
+                alert("Nu esti conectat la internet!!!");
+            }
+        }
+        app.SetOnError(function () {
+            // window.location.href = "locatiacurenta.html";
+        });
+        function playbeep() {
+            var x = document.getElementById("myAudio");
+            x.currentTime = 0;
+            x.volume = 0.05;
+            x.play();
+        }
+    </script>
+    <script src="materialize.min.js"></script>
+    <script>
+        var selectedLanguage = localStorage.getItem('lang');
+        var language = "";
+        if (selectedLanguage == "ro") {
+            language = lang.ro;
+        }
+        if (selectedLanguage == "en") {
+            language = lang.en;
+        }
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        #map {
+            width: 600px;
+            height: 400px;
+        }
+    </style>
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        #map {
+            height: 100%;
+            width: 100vw;
+        }
+
+        .brand-logo2 {
+            color: #fff;
+            display: inline-block;
+            font-size: 2.1rem;
+            padding: 0;
+            text-align: center;
+        }
+
+        #header2 {
+            display: none;
+            margin: 0px;
+        }
+
+        #header3 {
+            display: none;
+            margin: 0px;
+        }
+
+        #header4 {
+            display: none;
+            margin: 0px;
+        }
+
+        #header5 {
+            display: none;
+            margin: 0px;
+        }
+
+        .button {
+            background-color: #26A69A;
+            /* Green */
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
+            width: 100%;
+            height: 10%;
+        }
+
+        .titlu {
+            /* Green */
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+        }
+
+        .alertw3 {
+            padding: 5px;
+            background-color: #2FB886;
+            color: white;
+            margin-bottom: 15px;
+            border: 3px solid white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn-large {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+    <script>
+
+        app.SetOnKey(OnKey);
+        function OnKey(action, name, code, extra) {
+            if (code == 4 && action == "Up") {
+                playbeep();
+                setTimeout(function () {
+                    window.history.back();
+                }, 350);
+            }
+        }  
+    </script>
+    <script>
+        function activeazagpsul() {
+            var locEnabled = app.IsLocationEnabled('GPS');
+            if (locEnabled == true) {
+            } else {
+                alert(language.activeazagpsul);
+                window.history.back();
+            }
+        }
+        function goforward() {
+            $('.btn').sideNav('hide');
+            loc2 = app.CreateLocator("GPS");
+            loc2.SetOnChange(function (pos) {
+                localStorage.setItem("lat6", pos.latitude);
+                localStorage.setItem("lng6", pos.longitude);
+                loc2.Stop();
+                window.location.href = "locatiacurenta.html";
+            });
+            loc2.SetRate(1);
+            loc2.Start();
+        }
+
+        function salveazalocatia() {
+            var locatia = prompt(language.introdunumelelocatiei);
+            if (locatia != null) {
+                $(document).ready(function () {
+                    var lat = localStorage.getItem("lat6");
+                    var lng = localStorage.getItem("lng6");
+                    var email = localStorage.getItem("email");
+                    var parola = localStorage.getItem("parola");
+                    $.post("https://evidentacolumbofila.eu/public/salveazalocatiadistanta", { "email": email, "parola": parola, "lat": lat, "lng": lng, "locatia": locatia, "cheie": localStorage.getItem("cheie") }, function (data, status) {
+                        //alert(locatia);
+                        var data2 = JSON.parse(data);
+                        if (data2[0] == 1) {
+
+                            alert(language.salvarereusita);
+                        } else {
+                            if (data2[2] == -2) {
+                                var alert2 = language.utilizatorulnuexista;
+                            }
+                            if (data2[2] == -1) {
+                                var alert2 = language.continactiv;
+                            }
+                            if (data2[2] == 1) {
+                                var alert2 = language.rutaintrodusaexistadeja;
+                            }
+                            if (data2[2] == 2) {
+                                var alert2 = language.eroare21;
+                            }
+                            if (data2[2] == 3) {
+                                var alert2 = language.eroare22;
+                            }
+
+                            if (data2[2] == 5) {
+                                var alert2 = language.eroarelabazadedate;
+                            }
+
+                            alert(alert2);
+                        }
+                    }).fail(function (data) {
+
+
+                        console.log(data.responseJSON["error"]);
+                        if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
+                            alert(language.nuestilogat);
+                            window.location.href = "_main_.html";
+                        } else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
+                            alert(language.nuestilogat);
+                            window.location.href = "_main_.html";
+                        } else {
+                            alert(language.eroare);
+                        }
+                    });
+                });
+
+
+            } else {
+                alert(language.actiuneanulata);
+            }
+            return false;
+        }
+
+
+        function ddToDms(lat, lng) {
+
+            var lat = lat;
+            var lng = lng;
+            var latResult, lngResult, dmsResult;
+
+            // Make sure that you are working with numbers.
+            // This is important in case you are working with values
+            // from input text in HTML.
+            lat = parseFloat(lat);
+            lng = parseFloat(lng);
+
+            // Check the correspondence of the coordinates for latitude: North or South.
+            latResult = (lat >= 0) ? 'N' : 'S';
+
+            // Call to getDms(lat) function for the coordinates of Latitude in DMS.
+            // The result is stored in latResult variable.
+            latResult += getDms(lat);
+
+            // Check the correspondence of the coordinates for longitude: East or West.
+            lngResult = (lng >= 0) ? 'E' : 'W';
+
+            // Call to getDms(lng) function for the coordinates of Longitude in DMS.
+            // The result is stored in lngResult variable.
+            lngResult += getDms(lng);
+
+            // Joining both variables and separate them with a space.
+            dmsResult = latResult + ' ' + lngResult;
+
+            // Return the resultant string.
+            return dmsResult;
+        }
+
+        // Function that converts DMS to DD.
+        // Taking as example the value -40.601203.
+        function getDms(val) {
+
+            // Required variables
+            var valDeg, valMin, valSec, result;
+
+            // Here you'll convert the value received in the parameter to an absolute value.
+            // Conversion of negative to positive.
+            // In this step does not matter if it's North, South, East or West,
+            // such verification was performed earlier.
+            val = Math.abs(val); // -40.601203 = 40.601203
+
+            // ---- Degrees ----
+            // Stores the integer of DD for the Degrees value in DMS
+            valDeg = Math.floor(val); // 40.601203 = 40
+
+            // Add the degrees value to the result by adding the degrees symbol "º".
+            result = valDeg + "º"; // 40º
+
+            // ---- Minutes ----
+            // Removing the integer of the inicial value you get the decimal portion.
+            // Multiply the decimal portion by 60.
+            // Math.floor returns an integer discarding the decimal portion.
+            // ((40.601203 - 40 = 0.601203) * 60 = 36.07218) = 36
+            valMin = Math.floor((val - valDeg) * 60); // 36.07218 = 36
+
+            // Add minutes to the result, adding the symbol minutes "'".
+            result += valMin + "'"; // 40º36'
+
+            // ---- Seconds ----
+            // To get the value in seconds is required:
+            // 1º - removing the degree value to the initial value: 40 - 40.601203 = 0.601203;
+            // 2º - convert the value minutes (36') in decimal ( valMin/60 = 0.6) so
+            // you can subtract the previous value: 0.601203 - 0.6 = 0.001203;
+            // 3º - now that you have the seconds value in decimal,
+            // you need to convert it into seconds of degree.
+            // To do so multiply this value (0.001203) by 3600, which is
+            // the number of seconds in a degree.
+            // You get 0.001203 * 3600 = 4.3308
+            // As you are using the function Math.round(),
+            // which rounds a value to the next unit,
+            // you can control the number of decimal places
+            // by multiplying by 1000 before Math.round
+            // and subsequent division by 1000 after Math.round function.
+            // You get 4.3308 * 1000 = 4330.8 -> Math.round = 4331 -> 4331 / 1000 = 4.331
+            // In this case the final value will have three decimal places.
+            // If you only want two decimal places
+            // just replace the value 1000 by 100.
+            valSec = Math.round((val - valDeg - valMin / 60) * 3600 * 1000) / 1000; // 40.601203 = 4.331 
+
+            // Add the seconds value to the result,
+            // adding the seconds symbol " " ".
+            result += valSec + '"'; // 40º36'4.331"
+
+            // Returns the resulting string.
+            return result;
+        }
+
+        function exit() {
+            var yesNo = app.CreateYesNoDialog("Exit App?");
+            yesNo.SetOnTouch(yesNo_OnTouch);
+            yesNo.Show();
+        }
+        function yesNo_OnTouch(result) {
+            if (result == "Yes") app.Exit();
+        }
+
+        window["locnume"] = "";
+        if (localStorage.getItem("lat6") != "0" && localStorage.getItem("lng6") != "0") {
+            //lat2=localStorage.getItem("lat20"); 
+            //ng2=localStorage.getItem("lng20");
+            window["lat2"] = localStorage.getItem("lat6");
+            window["lng2"] = localStorage.getItem("lng6");
+        }
+        if (localStorage.getItem("lat42") != "0" && localStorage.getItem("lng42") != "0") {
+            //lat2=localStorage.getItem("lat20"); 
+            //ng2=localStorage.getItem("lng20");
+            window["lat2"] = localStorage.getItem("lat42");
+            window["lng2"] = localStorage.getItem("lng42");
+            window["numeloc"] = localStorage.getItem("numeloc");
+        }
+
+        function deschidegmaps() {
+            var url = "http://maps.google.com/maps?q=" + window["lat2"] + "," + window["lng2"];
+
+            app.OpenUrl(url);
+            //app.SendIntent("com.google.android.apps.maps",null,"android.intent.action.VIEW","android.intent.category.DEFAULT","geo:0,0?q=" + window["latadr"]+","+window["lngadr"]);
+        }
+        function copiazaurlmap() {
+            app.SendText("http://maps.google.com/maps?q=" + window["lat2"] + "," + window["lng2"], "", "Choose an app");
+        }
+        function sharelocationcoord() {
+            app.SendText("" + window["lat2"] + "," + window["lng2"], "", "Choose an app");
+        }
+
+        function sharelocation() {
+            app.SendText("https://da.me/coordonatelelocatiei2/" + window["lat2"] + "/" + window["lng2"], "", "Choose an app");
+        }
+
+    </script>
+</head>
+
+<body onload="app.Start();">
+    <audio id="myAudio">
+        <source src="Snd/a.ogg" type="audio/ogg">
+    </audio>
+    <div class="center hide-on-small-and-down">
+        <table>
+            <tr>
+                <td class="alertw3">
+                    <div id="location1" class="text-white">
+                    </div>
+                </td>
+                <td class="alertw3">
+                    <a href="#" class="dropdown-button right orange darken-4 btn" style="height:100%;"
+                        data-activates='dropdown1'><i class="material-icons">menu</i></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="center hide-on-med-and-up">
+        <table>
+            <tr>
+                <td class="alertw3">
+                    <div id="location2" class="text-white">
+                    </div>
+                </td>
+                <td class="alertw3">
+                    <a href="#" class="dropdown-button right orange darken-4 btn" style="height:100%;"
+                        data-activates='dropdown2'><i class="material-icons">menu</i></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- <div id="header2" class="alertw3">
+        <div class="center  hide-on-small-and-down">
+            <div id="localitate" class="text-white"></div>
+        </div>
+        <div class="center hide-on-med-and-up">
+            <div id="localitate2" class="text-white"></div>
+        </div>
+    </div>
+    <div id="header3" class="alertw3">
+        <div class="center  hide-on-small-and-down">
+            <div id="localitate3" class="text-white"></div>
+        </div>
+        <div class="center hide-on-med-and-up">
+            <div id="localitate4" class="text-white"></div>
+        </div>
+    </div>
+    <div id="header4" class="alertw3">
+        <div class="center  hide-on-small-and-down">
+            <div id="localitate5" class="text-white"></div>
+        </div>
+        <div class="center hide-on-med-and-up">
+            <div id="localitate6" class="text-white"></div>
+        </div>
+    </div>
+    <div id="header5" class="alertw3">
+        <div class="center  hide-on-small-and-down">
+            <div id="localitate7" class="text-white"></div>
+        </div>
+        <div class="center hide-on-med-and-up">
+            <div id="localitate8" class="text-white"></div>
+        </div>
+    </div> -->
+
+
+
+    <ul id='dropdown1' class='dropdown-content' style='margin-left:10px'>
+        <li><a href="distanta2.html">
+                <script>document.write(language.buton9);</script></a>
+        </li>
+        <li><a onclick="map.fitBounds(feature.getBounds(), { padding: [20, 20] });map.setZoom(10)">
+                <script>document.write(language.centreazaharta);</script></a>
+        </li>
+        <li> <a href="#" data-activates="slide-out" class="sidenav-trigger btn2">
+                <script>document.write(language.meniu2);</script></a></li>
+        <li><a href='#' class='' onclick="playbeep();doscreenshot();return false;">
+                <script>document.write(language.doscreenshot);</script></a>
+        </li>
+        <li><a href='#' class='' onclick="playbeep();openlastscreenshoot();return false;">
+                <script>document.write(language.openlastscreenshoot);</script></a></li>
+        <li><a href='#' class='' onclick="playbeep();shareroutscreenshoot();return false;">
+                <script>document.write(language.openroutesfolder);</script></a>
+        </li>
+        <li><a href='#' class='' onclick="playbeep();listarutesalvate();return false;">
+                <script>document.write(language.listarutesalvate);</script></a>
+        </li>
+    </ul>
+    <ul id='dropdown2' class='dropdown-content'>
+        <li><a href="distanta2.html">
+                <script>document.write(language.buton9);</script></a>
+        </li>
+        <li><a onclick="map.fitBounds(feature.getBounds(), { padding: [20, 20] });map.setZoom(10)">
+                <script>document.write(language.centreazaharta);</script></a>
+        </li>
+        <li> <a href="#" data-activates="slide-out" class="sidenav-trigger btn2">
+                <script>document.write(language.meniu2);</script></a></li>
+        <li> <a href="#" onclick="return salveazalocatia();" class="">
+                <script>document.write(language.salveazalocatia);</script></a></li>
+        <li><a href='#' class='' onclick="deschidegmaps();">
+                <script>document.write(language.deschideingooglemaps);</script>
+        </li>
+        <li><a href='#' class='' onclick="copiazaurlmap();return false;">
+                <script>document.write(language.sharegooglemaplocation);</script>
+        </li>
+        <li><a href='#' class='' onclick="sharelocation();return false;">
+                <script>document.write(language.sharelocation);</script>
+        </li>
+        <li><a href='#' class='' onclick="sharelocationcoord();return false;">
+                <script>document.write(language.sharelocationcoord);</script>
+        </li>
+        <li><a href='#' class='' onclick="playbeep();doscreenshot();return false;">
+                <script>document.write(language.doscreenshot);</script></a>
+        </li>
+        <li><a href='#' class='' onclick="playbeep();openlastscreenshoot();return false;">
+                <script>document.write(language.openlastscreenshoot);</script></a></li>
+        <li><a href='#' class='' onclick="playbeep();shareroutscreenshoot();return false;">
+                <script>document.write(language.ultimaloc);</script></a>
+        </li>
+        <li><a href='#' id='drp1' class='' onclick="playbeep();listarutesalvate();return false;">
+                <script>document.write(language.listalocscreenshot);</script></a>
+        </li>
+    </ul>
+
+    <ul id="slide-out" class="side-nav light-blue lighten-3">
+
+        <div id="container">
+            <div class="section" id="section4">
+                <div class="row">
+
+                    <div class="col s12  m12 l12 xl12">
+                        <p class="waves-effect waves-light titlu orange darken-3">
+                            <script>document.write(language.meniu)</script>
+                            <button class="light-blue lighten-3" onclick="$('.btn').sideNav('hide');return false;"> <i
+                                    class="tiny material-icons">clear</i></button>
+                            &nbsp;&nbsp;&nbsp;<button class="light-blue lighten-3" onclick="exit();"> <i
+                                    class="tiny material-icons">exit_to_app</i></button>
+                        </p>
+                    </div>
+                </div>
+
+
+                <hr />
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="_main_.html">
+                                <script>document.write(language.login)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="distanta2.html">
+                                <script>document.write(language.buton9)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="noutati.html">
+                                <script>document.write(language.noutati)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large"
+                                href="distantadelalocatiacurentalaoadresa.html">
+                                <script>document.write(language.buton4)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="distantadintredouaadrese.html">
+                                <script>document.write(language.buton5)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large modal-trigger" href="#modal1"
+                                onclick="goforward()">
+                                <script>document.write(language.buton6)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="coordonatelelocatiei.html">
+                                <script>document.write(language.buton14)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+                <!--<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large modal-trigger"  href="plandezbor.html">
+							<script>document.write(language.plan)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>-->
+
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="plandezbor.html">
+                                <script>document.write(language.plan)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="locatii.html">
+                                <script>document.write(language.locatii)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="rute.html">
+                                <script>document.write(language.rute)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="contact.html">
+                                <script>document.write(language.contact)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="dmstodd.html">
+                                <script>document.write(language.dmstodd)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <br /><br /><br />
+            </div>
+
+        </div>
+    </ul>
+
+    <script>
+        $(".btn2").sideNav();
+        $(document).ready(function () {
+            // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+            $('.modal').modal({
+                dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                opacity: 0.8, // Opacity of modal background
+            }
+            );
+        });
+
+    </script>
+    <div id="modal1" class="modal" style="width:100%;height:50%;padding-top:30%;">
+        <div class="progress" id="loader" style="width:100%;height:20%;">
+            <div class="indeterminate"></div>
+        </div>
+    </div>
+    <div id="modal2" class="modal"
+        style="width:100%;height:90%;padding-top:10%;overflow-y:auto;overflow-x: scroll !important;">
+
+    </div>
+    <script>
+        $('.dropdown-trigger').dropdown({
+            belowOrigin: false
+        }
+        );
+    </script>
+    <style>
+        .modal-overlayC {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 75%;
+        }
+    </style>
+
+    <div id="simpleModalC" class="modal-overlayC">
+
+        <div style="width:100%;height:50%;background-color:white;">
+            <style>
+                .tdloader {
+                    width: 11%;
+                    height: 11%;
+                }
+            </style>
+            <table id="loadertable" style="width:100%;height:100%;display:block;">
+                <tr>
+                    <td class="tdloader"></td>
+                    <td class="tdloader"></td>
+                    <td class="tdloader"></td>
+                </tr>
+                <tr>
+                    <td class="tdloader"></td>
+                    <td class="tdloader" style="text-align:center;">
+                        <img src="Img/loading.gif" />
+                    </td>
+                    <td class="tdloader"></td>
+                </tr>
+                <tr>
+                    <td class="tdloader"></td>
+                    <td class="tdloader"></td>
+                    <td class="tdloader"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <script>
+        // Get modal element
+        var modalloading = document.getElementById('simpleModalC');
+        // Get close button
+
+
+
+        // Listen for outside click
+        window.addEventListener('click', outsideClick);
+
+        // Open modal
+        function openModal() {
+            modalloading.style.display = 'block';
+        }
+
+        // Close modal
+        function closeModal() {
+            modalloading.style.display = 'none';
+        }
+
+        // Click outside and close
+        function outsideClick(e) {
+            if (e.target == modalloading) {
+                modalloading.style.display = 'none';
+            }
+        }
+    </script>
+    <div id='map' style="position:fixed;"></div>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            localStorage.setItem("lat6", position.coords.latitude);
+            localStorage.setItem("lng6", position.coords.longitude);
+        }
+        getLocation();
+        window["tooltip1"] = [];
+        function gettooltip(latlng, name) {
+            var texttemp = ""; var texttemp2 = ""; var texttemp3 = ""; var texttemp4 = ""; var texttemp5 = "";
+            $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latlng.lat + "," + latlng.lng +
+                "&key=AIzaSyAPi8VTcgjj3U2xF_BBmJaq32f3W96YsUQ", function (data, status) {
+                    var adresa = data;
+
+                    adresa.results[0].address_components.forEach(function (item) {
+                        if (item.types[0] == "locality") {
+                            texttemp = texttemp + item.long_name;
+                            texttemp2 = texttemp2 + item.long_name;
+                            texttemp3 = texttemp3 + item.long_name;
+                            texttemp4 = texttemp4 + item.long_name;
+                            texttemp5 = texttemp5 + item.long_name;
+                        }
+                        if (item.types[0] == "administrative_area_level_2") {
+                            texttemp = texttemp + "," + item.long_name;
+                        }
+                        if (item.types[0] == "administrative_area_level_1") {
+                            texttemp = texttemp + "," + item.long_name;
+                        }
+                        if (item.types[0] == "country") {
+                            texttemp = texttemp + "," + item.long_name;
+                            texttemp2 = texttemp2 + " , " + item.long_name + "<br />Lat: " + latlng.lat + " Long:" + latlng.lng;
+                            texttemp3 = texttemp3 + " , " + item.long_name + "<br />Lat: " + latlng.lat + " <br />Long:" + latlng.lng;
+                            texttemp4 = texttemp4 + " , " + item.long_name + " Lat: " + latlng.lat + " Long:" + latlng.lng;
+                            texttemp5 = texttemp5 + " , " + item.long_name + "<br/>Lat: " + latlng.lat + " Long:" + latlng.lng;
+                        }
+                    });
+                    window[name] = [texttemp, texttemp2, texttemp3, texttemp4, texttemp5];
+                });
+
+        }
+        var latlng = L.latLng(0, 0);
+        var icon = L.marker(latlng);
+        //var icon2 = L.marker(latlng, { draggable: 'true' });
+        var map = L.map('map',{zoomSnap: 0.1}).panTo(latlng).setZoom(15);
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2VsdWJ0NSIsImEiOiJja3RraDFrNngxbHVsMm5wZWtraDN3aG4yIn0.GjYTCP7lP23SC__l-I7wWQ',
+            {
+                maxZoom: 18,
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+                    'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1
+            }).addTo(map);
+
+        var latlng = L.latLng(window["lat2"], window["lng2"]);
+        // var latlng2 = L.latLng(localStorage.getItem("lat3"), localStorage.getItem("lng3"));
+        map.panTo(latlng).setZoom(10);
+        icon.setLatLng(latlng);
+        var cerc = L.circle(latlng, { radius: 10000 }).addTo(map);
+        var feature = L.featureGroup([icon]);
+        feature.addTo(map);
+        // var latlngs2 = [
+        //     [localStorage.getItem("lat2"), localStorage.getItem("lng2")],
+        //     [localStorage.getItem("lat3"), localStorage.getItem("lng3")]
+        // ];
+        // var polyline = L.polyline(latlngs2, { color: 'red' }).addTo(map);
+        // var polyline2 = L.polyline(latlngs2, { color: 'red' }).addTo(map);
+        //icon2.setLatLng(latlng2);
+        //icon2.addTo(map);
+        // map.fitBounds(polyline.getBounds(), { padding: [20, 20] });
+        gettooltip(latlng, "tooltip1");
+        //gettooltip(latlng2, "tooltip2");
+        //icon.bindTooltip("", { permanent: true, offset: [0, 12] });
+        //icon2.bindTooltip("", { permanent: true, offset: [0, 12] });
+        // var dist = latlng.distanceTo(latlng2);
+        // dist = (dist / 1000).toFixed(2) + " km";
+        // $("#distanta").text(dist);
+        // $("#distanta2").text(dist);
+
+        // console.log("dist=" + dist);
+        // var latlng_sear2 = L.latLng(`+posG.latitude+`, `+posG.longitude+`);
+        // var latlng_sear2_2 = L.latLng(`+decodeG.data[0].latitude+`, `+decodeG.data[0].longitude+`);
+        // var dist = latlng_sear2.distanceTo(latlng_sear2_2);
+        // dist = "Distanta " + (dist / 1000).toFixed(2) + " km";
+        // console.log("dist=" + dist);
+        // icon2.on('dragend', function (event) {
+        //     polyline.remove();
+        //     polyline2.remove();
+        //     var pp2 = event.target.getLatLng();
+        //     latlngs22 = [
+        //         [icon.getLatLng().lat, icon.getLatLng().lng],
+        //         [pp2.lat, pp2.lng],
+        //     ];
+        //     polyline = L.polyline(latlngs22, { color: 'red' }).addTo(map);
+        //     polyline2 = L.polyline(latlngs22, { color: 'red' }).addTo(map);
+        //     var km = pp2.distanceTo(icon.getLatLng()) / 1000;
+        //     var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+        //     $("#distanta").text(dist_from_P1_to_P2);
+        //     $("#distanta2").text(dist_from_P1_to_P2);
+        //     map.fitBounds(polyline.getBounds(), { padding: [20, 20] });
+        //     //console.log("func=Second_Page_Http_icon2_dragend=" + pp2.lat + "=" + pp2.lng);
+        //     gettooltip(pp2, "tooltip2");
+        // });
+
+        // icon.on('dragend', function (event) {
+        //     polyline.remove();
+        //     polyline2.remove();
+        //     var pp2 = event.target.getLatLng();
+        //     latlngs22 = [
+        //         [pp2.lat, pp2.lng],
+        //         [icon2.getLatLng().lat, icon2.getLatLng().lng],
+        //     ];
+        //     polyline = L.polyline(latlngs22, { color: 'red' }).addTo(map);
+        //     polyline2 = L.polyline(latlngs22, { color: 'red' }).addTo(map);
+        //     var km = pp2.distanceTo(icon2.getLatLng()) / 1000;
+        //     var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+        //     $("#distanta").text(dist_from_P1_to_P2);
+        //     $("#distanta2").text(dist_from_P1_to_P2);
+        //     map.fitBounds(polyline.getBounds(), { padding: [20, 20] });
+        //     //console.log("func=Second_Page_Http_icon1_dragend=" + pp2.lat + "=" + pp2.lng);
+        //     gettooltip(pp2, "tooltip1");
+        // });
+
+        // icon2.on('drag', function (event) {
+        //     icon2.unbindTooltip();
+        //     polyline2.remove();
+        //     var pp2 = event.target.getLatLng();
+        //     latlngs22 = [
+        //         [icon.getLatLng().lat, icon.getLatLng().lng],
+        //         [pp2.lat, pp2.lng],
+        //     ];
+        //     polyline2 = L.polyline(latlngs22, { color: 'red', stroke: true, dashArray: '20, 20', dashOffset: '0' }).addTo(map);
+        // });
+
+        // icon.on('drag', function (event) {
+        //     icon.unbindTooltip();
+        //     polyline2.remove();
+        //     var pp2 = event.target.getLatLng();
+        //     latlngs22 = [
+        //         [pp2.lat, pp2.lng],
+        //         [icon2.getLatLng().lat, icon2.getLatLng().lng]
+        //     ];
+        //     polyline2 = L.polyline(latlngs22, { color: 'red', stroke: true, dashArray: '20, 20', dashOffset: '0' }).addTo(map);
+        // });
+        $(document).ajaxComplete(function () {
+            icon.unbindTooltip();
+            // icon2.unbindTooltip();
+            icon.bindTooltip(window["tooltip1"][2], { permanent: true, offset: [0, 12] });
+            // icon2.bindTooltip(window["tooltip2"][2], { permanent: true, offset: [0, 12] });
+            $("#location1").html(window["tooltip1"][3]);
+
+
+            $("#location2").html(window["tooltip1"][4] + "<br/>" + ddToDms(window["lat2"], window["lng2"]));
+
+            // $("#localitate3").html(window["tooltip2"][0]);
+            // $("#localitate4").html(window["tooltip2"][0]);
+
+            // $("#localitate5").html(window["tooltip1"][1]);
+            // $("#localitate6").html(window["tooltip1"][1]);
+            // $("#localitate7").html(window["tooltip2"][1]);
+            // $("#localitate8").html(window["tooltip2"][1]);
+        });
+        var sv1 = 0; var vr = 0; var sv2 = 3;
+        if (!app.FolderExists(app.GetSpecialFolder("Pictures") + "/" + "screenshots")) {
+            app.MakeFolder(app.GetSpecialFolder("Pictures") + "/" + "screenshots");
+        }
+        if (app.FolderExists(app.GetSpecialFolder("Pictures") + "/" + "screenshots")) {
+            sv1 = 1;
+        }
+        if (sv1 == 1) {
+            app.CreateFile(app.GetSpecialFolder("Pictures") + "/" + "screenshots" + "/" + "testscreenshot3.jpg", "rw");
+        }
+        if (app.FileExists(app.GetSpecialFolder("Pictures") + "/" + "screenshots" + "/" + "testscreenshot3.jpg")) {
+            localStorage.setItem('adresascreeshot', app.GetSpecialFolder("Pictures") + "/" + "screenshots");
+            sv1 = 2;
+        }
+        if (sv1 < 2) {
+            if (!app.FolderExists(app.GetPrivateFolder("", "external") + "/" + "screenshots")) {
+                app.MakeFolder(app.GetPrivateFolder("", "external") + "/" + "screenshots");
+            }
+            if (app.FolderExists(app.GetPrivateFolder("", "external") + "/" + "screenshots")) {
+                sv2 = 4;
+            }
+            if (sv2 == 4) {
+                app.CreateFile(app.GetPrivateFolder("", "external") + "/" + "screenshots" + "/" + "testscreenshot3.jpg", "rw");
+            }
+            if (app.FileExists(app.GetPrivateFolder("", "external") + "/" + "screenshots" + "/" + "testscreenshot3.jpg")) {
+                localStorage.setItem('adresascreeshot', app.GetPrivateFolder("", "external") + "/" + "screenshots");
+                sv2 = 5;
+            }
+
+        }
+
+        if (sv1 < 2 && sv2 < 5) {
+            localStorage.setItem('adresascreeshot', null);
+        }
+        function listarutesalvate() {
+            if (localStorage.getItem('adresascreeshot') == null) {
+                alert(language.nusuportascreenshotdinaplicatie);
+            } else {
+                var lr = app.ListFolder(localStorage.getItem('adresascreeshot'));
+                var lr3 = new Array();
+                lr.forEach(function (value, index) {
+                    if (value.includes("location")) {
+                        lr3.push(value);
+                    }
+                });
+                var htmllr = "Screensots Folder Location:<br/>" + localStorage.getItem('adresascreeshot') + "<br/><a href='#' class='waves-effect waves-light btn' onclick=\"deschidescrfolder();return false;\">" + language.deschidescrfolder + "</a><br/><br/>Works with Total Commander  , X-plore (tested) ...or try another custom file explorer from google play !!!<br/><hr/><a href='#' class='waves-effect waves-light btn' onclick=\"$('#modal2').modal('close');return false;\">" + language.inchide + "</a><br/><br/><table style='width:100%'><tr><td>Nr.</td><td>" + language.imagine + "</td></tr>";
+                if (lr3.length > 1) {
+                    var lr2 = lr3.sort((a, b) => (a > b ? -1 : 1));
+                } else {
+                    lr2 = lr3;
+                }
+                lr2.forEach(function (value, index) {
+                    htmllr = htmllr + "<tr><td>" + (index + 1) + "</td><td >" + value + "</td><td></tr><tr><td colspan='2'><div style='display: flex;'><div style='width:30%;'>" + "<a data-value='" + value + "' class='sharee2 waves-effect waves-light btn'  href='#' >" + language.openscreenshot + "</a></div>" + "<div style='width:30%;margin-left:3%'><a data-value='" + value + "' class='sharee waves-effect waves-light btn'  href='#' >" + language.share + "</a></div>" + "<div style='width:30%;margin-left:3%'><a data-value='" + value + "' class='deletero waves-effect waves-light btn'  href='#' >" + language.deletero + "</a></div></div></td></tr><tr><td colspan='2'><hr /></td></tr>";
+                });
+                console.log(lr2);
+                htmllr = htmllr + "</table>";
+                document.getElementById("modal2").innerHTML = htmllr;
+
+                var elements = document.getElementsByClassName("sharee");
+
+                var myFunction = function () {
+                    var attribute = this.getAttribute("data-value");
+                    playbeep(); alert(attribute); app.SendImage(localStorage.getItem('adresascreeshot') + "/" + attribute);
+                };
+
+                for (var i = 0; i < elements.length; i++) {
+                    elements[i].addEventListener('click', myFunction, false);
+                }
+                var elements2 = document.getElementsByClassName("sharee2");
+
+                var myFunction2 = function () {
+                    var attribute = this.getAttribute("data-value");
+                    playbeep(); alert(attribute); app.OpenFile(localStorage.getItem('adresascreeshot') + "/" + attribute, "image/jpeg", "Choose Editor");
+                };
+
+                for (var i = 0; i < elements2.length; i++) {
+                    elements2[i].addEventListener('click', myFunction2, false);
+                }
+                var elements3 = document.getElementsByClassName("deletero");
+
+                var myFunction3 = function () {
+                    var attribute = this.getAttribute("data-value");
+                    playbeep(); alert(attribute); app.DeleteFile(localStorage.getItem('adresascreeshot') + "/" + attribute);
+                    if (app.FileExists(localStorage.getItem('adresascreeshot') + "/" + attribute))
+                        alert("File was not deleted!");
+
+                    else
+                        alert("File was deleted!");
+                    $('#modal2').modal('close');
+                    setTimeout(function () { document.getElementById('drp1').click(); }, 500);
+                };
+
+                for (var i = 0; i < elements3.length; i++) {
+                    elements3[i].addEventListener('click', myFunction3, false);
+                }
+                $('#modal2').modal('open');
+            }
+        }
+        function deschidescrfolder() {
+            if (sv1 == 2) {
+                app.OpenFile(localStorage.getItem("adresascreeshot"), "resource/folder", "Choose");
+            } else {
+                if (sv2 == 5) {
+                    app.OpenFile(localStorage.getItem("adresascreeshot"), "resource/folder", "Choose");
+                }
+            }
+
+        }
+        function shareroutscreenshoot() {
+            if (localStorage.getItem('adresascreeshot') == null) {
+                alert(language.nusuportascreenshotdinaplicatie);
+            } else {
+                app.SendImage(localStorage.getItem("lastlocation"));
+            }
+        }
+        function openlastscreenshoot() {
+            if (localStorage.getItem('adresascreeshot') == null) {
+                alert(language.nusuportascreenshotdinaplicatie);
+            } else {
+                app.OpenFile(localStorage.getItem("lastlocation"), "image/jpeg", "Choose Editor");
+            }
+        }
+        function doscreenshot() {
+            if (localStorage.getItem('adresascreeshot') == null) {
+                alert(language.nusepoatefacescrenshot);
+            } else {
+                //   var dt = new Date();      
+                //   var path = app.GetSpecialFolder( "Pictures" )+"/Routes/"+dt.toISOString().replaceAll(":","")+".png";              
+                //  setTimeout(function(){ app.ScreenShot(path);   alert(language.efectuat + "\n" + path); app.OpenFile( path , "image/jpeg", "Choose Editor" );},500);
+                //  setTimeout(function(){    
+                // domtoimage.toJpeg(document.body)
+                // .then(function (dataUrl) {
+                //      var dt = new Date(); 
+                //     var path = app.GetSpecialFolder( "Pictures" )+"/Routes/"+dt.toISOString().replaceAll(":","")+".jpg";
+                //     img = app.CreateImage( null,.3,.15);
+                //     img.SetPixelData(dataUrl );
+                //     img.Save(path);
+                //     //app.WriteFile(path,dataUrl);
+                //     alert(language.efectuat + "\n" + path);
+                //     app.OpenFile( path , "image/jpeg", "Choose Editor" );
+                //     //   $.post("https://evidentacolumbofila.eu/public/save_jpgd",{datad:dataUrl}, function(data, status){
+                //     //  // alert("Data: " + data + "\nStatus: " + status);
+                //     //  app.SendFile(data,"AAA","AAA","AAA");
+                //     //   });
+                // });
+                //  },500);
+
+                setTimeout(function () {
+                    const node = document.body;
+                    const scale = 3000 / node.offsetWidth;
+                    this.shot_loading = true;
+
+                    domtoimage
+                        .toJpeg(node, {
+                            height: node.offsetHeight * scale,
+                            width: node.offsetWidth * scale,
+                            style: {
+                                transform: "scale(" + scale + ")",
+                                transformOrigin: "top left",
+                                width: node.offsetWidth + "px",
+                                height: node.offsetHeight + "px"
+                            }
+                        })
+                        .then(dataUrl => {
+                            $.get("https://evidentacolumbofila.eu/public/dt", function (data, status) {
+                                dt = new Date(parseInt(data) * 1000);
+                                console.log(dt + "-" + data);
+                                var path = localStorage.getItem('adresascreeshot') + "/" + "location_" + formatDate(dt) + ".jpg";
+                                localStorage.setItem("lastlocation", path);
+                                // var path2 = app.GetPrivateFolder("", "external") + "/" + "Locations";
+                                // if (!app.FolderExists(path2))
+                                //     app.MakeFolder(path2);
+                                img = app.CreateImage(null, .3, .15);
+                                img.SetPixelData(dataUrl);
+                                img.Save(path);
+                                
+                                   while (!app.FileExists(path )) {}
+
+                                   app.ScanFile( path );
+                                //app.WriteFile(path,dataUrl);
+
+                                alert(language.efectuat + "\n" + path);
+                                app.OpenFile(path, "image/jpeg", "Choose Editor");
+                            }).fail(function (data) {
+
+                                alert("Error");
+                            });
+
+
+                        })
+                        .catch(error => {
+                            this.shot_loading = false;
+                            console.error("oops, something went wrong!", error);
+                        });
+                }, 500);
+            }
+        }
+        function padTo2Digits(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        function formatDate(date) {
+            return (
+                [
+                    date.getFullYear(),
+                    padTo2Digits(date.getMonth() + 1),
+                    padTo2Digits(date.getDate()),
+                ].join('_') +
+                '_' +
+                [
+                    padTo2Digits(date.getHours()),
+                    padTo2Digits(date.getMinutes()),
+                    padTo2Digits(date.getSeconds()),
+                ].join('_')
+            );
+        }
+    </script>
+</body>
+
+</html>

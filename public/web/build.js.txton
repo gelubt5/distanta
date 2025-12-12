@@ -1,0 +1,6 @@
+{
+    "manifest": {        
+        "urlHost":"*,*",
+        "urlScheme": "geo,https,http"
+    }
+}

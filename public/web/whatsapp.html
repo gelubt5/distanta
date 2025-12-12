@@ -1,0 +1,380 @@
+<html>
+
+<head>
+
+	<script src='file:///android_asset/app.js'></script>
+	<link href="font.css" rel="stylesheet">
+	<link rel="stylesheet" href="materialize.min.css">
+	<script src="jquery-3.4.1.min.js"></script>
+	<script src="materialize.min.js"></script>
+	<script src="language.js"></script>
+	<script>
+		//  window.addEventListener("error", function (e) {
+		//   location.reload();alert();
+		//   return false;
+		// });
+		var that = new XMLHttpRequest();
+		that.open('GET', 'http://google.com', false);
+		try {
+			that.send();
+		} catch (exception) {
+			if (exception.name == 'NetworkError') {
+				alert("Nu esti conectat la internet!!!");
+			}
+		}
+		app.SetOnError(function (msg, line, file) {
+			// window.location.href="distanta.html";
+			
+		});
+
+	</script>
+	<script>
+		var selectedLanguage = localStorage.getItem('lang');
+		var language = "";
+		if (selectedLanguage == "ro") {
+			language = lang.ro;
+		}
+		if (selectedLanguage == "en") {
+			language = lang.en;
+		}
+	</script>
+	<script>
+   function playbeep() {
+            var x = document.getElementById("myAudio");
+            x.currentTime = 0;
+            x.volume = 0.05;
+            x.play();
+        }
+		app.SetOnKey(OnKey);
+		function OnKey(action, name, code, extra) {
+			if (code == 4 && action == "Up") {
+				playbeep();
+				setTimeout(function () {
+					window.location.href = "distanta2.html";
+				}, 350);
+
+			}
+		}
+		function exit() {
+			var yesNo = app.CreateYesNoDialog("Exit App?");
+			yesNo.SetOnTouch(yesNo_OnTouch);
+			yesNo.Show();
+		}
+		function yesNo_OnTouch(result) {
+			if (result == "Yes") app.Exit();
+		}
+	</script>
+	<script>
+
+		window["raspuns"] = "";
+		function contact() {
+			$(document).ready(function () {
+				var email = localStorage.getItem("email");
+				var parola = localStorage.getItem("parola");
+				$.post("https://evidentacolumbofila.eu/public/whatsappdistanta?email=" + email + "&parola=" + parola, function (data, status) {
+					window["raspuns"] = data;
+					var data2 = JSON.parse(data);
+					if (data2[1] == 0) {
+						if (data2[5] == 1) {
+							var alerta2 = language.utilizatorulnuexista;
+						}
+						if (data2[5] == 2) {
+							var alerta2 = language.continactiv;
+						}
+						if (data2[5] == 4) {
+							var alerta2 = language.eroare;
+						}
+
+
+					}
+					if (data2[1] == 1) {
+						if (localStorage.getItem("lang").includes("en")) {
+
+							$('#body').html(data2[3]);
+						} else {
+							$('#body').html(data2[4]);
+						}
+						//alert(data2[0]);
+					}
+
+				});
+			});
+		}
+
+
+		function goforward() {
+			$('.btn').sideNav('hide');
+			loc2 = app.CreateLocator("GPS");
+			loc2.SetOnChange(function (pos) {
+				localStorage.setItem("lat6", pos.latitude);
+				localStorage.setItem("lng6", pos.longitude);
+				localStorage.setItem("lat42", "0");
+				localStorage.setItem("lng42", "0");
+				loc2.Stop();
+				window.location.href = "locatiacurenta.html";
+			});
+			loc2.SetRate(1);
+			loc2.Start();
+		}
+	</script>
+	<style>
+		.btn {
+			width: 100%;
+			height: auto;
+		}
+
+		.btn-large {
+			width: 100%;
+			height: auto;
+		}
+
+
+
+
+		#section2 {
+			height: 90%;
+			display: block;
+		}
+
+		#section3 {
+			display: block;
+			height: 10%;
+		}
+
+		#section4 {
+			display: block;
+			height: 150%;
+		}
+
+		.button {
+			background-color: #26A69A;
+			/* Green */
+			border: none;
+			color: white;
+			text-align: center;
+			text-decoration: none;
+			display: block;
+			font-size: 18px;
+			width: 100%;
+			height: 15%;
+			margin: auto;
+		}
+
+		.titlu {
+			/* Green */
+			border: none;
+			color: white;
+			text-align: center;
+			text-decoration: none;
+			display: block;
+			font-size: 18px;
+			width: 100%;
+			height: 50px;
+			padding: 10px;
+		}
+	</style>
+</head>
+
+<body onload="app.Start();contact();">
+	<audio id="myAudio">
+		<source src="Snd/a.ogg" type="audio/ogg">
+	</audio>
+	<nav class="light-blue lighten-3 ">
+		<div class="nav-wrapper">
+			<a href="#" class="brand-logo center">
+				<script>document.write(language.titlu)</script></a>
+			<ul class="left">
+				<li> <a href="#" style="width:100px;" data-activates="slide-out"
+						class="sidenav-trigger orange darken-4 btn"><i class="material-icons">menu</i></a></li>
+			</ul>
+			<ul class="right">
+				<li> <a href="#modal1" style="width:100px;" data-activates='dropdown1'
+						class="sidenav-trigger orange darken-4 btn dropdown-button">
+						<i class="material-icons">language</i>
+					</a></li>
+			</ul>
+		</div>
+	</nav>
+	<ul id='dropdown1' class='dropdown-content'>
+		<li><a href="whatsapp.html"
+				onclick="localStorage.setItem('lang','ro');alert('Limba Selectata:Romana');">Romanian</a></li>
+		<li><a href="whatsapp.html"
+				onclick="localStorage.setItem('lang','en');alert('Selected Language:English');">English</a></li>
+	</ul>
+	<ul id="slide-out" class="side-nav light-blue lighten-3">
+
+		<div id="container">
+			<div class="section" id="section4">
+				<div class="row">
+
+					<div class="col s12  m12 l12 xl12">
+						<p class="waves-effect waves-light titlu orange darken-3">
+							<script>document.write(language.meniu)</script>
+							<button class="light-blue lighten-3" onclick="$('.btn').sideNav('hide');return false;"> <i
+									class="tiny material-icons">clear</i></button>
+							&nbsp;&nbsp;&nbsp;<button class="light-blue lighten-3" onclick="exit();"> <i
+									class="tiny material-icons">exit_to_app</i></button>
+						</p>
+
+					</div>
+				</div>
+
+
+				<hr />
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="_main_.html">
+								<script>document.write(language.login)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="distanta2.html">
+								<script>document.write(language.buton9)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="noutati.html">
+								<script>document.write(language.noutati)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large"
+								href="distantadelalocatiacurentalaoadresa.html">
+								<script>document.write(language.buton4)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="distantadintredouaadrese.html">
+								<script>document.write(language.buton5)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large modal-trigger" href="#modal1"
+								onclick="goforward()">
+								<script>document.write(language.buton6)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="coordonatelelocatiei.html">
+								<script>document.write(language.buton14)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+
+
+				<!--<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large modal-trigger"  href="plandezbor.html">
+							<script>document.write(language.plan)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>-->
+
+
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="plandezbor.html">
+								<script>document.write(language.plan)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="locatii.html">
+								<script>document.write(language.locatii)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="rute.html">
+								<script>document.write(language.rute)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="dmstodd.html">
+								<script>document.write(language.dmstodd)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="contact.html">
+								<script>document.write(language.contact)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div><br /><br /><br />
+			</div>
+
+		</div>
+	</ul>
+
+	<script>
+		$(".btn").sideNav();	         
+	</script>
+	<div id="body">
+
+	</div>
+
+
+	<div class='col s12  m12 l12 xl12'>
+		<div class='card blue-grey darken-1'>
+			<div class='card-content white-text'>
+				<span class='card-title'></span>
+				<p style='font-size:17px;'>
+				<ul style='font-size:17px;'>
+					<li>
+
+						<a class="waves-effect waves-light btn"
+							onclick="app.OpenUrl('https://chat.whatsapp.com/JZReZyZwpmo4qq7JO5bKmZ');return false;">Whatsapp
+							Group Distance</a>
+					</li>
+				</ul>
+				</p>
+
+
+
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

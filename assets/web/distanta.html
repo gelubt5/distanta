@@ -1,0 +1,951 @@
+<html>
+
+<head>
+  <title>Distanta</title>
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+  <link rel="stylesheet" href="leaflet-routing-machine.css" />
+  <link rel="stylesheet" href="leaflet.css" />
+  <script src="leaflet.js"></script>
+  <script src="leaflet-routing-machine.js"></script>
+  <link rel="stylesheet" href="Control.Geocoder.css" />
+  <script src="Control.Geocoder.js"></script>
+  <script src="language.js"></script>
+  <link href="font.css" rel="stylesheet">
+  <link rel="stylesheet" href="materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+  <script src="materialize.min.js"></script>
+  <script>
+    //  window.addEventListener("error", function (e) {
+    //   location.reload();alert();
+    //   return false;
+    // });
+
+    // var that = new XMLHttpRequest();
+    // that.open('GET', 'http://google.com', false);
+    // try {
+    //   that.send();
+    // } catch (exception) {
+    //   if (exception.name == 'NetworkError') {
+    //     alert("Nu esti conectat la internet!!!");
+    //   }
+    // }
+    
+    //   $(document).ready(function () {
+    //     $.get("http://google.com", function (data, status) {
+    //     }).fail(function() {
+    //         alert("Nu esti conectat la internet!!!");
+    //   });
+    //   });
+      
+  
+  </script>
+  <script>
+    //localStorage.clear();
+    localStorage.setItem("cheie", "");
+    if (localStorage.getItem('lang') == null) {
+      localStorage.setItem('lang', 'en');
+    }
+    var selectedLanguage = localStorage.getItem('lang');
+    var language = "";
+    if (selectedLanguage == "ro") {
+      language = lang.ro;
+    }
+    if (selectedLanguage == "en") {
+      language = lang.en;
+    }
+
+  </script>
+  <script>
+   
+    
+  
+
+    // var path2 = app.GetSpecialFolder("Pictures") + "/" + "Locations";
+    // if (!app.FolderExists(path2))
+    //   app.MakeFolder(path2);
+    // var path2 = app.GetSpecialFolder("Pictures") + "/" + "Routes";
+    // if (!app.FolderExists(path2))
+    //   app.MakeFolder(path2);
+  </script>
+
+  <script>
+    // function activeazagpsul() {
+    //   var locEnabled = app.IsLocationEnabled('GPS');
+    //   if (locEnabled == true) {
+    //   } else {
+    //     alert('Activeaza GPS-ul');
+    //   }
+    // }
+    function reset() {
+      $('#email').val("");
+      $('#parola').val("");
+      localStorage.setItem("email", "");
+      localStorage.setItem("parola", "");
+      return false;
+    }
+    function reset2() {
+      $('#email2').val("");
+      $('#parola2').val("");
+      $('#parola_confirmation2').val("");
+
+      return false;
+    }
+    function salveazadatele() {
+      localStorage.setItem("email", $('#email').val());
+      localStorage.setItem("parola", $('#parola').val());
+      console.log(email);
+    }
+
+    var varianta = 1;
+    if (localStorage.getItem("email") == null) {
+      localStorage.setItem("email", "");
+    }
+    if (localStorage.getItem("parola") == null) {
+      localStorage.setItem("parola", "");
+    }
+
+  </script>
+  <script>
+    window["raspuns"] = "";
+    function logare() {
+      // Show native spinner
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage('showSpinner');
+      }
+      
+      varianta = 1;
+     
+        var email = $('#email').val();
+        var parola = $('#parola').val();
+        $.get("https://evidentacolumbofila.eu/public/distantav2?email=" + email + "&parola=" + parola, function (data, status) {
+            
+          // Hide native spinner
+         
+          
+          window["raspuns"] = data;
+          //alert(data);
+          console.log(data);
+          
+        console.log(window["raspuns"]);
+        var data = JSON.parse(window["raspuns"]);
+
+
+        if (data[1].includes("succes")) {
+          localStorage.setItem("cheie", data[10]);
+          if (data[0] == 1) {
+
+            $("#var").val(1);
+            if (localStorage.getItem("lang") == "en") {
+              $("#md").html(data[8]);
+              //      window.confirm(data[8]);
+            }
+            if (localStorage.getItem("lang") == "ro") {
+              $("#md").html(data[9]);
+              //alert(data[9]);
+            }
+            //localStorage.setItem("cheie",data[7]);
+            $('#modal1').modal('open');
+            //alert(language.alertalogare1);
+          } else {
+            if (data[2] == 3) {
+              var alerta = language.alertalogare2;
+              //localStorage.setItem("cheie",data[7]);
+            }
+            if (data[2] == 4) {
+              var alerta = language.alertalogare2 + language.alertalogare3;
+              // localStorage.setItem("cheie",data[7]);
+            }
+            if (data[2] == 5) {
+              var alerta = language.alertalogare2 + language.alertalogare4;
+              //localStorage.setItem("cheie",data[7]);
+            }
+            if (data[2] == 6) {
+              var alerta = language.alertalogare2;
+              // localStorage.setItem("cheie",data[7]);
+            }
+           // app.HideProgress();
+            if (window.ReactNativeWebView) {
+            window.ReactNativeWebView.postMessage('hideSpinner');
+          }
+            if (data[2] == 3) {
+
+              window.location.href = "distanta2.html";
+            } else {
+              alert(alerta);
+              window.location.href = "distanta2.html";
+            }
+          }
+
+        } else if (data[1].includes("Date incorecte!!!")) {
+          alert(language.alertalogare5); closeModal();
+        } else {
+          //alert(language.continactiv2); 
+          $("#var").val(2);
+          if (localStorage.getItem("lang") == "en") {
+            $("#md2").html(data[11]);
+            //      window.confirm(data[8]);
+          }
+          if (localStorage.getItem("lang") == "ro") {
+            $("#md2").html(data[12]);
+            //alert(data[9]);
+          }
+          closeModal();
+          $('#modal2').modal('open');
+        }
+      
+      if (varianta == 2) {
+
+      }
+      
+      
+        }).fail(function() {
+          // Hide native spinner on error
+          if (window.ReactNativeWebView) {
+            window.ReactNativeWebView.postMessage('hideSpinner');
+          }
+        });
+    
+    }
+
+
+    function salveazadatele2() {
+      $(document).ready(function () {
+        var email2 = $('#email2').val();
+        var parola2 = $('#parola2').val();
+        $('#email').val($('#email2').val());
+        $('#parola').val($('#parola2').val());
+        var parola_confirmation2 = $('#parola_confirmation2').val();
+        var nume = $('#nume').val();
+        $.post("https://evidentacolumbofila.eu/public/mobilinregistrare4", { 'email': email2, 'parola': parola2, 'parola_confirmation': parola_confirmation2, 'nume': nume }, function (data, status) {
+          var data2 = JSON.parse(data);
+          if (data2[0] == 1) {
+            alert(language.inregistrarereusita);
+
+          } else {
+            if (data2[2] == 1) {
+              var alerta2 = language.eroare51;
+            }
+            if (data2[2] == 2) {
+              var alerta2 = language.eroare52;
+            }
+            if (data2[2] == 3) {
+              var alerta2 = language.eroare53;
+            }
+            if (data2[2] == 4) {
+              var alerta2 = language.eroare54;
+            }
+            if (data2[2] == 5) {
+              var alerta2 = language.eroare55;
+            }
+            if (data2[2] == 6) {
+              var alerta2 = language.eroare56;
+            }
+            if (data2[2] == 7) {
+              var alerta2 = language.eroare57;
+            }
+            if (data2[2] == 8) {
+              var alerta2 = language.eroare58;
+            }
+            if (data2[2] == 9) {
+              var alerta2 = language.eroare59;
+            }
+            if (data2[2] == 61) {
+              var alerta2 = language.eroare61;
+            }
+            alert(alerta2);
+          }
+
+        });
+        //app.OpenUrl( "https://evidentacolumbofila.eu/public/mobilinregistrare4?email="+email2+"&parola="+parola2+"&parola_confirmation="+parola_confirmation2);
+        //              $.post("https://evidentacolumbofila.eu/public/mobilinregistrare4?email="+email2+"&parola="+parola2+"&parola_confirmation="+parola_confirmation2, function (data, status) {
+        //              alert(data);
+        //              localStorage.setItem("email", $('#email2').val());    
+        // 	         localStorage.setItem("parola", $('#parola2').val());
+        // 	        $('#email').val($('#email2').val());
+        // 	        $('#parola').val($('#parola2').val());
+        // 	        if (data.includes("succes"))
+        // 	        {
+        //             $('#mesaj').html("Inregistrare Reusita!!!");
+        // 	        }
+        // 	        if (data.includes("eroare"))
+        // 	        {
+        //             $('#mesaj').html("Eroare !!!");
+        // 	        }
+
+        //          }).fail(function(data) {
+        //       try {       
+
+        //      console.log(JSON.parse(data.responseJSON[0]));
+        //      var errors = JSON.parse(data.responseJSON[0]);
+        //                           errorHtml='<span style=\'color:blue;font-weight:bold;\'>Eroare!!!</span><br/><ul>';
+        //                           $.each( errors, function( key, value ) {
+        //                               errorHtml += '<li>' + value[0] + '</li>';
+        //                          });                    
+        //              errorHtml += '</ul>';  	
+        // 	$('#mesaj').html(errorHtml);	
+        //       } catch(e) {
+        //           alert(e);
+        //       }
+        //   });
+      });
+      return false;
+    }
+
+    // function cheie(i)
+    // {
+    //     varianta=2;var cheie="";
+    //     if (localStorage.getItem("email")!=null && localStorage.getItem("parola")!=null && localStorage.getItem("email")!="" && localStorage.getItem("parola")!="")
+    //      {
+
+    //     $.ajax({type: "POST",url:"https://evidentacolumbofila.eu/public/cheie",data:{"email":localStorage.getItem("email"),"parola":localStorage.getItem("parola")},async:false,success:function (result,status,xhr){
+    //         cheie=JSON.parse(result)[0];            
+    //         if (i==1){
+    //             contact(cheie);
+    //             console.log(cheie);
+    //         }
+    //          if (i==2){
+    //             detaliicont(cheie);
+    //             console.log(cheie);
+    //         }
+    //     }});   
+    // } 
+    // }
+
+    function contact() {
+
+      varianta = 2;
+      $(document).ready(function () {
+        if (localStorage.getItem("email") != null && localStorage.getItem("parola") != null && localStorage.getItem("email") != "" && localStorage.getItem("parola") != "") {
+
+          var email = localStorage.getItem("email");
+          var parola = localStorage.getItem("parola");
+          $.ajax({
+            type: "POST", url: "https://evidentacolumbofila.eu/public/whatsappdistanta", data: { "email": email, "parola": parola }, async: false, success: function (result, status, xhr) {
+
+              var data2 = JSON.parse(result);
+              if (data2[1] == 0) {
+                if (data2[5] == 1) {
+                  var alerta2 = language.utilizatorulnuexista;
+                }
+                if (data2[5] == 2) {
+                  var alerta2 = language.continactiv2;
+                }
+                if (data2[5] == 4) {
+                  var alerta2 = language.eroare;
+                }
+
+
+              }
+              if (data2[1] == 1) {
+                if (localStorage.getItem("lang").includes("en")) {
+
+                  $('#body').html(data2[4]);
+                } else {
+                  $('#body').html(data2[3]);
+                }
+                //alert(data2[0]);
+              }
+
+
+            }
+          });
+        } else {
+
+        }
+      });
+    }
+
+    function detaliicont() {
+      varianta = 2;
+
+      if (localStorage.getItem("email") != null && localStorage.getItem("parola") != null && localStorage.getItem("email") != "" && localStorage.getItem("parola") != "") {
+
+        $(document).ready(function () {
+
+          var email = localStorage.getItem("email");
+          var parola = localStorage.getItem("parola");
+          $.ajax({
+            type: "POST", url: "https://evidentacolumbofila.eu/public/detaliicont", data: { "email": email, "parola": parola }, async: false, success: function (result, status, xhr) {
+
+              var data2 = JSON.parse(result);
+              if (data2[5] == 3) {
+                if (localStorage.getItem('lang') == "en") {
+                  $("#detaliicont").text(data2[4]);
+                } else {
+                  $("#detaliicont").text(data2[3]);
+                }
+              }
+              if (data2[5] == 1) {
+                //alert(language.utilizatorulnuexista);
+              }
+              if (data2[5] == 2) {
+                //alert(language.continactiv);
+                if (localStorage.getItem('lang') == "en") {
+                  $("#detaliicont").text(data2[4]);
+                } else {
+                  $("#detaliicont").text(data2[3]);
+                }
+              }
+              if (data2[5] == 4) {
+                //alert(language.eroare);
+              }
+            }
+          });
+        });
+      }
+    }
+
+    if (localStorage.getItem("automaticlogin") == null) {
+      localStorage.setItem("automaticlogin", "nu");
+      console.log(localStorage.getItem("automaticlogin"));
+    }
+
+
+
+
+    function automaticlogin() {
+      if ($("#filled-in-box").is(':checked')) {
+        localStorage.setItem("automaticlogin", "da");
+      } else {
+        localStorage.setItem("automaticlogin", "nu");
+      }
+      console.log(localStorage.getItem("automaticlogin"));
+    }
+
+    function resetprogress() {
+      setTimeout(function () { 
+         if (window.ReactNativeWebView) {
+            window.ReactNativeWebView.postMessage('hideSpinner');
+          } 
+          alert("Click Login Button Again"); }, 5000);
+    }
+  </script>
+  <style>
+    body {
+      background-color: #ffffff;
+    }
+
+    .hello {
+      font-size: 42;
+      width: 100%;
+      margin-top: 2em;
+      text-align: center;
+      color: blue;
+    }
+
+    <style>.btn {
+      width: 100%;
+      height: auto;
+    }
+
+    .btn-large {
+      width: 100%;
+      height: auto;
+    }
+
+
+    #section1 {
+      height: 20%;
+      display: block;
+    }
+
+    #section2 {
+      height: 60%;
+      display: block;
+    }
+
+    #section3 {
+      height: 10%;
+      display: block;
+    }
+
+    .button {
+      background-color: #26A69A;
+      /* Green */
+      border: none;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      font-size: 18px;
+      width: 100%;
+      height: 15%;
+    }
+
+    .titlu {
+      /* Green */
+      border: none;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      font-size: 18px;
+      width: 100%;
+      height: 50px;
+      padding: 10px;
+    }
+
+    #email,
+    #parola {
+      border: 2px solid #84D7FF;
+      height: 70px;
+      border-radius: 10px;
+      font-size: 20px;
+      color: blue;
+    }
+
+    #email2,
+    #parola2,
+    #parola_confirmation2,
+    #nume {
+      border: 2px solid #84D7FF;
+      height: 70px;
+      border-radius: 10px;
+      font-size: 20px;
+      color: blue;
+    }
+  </style>
+
+  <script>
+    //localStorage.setItem("idata", app.GetIntent().data);     
+  </script>
+
+<body onload="detaliicont();contact();localStorage.setItem('v','2');">
+  <nav class="light-blue lighten-3 ">
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo center">
+        <script>document.write(language.titlu)</script>
+      </a>
+      <ul class="right">
+        <li> <a href="#modal1" data-activates='dropdown1' class="sidenav-trigger orange darken-4 btn dropdown-button">
+            <i class="material-icons">language</i>
+          </a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- Dropdown Structure -->
+  <ul id='dropdown1' class='dropdown-content'>
+    <li><a href="distanta.html"
+        onclick="localStorage.setItem('lang','ro');alert('Limba Selectata:Romana');">Romanian</a></li>
+    <li><a href="distanta.html"
+        onclick="localStorage.setItem('lang','en');alert('Selected Language:English');">English</a></li>
+  </ul>
+  <script>
+    $('.dropdown-trigger').dropdown({
+      belowOrigin: false
+    }
+    );
+  </script>
+
+
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text ">
+
+          <p id="detaliicont" style="font-size:17px;color:red;text-align:center;">
+          </p>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text ">
+          <span class="card-title">
+            <script>document.write(language.infogenerale)</script>
+          </span>
+          <p style='font-size:17px;'>
+            <script>
+              if (localStorage.getItem('lang').includes('ro')) {
+                document.write(language.text1);
+                document.write(language.text2);
+              }
+              if (localStorage.getItem('lang').includes('en')) {
+                document.write(language.text1);
+                document.write(language.text2);
+
+              }
+            </script>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    if (localStorage.getItem("lang") == "en") {
+      document.write("<p style='margin-left:5%;margin-right:5%;width:90%;'><a class='waves-effect waves-light btn-large' href='' onclick=\"$('#modal3').modal('open');return false;\">" + language.videotutorial + "</a></p>");
+    }
+    if (localStorage.getItem("lang") == "ro") {
+      document.write("<p style='margin-left:5%;margin-right:5%;width:90%;'<a class='waves-effect waves-light btn-large' href='' onclick=\"$('#modal4').modal('open');return false;\">" + language.videotutorial + "</a></p>");
+    }
+  </script>
+
+  <div class="row">
+    <div class="input-field col s12  m12 l12 xl12">
+      <script>document.write("<input placeholder=\"" + language.placeholderadresa9 + "\" id=\"email\" type=\"text\" class=\"validate\" value=\"" + localStorage.getItem("email") + "\">");</script>
+    </div>
+    <div class="input-field col s12  m12 l12 xl12">
+      <script>document.write("<input placeholder=\"" + language.placeholderadresa10 + "\" id=\"parola\" type=\"password\" class=\"validate\" value=\"" + localStorage.getItem("parola") + "\">");</script>
+    </div>
+    <div class="col s12  m12 l12 xl12" style="text-align:center;height:70px;padding-top:20px;">
+      <script>
+        document.write("<input type=\"checkbox\" class=\"filled-in\" id=\"filled-in-box\"");
+        if (localStorage.getItem("automaticlogin") == "da") {
+          document.write("checked=\"checked\"");
+        }
+        document.write("style=\"width:50px;height:auto;display:block;\" onclick=\"automaticlogin();\" />");
+      </script>
+      <label for="filled-in-box" style="font-size:20px;">
+        <script>document.write("" + language.autologin + "");</script>
+      </label>
+    </div>
+    <p style="margin-left:5%;margin-right:5%;"><a class="waves-effect waves-light btn-large " id="log" href="#"
+        onclick="salveazadatele();  logare();  ">
+        <script>document.write(language.buton7)</script>
+      </a></p>
+    <p style="margin-left:5%;margin-right:5%;"><a class="waves-effect waves-light btn-large" href="#"
+        onclick="return reset();">
+        <script>document.write(language.buton8)</script>
+      </a></p>
+    <div id="aaa">
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card  teal lighten-2 darken-1">
+        <div class="card-content white-text">
+          <p style="font-size:25px;">
+            <script>document.write(language.mesajprimapaginalogare)</script>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12  m12 l12 xl12">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">
+            <script>document.write(language.mesajprimapaginainregistrare)</script>
+          </span>
+          <div class="row">
+
+
+          </div>
+
+
+
+
+          <div class="input-field col s12  m12 l12 xl12">
+            <script>document.write("<input placeholder=\"" + language.placeholderadresa11 + "\" id=\"email2\" type=\"text\" class=\"validate\" >");</script>
+          </div>
+          <div class="input-field col s12  m12 l12 xl12">
+            <script>document.write("<input placeholder=\"" + language.placeholderadresa12 + "\" id=\"parola2\" type=\"password\" class=\"validate\" >");</script>
+          </div>
+          <div class="input-field col s12  m12 l12 xl12">
+            <script>document.write("<input placeholder=\"" + language.placeholderadresa13 + "\" id=\"parola_confirmation2\" type=\"password\" class=\"validate\" >");</script>
+          </div>
+          <div class="input-field col s12  m12 l12 xl12">
+            <script>document.write("<input placeholder=\"" + language.placeholderadresa14 + "\" id=\"nume\" type=\"text\" class=\"validate\" >");</script>
+          </div>
+          <p><a class="waves-effect waves-light btn-large" href="" onclick="return salveazadatele2();">
+              <script>document.write(language.buton12)</script>
+            </a></p><br /><br />
+          <p><a class="waves-effect waves-light btn-large" href="#" onclick="return reset2();">
+              <script>document.write(language.buton8)</script>
+            </a></p>
+          <div id="aaa">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  <div id="body" class="row">
+
+  </div>
+  <div class='row'>
+    <div class='col s12  m12 l12 xl12'>
+
+      <div class='card blue-grey darken-1'>
+        <div class='card-content white-text'>
+          <span class='card-title'></span>
+          <p style='font-size:17px;'>
+          <ul style='font-size:17px;'>
+            <li>
+
+              <!-- <a style="display:block;width:100%;" class="waves-effect waves-light btn"
+                onclick="app.OpenUrl('https://chat.whatsapp.com/JZReZyZwpmo4qq7JO5bKmZ');return false;">
+                <script> -->
+                  document.write(language.whatsappgroup);
+                </script>
+              </a>
+            </li>
+          </ul>
+          </p>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12  m12 l12 xl12">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <script>document.write(language.articol1primapagina)</script>
+        </div>
+        <div class="card-action">
+          <p style="text-align:center;">
+            <script>document.write(language.titlu)</script>
+            2021
+            <script>
+              const data = new Date();
+              if (data.getFullYear() != 2021)
+                document.write(" - " + data.getFullYear());
+            </script>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div id="modal1" class="modal modal-fixed-footer">
+    <div class="modal-content" id="md" style="font-size:20px;">
+
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
+  <div id="modal2" class="modal modal-fixed-footer">
+    <div class="modal-content" id="md2" style="font-size:20px;">
+
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
+
+  <div id="modal3" class="modal modal-fixed-footer" style="width:90%;">
+    <div class="modal-content" id="md" style="font-size:20px;">
+      <iframe id="playerid" width="250" height="315" src="https://www.youtube.com/embed/0-TXwpR6rAY"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat"
+        onclick="var video = $('#playerid').attr('src');$('#playerid').attr('src','');$('#playerid').attr('src',video);">Ok</a>
+    </div>
+  </div>
+
+
+  <div id="modal4" class="modal modal-fixed-footer" style="width:90%;">
+    <div class="modal-content" id="md" style="font-size:20px;">
+      <iframe id="playerid2" width="250" height="315" src="https://www.youtube.com/embed/Vfur5QjzD2g"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat"
+        onclick="var video = $('#playerid2').attr('src');$('#playerid2').attr('src','');$('#playerid2').attr('src',video);">Ok</a>
+    </div>
+  </div>
+
+
+  <style>
+    /*body{*/
+    /*  font-family: fantasy;*/
+    /*  font-size: 20px;*/
+    /*  line-height: 1.6;*/
+    /*}*/
+
+
+
+
+    .modal-overlayC {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding-top: 75%;
+    }
+  </style>
+
+  <div id="simpleModalC" class="modal-overlayC">
+
+    <div style="width:100%;height:50%;background-color:white;">
+      <style>
+        .tdloader {
+          width: 11%;
+          height: 11%;
+        }
+      </style>
+      <table id="loadertable" style="width:100%;height:100%;display:block;">
+        <tr>
+          <td class="tdloader"></td>
+          <td class="tdloader"></td>
+          <td class="tdloader"></td>
+        </tr>
+        <tr>
+          <td class="tdloader"></td>
+          <td class="tdloader" style="text-align:center;">
+            <img src="Img/loading.gif" />
+          </td>
+          <td class="tdloader"></td>
+        </tr>
+        <tr>
+          <td class="tdloader"></td>
+          <td class="tdloader"></td>
+          <td class="tdloader"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+  <script>
+    // Get modal element
+    var modal = document.getElementById('simpleModalC');
+    // Get close button
+
+
+
+    // Listen for outside click
+    window.addEventListener('click', outsideClick);
+
+    // Open modal
+    function openModal() {
+      modal.style.display = 'block';
+    }
+
+    // Close modal
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+
+    // Click outside and close
+    function outsideClick(e) {
+      if (e.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
+  </script>
+
+  <input id="var" value="" type="hidden" />
+  <script>
+
+    $(document).ready(function () {
+      // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+      $('.modal').modal({
+        complete: function () { if ($("#var").val() == 1) { window.location.href = "distanta2.html"; } }
+      });
+      if ($("#filled-in-box").is(':checked')) {
+           $("#log").trigger("click");
+      }
+    });
+    $(document).ajaxComplete(function () {
+    //   if (varianta == 1) {
+    //     console.log(window["raspuns"]);
+    //     var data = JSON.parse(window["raspuns"]);
+
+
+    //     if (data[1].includes("succes")) {
+    //       localStorage.setItem("cheie", data[10]);
+    //       if (data[0] == 1) {
+
+    //         $("#var").val(1);
+    //         if (localStorage.getItem("lang") == "en") {
+    //           $("#md").html(data[8]);
+    //           //      window.confirm(data[8]);
+    //         }
+    //         if (localStorage.getItem("lang") == "ro") {
+    //           $("#md").html(data[9]);
+    //           //alert(data[9]);
+    //         }
+    //         //localStorage.setItem("cheie",data[7]);
+    //         $('#modal1').modal('open');
+    //         //alert(language.alertalogare1);
+    //       } else {
+    //         if (data[2] == 3) {
+    //           var alerta = language.alertalogare2;
+    //           //localStorage.setItem("cheie",data[7]);
+    //         }
+    //         if (data[2] == 4) {
+    //           var alerta = language.alertalogare2 + language.alertalogare3;
+    //           // localStorage.setItem("cheie",data[7]);
+    //         }
+    //         if (data[2] == 5) {
+    //           var alerta = language.alertalogare2 + language.alertalogare4;
+    //           //localStorage.setItem("cheie",data[7]);
+    //         }
+    //         if (data[2] == 6) {
+    //           var alerta = language.alertalogare2;
+    //           // localStorage.setItem("cheie",data[7]);
+    //         }
+    //         if (data[2] == 3) {
+
+    //           window.location.href = "distanta2.html";
+    //         } else {
+    //           alert(alerta);
+    //           window.location.href = "distanta2.html";
+    //         }
+    //       }
+
+    //     } else if (data[1].includes("Date incorecte!!!")) {
+    //       alert(language.alertalogare5); closeModal();
+    //     } else {
+    //       //alert(language.continactiv2); 
+    //       $("#var").val(2);
+    //       if (localStorage.getItem("lang") == "en") {
+    //         $("#md2").html(data[11]);
+    //         //      window.confirm(data[8]);
+    //       }
+    //       if (localStorage.getItem("lang") == "ro") {
+    //         $("#md2").html(data[12]);
+    //         //alert(data[9]);
+    //       }
+    //       closeModal();
+    //       $('#modal2').modal('open');
+    //     }
+    //   }
+    //   if (varianta == 2) {
+
+    //   }
+    });
+ 
+
+
+
+  </script>
+</body>
+
+</html>

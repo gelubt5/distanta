@@ -1,0 +1,775 @@
+<html>
+
+<head>
+    <script src='file:///android_asset/app.js'></script>
+
+
+    <link href="font.css" rel="stylesheet">
+    <link rel="stylesheet" href="materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+    <script src="materialize.min.js"></script>
+    <script>
+        //  window.addEventListener("error", function (e) {
+        //   location.reload();alert();
+        //   return false;
+        // });
+        var that = new XMLHttpRequest();
+        that.open('GET', 'http://google.com', false);
+        try {
+            that.send();
+        } catch (exception) {
+            if (exception.name == 'NetworkError') {
+                alert("Nu esti conectat la internet!!!");
+            }
+        }
+        var sti;
+        app.SetOnError(function (msg, line, file) {
+            console.log('Message: "' + msg + '"\n' + 'Line: ' + line + '\n');
+            
+        });
+        function hk(x) {
+            clearInterval(sti);
+            sti = setInterval(function () { app.HideKeyboard(); clearInterval(sti); }, 1000);
+        }
+        function playbeep() {
+            var x = document.getElementById("myAudio");
+            x.currentTime = 0;
+            x.volume = 0.05;
+            x.play();
+        }
+    </script>
+    <script>
+        // var lat2=47.844856;
+        // var lng2=26.3274664;
+        // var lat3=47.63333;
+        // var lng3=26.25;
+
+        var latadr = localStorage.getItem("latadr");
+        var lngadr = localStorage.getItem("lngadr");
+
+        var latadr2 = localStorage.getItem("latadr2");
+        var lngadr2 = localStorage.getItem("lngadr2");
+        if (latadr == null) {
+            latadr = 0;
+        }
+        if (lngadr == null) {
+            lngadr = 0;
+        }
+        if (latadr2 == null) {
+            latadr2 = 0;
+        }
+        if (lngadr2 == null) {
+            lngadr2 = 0;
+        }
+
+        var adresaadr = localStorage.getItem("adresaadr");
+        if (adresaadr == null) {
+            adresaadr = "";
+        }
+    </script>
+    <title>
+        Coordonatele Locatiei
+    </title>
+    <!-- Compiled and minified CSS -->
+
+    <script src="language.js"></script>
+    <script>
+        function activeazagpsul() {
+            var locEnabled = app.IsLocationEnabled('GPS');
+            if (locEnabled == true) {
+            } else {
+                alert(language.activeazagpsul);
+                window.location.href = "distanta2.html";
+            }
+        }
+        var selectedLanguage = localStorage.getItem('lang');
+        var language = "";
+        if (selectedLanguage == "ro") {
+            language = lang.ro;
+        }
+        if (selectedLanguage == "en") {
+            language = lang.en;
+        }
+    </script>
+
+
+
+    <script>
+        app.SetOnKey(OnKey);
+        function OnKey(action, name, code, extra) {
+            if (code == 4 && action == "Up") {
+                playbeep();
+                setTimeout(function () {
+                    window.location.href = "distanta2.html";
+                }, 350);
+
+            }
+        }
+        function exit() {
+            var yesNo = app.CreateYesNoDialog("Exit App?");
+            yesNo.SetOnTouch(yesNo_OnTouch);
+            yesNo.Show();
+        }
+        function yesNo_OnTouch(result) {
+            if (result == "Yes") app.Exit();
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('select').on('contentChanged', function () {
+                $(this).material_select();
+            });
+            $("#locatie1").change(function () {
+                latadr = 0;
+                lngadr = 0;
+                localStorage.setItem("latadr", 0);
+                localStorage.setItem("lngadr", 0);
+                $("#adresa61").val("");
+                if ($(this).val() == "0") {
+                    latadr2 = 0;
+                    lngadr2 = 0;
+                    localStorage.setItem("latadr2", 0);
+                    localStorage.setItem("lngadr2", 0);
+                } else {
+                    var latlng = $(this).val().split("===");
+                    latadr2 = latlng[0];
+                    lngadr2 = latlng[1];
+                    localStorage.setItem("latadr2", latadr2);
+                    localStorage.setItem("lngadr2", lngadr2);
+                }
+                localStorage.setItem("latlngadr", $(this).val());
+                localStorage.setItem("adresaadr", $("option:selected", this).text());
+                //alert(lat20+"----"+lng20);
+            });
+        });
+    </script>
+
+    <script>
+        function reset() {
+
+
+            $('#adresa61').val("");
+            localStorage.setItem("latadr", 0);
+            localStorage.setItem("lngadr", 0);
+            localStorage.setItem("latadr2", 0);
+            localStorage.setItem("lngadr2", 0);
+
+            localStorage.setItem("latlngadr", "");
+
+            latadr = 0;
+            lngadr = 0;
+
+            latadr2 = 0;
+            lngadr2 = 0;
+
+            adresaadr = "";
+            localStorage.setItem("adresaadr", "");
+            $('#locatie1').val("0");
+            $('select').material_select();
+
+            return false;
+        }
+        function resetslc() {
+            localStorage.setItem("latlngadr", "");
+            $('#locatie1').val("0");
+            $('select').material_select();
+            return false;
+        }
+    </script>
+
+    <script>
+
+
+
+
+        function incarcaLocatii() {
+            $(document).ready(function () {
+                var email = localStorage.getItem("email");
+                var parola = localStorage.getItem("parola");
+                $.get("https://evidentacolumbofila.eu/public/incarcalocatii?email=" + email + "&parola=" + parola + "&cheie=" + localStorage.getItem('cheie'), function (data, status) {
+                    window["raspuns"] = data;
+                }).fail(function (data) {
+
+
+                    console.log(data.responseJSON["error"]);
+                    if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
+                        alert(language.nuestilogat);
+                        window.location.href = "_main_.html";
+                    } else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
+                        alert(language.nuestilogat);
+                        window.location.href = "_main_.html";
+                    } else {
+                        alert(language.eroare);
+                    }
+                });
+            });
+        }
+
+
+
+        $(document).ready(function () {
+            $('#adresa61').keyup(function () {
+                varianta = 2;
+                var email = localStorage.getItem("email");
+                var parola = localStorage.getItem("parola");
+                var search = $(this).val();
+                $.get("https://evidentacolumbofila.eu/public/places?email=" + email + "&parola=" + parola + "&search=" + search + "&cheie=" + localStorage.getItem('cheie'), function (data, status) {
+                    var data2 = JSON.parse(data);
+                    if (data2[3] == 1) {
+                        alert(language.utilizatorulnuexista);
+                        $("#adresa71").html("");
+                    }
+                    if (data2[3] == 2) {
+                        alert(language.continactiv);
+                        $("#adresa71").html("");
+                    }
+                    if (data2[3] == 3) {
+                        alert(language.eroare);
+                        $("#adresa71").html("");
+                    }
+                    if (data2[3] == 4) {
+                        var html = "<ul class='blue-grey darken-1'>";
+                        data2[1].forEach(function (item) {
+                            var html2 = "<li  style='height:60px;font-size:20px;text-align:center;color:white;' onclick='this.style.backgroundColor=\"" + "#E65100" + "\";playbeep();returneaza(1,\"" + item[0] + "\");'>" + item[0] + "</li>";
+                            html = html + html2 + "<hr/>";
+                        });
+                        html = html + "<ul>";
+                        $("#adresa71").html("");
+                        $("#adresa71").html(html);
+                    }
+                }).fail(function (data) {
+
+
+                    console.log(data.responseJSON["error"]);
+                    if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
+                        alert(language.nuestilogat);
+                        window.location.href = "_main_.html";
+                    } else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
+                        alert(language.nuestilogat);
+                        window.location.href = "_main_.html";
+                    } else {
+                        alert(language.eroare);
+                    }
+                });
+            });
+        });
+
+        function returneaza(x, y) {
+            latadr2 = 0;
+            lngadr2 = 0;
+            localStorage.setItem("latadr2", 0);
+            localStorage.setItem("lngadr2", 0);
+            resetslc();
+
+
+            $(document).ready(function () {
+
+                varianta = 2;
+                var email = localStorage.getItem("email");
+                var y2 = decodeURI(y);
+                var parola = localStorage.getItem("parola");
+                $.post("https://evidentacolumbofila.eu/public/returneazalatlngnume", { 'email': email, 'parola': parola, 'search': y, 'cheie': localStorage.getItem('cheie') }, function (data, status) {
+                    var data3 = JSON.parse(data);
+                    if (data3[5] != null) {
+                        if (data3[5] == 1) {
+                            alert(language.utilizatorulnuexista);
+                        }
+                        if (data3[5] == 2) {
+                            alert(language.continactiv);
+                        }
+                        if (data3[5] == 3) {
+                            alert(language.eroare);
+                        }
+                        if (x == 1) {
+
+                            latadr = 0;
+                            lngadr = 0;
+                            adresaadr = "";
+                            localStorage.setItem("latadr", 0);
+                            localStorage.setItem("lngadr", 0);
+                            localStorage.setItem("adresaadr", "");
+                            $("#adresa61").val("");
+                            $("#adresa71").html("");
+                        }
+                    } else {
+                        if (x == 1) {
+
+                            var data2 = [];
+                            data2[0] = data3["results"][0]["address_components"][0]["short_name"];
+                            data2[1] = data3["results"][0]["geometry"]["location"]["lat"];
+                            data2[2] = data3["results"][0]["geometry"]["location"]["lng"];
+                            // alert(data2[0]+"==="+data2[1]+"==="+data2[2]);
+                            if (data2[0] == "" && data2[1] == 0 && data2[2] == 0) {
+                                alert("Eroare!!!");
+                                latadr = 0;
+                                lngadr = 0;
+                                adresaadr = "";
+                                localStorage.setItem("latadr", 0);
+                                localStorage.setItem("lngadr", 0);
+                                localStorage.setItem("adresaadr", "");
+                                $("#adresa61").val("");
+                                $("#adresa71").html("");
+                            } else {
+                                latadr = data2[1];
+                                lngadr = data2[2];
+                                localStorage.setItem("latadr", latadr);
+                                localStorage.setItem("lngadr", lngadr);
+                                localStorage.setItem("adresaadr", data2[0]);
+                                $("#adresa61").val(data2[0]);
+                                $("#adresa71").html("");
+                            }
+                        }
+                    }
+
+                }).fail(function (data) {
+
+                    if (x == 1) {
+
+                        latadr = 0;
+                        lngadr = 0;
+                        adresaadr = "";
+                        localStorage.setItem("latadr", 0);
+                        localStorage.setItem("lngadr", 0);
+                        localStorage.setItem("adresaadr", "");
+                        $("#adresa61").val("");
+                        $("#adresa71").html("");
+                    }
+                    console.log(data.responseJSON["error"]);
+                    if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
+                        alert(language.nuestilogat);
+                        window.location.href = "_main_.html";
+                    } else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
+                        alert(language.nuestilogat);
+                        window.location.href = "_main_.html";
+                    } else {
+                        alert(language.eroare);
+                    }
+                });
+            });
+        }
+
+        //  function goforward2()
+        //  {      
+        //     if (lat5!=0 && lng5!=0)
+        //     {
+        //     if ($("#test1").prop("checked")) {
+        //         localStorage.setItem("tiplinie", "da");
+        //     }
+        //     if ($("#test2").prop("checked")) {
+        //         localStorage.setItem("tiplinie", "nu");
+        //     }                 
+        //  loc2 = app.CreateLocator("GPS");
+        //  loc2.SetOnChange(function(pos){
+        //  localStorage.setItem("lat4", pos.latitude);
+        //  localStorage.setItem("lng4", pos.longitude);
+        //  loc2.Stop();
+        //  window.location.href="distantadintredouaadresehartamap2.html";
+        //  });
+        //  loc2.SetRate( 1 );
+        //  loc2.Start();     
+        //  } else {
+        //       if (lng22!=0  && lat22!=0)
+        //         {
+        //              if ($("#test1").prop("checked")) {
+        //         localStorage.setItem("tiplinie", "da");
+        //     }
+        //     if ($("#test2").prop("checked")) {
+        //         localStorage.setItem("tiplinie", "nu");
+        //     }
+
+        //     loc2 = app.CreateLocator("GPS");
+        //  loc2.SetOnChange(function(pos){
+        //  localStorage.setItem("lat4", pos.latitude);
+        //  localStorage.setItem("lng4", pos.longitude);
+        //  loc2.Stop();
+        //  window.location.href="distantadintredouaadresehartamap2.html";
+        //  });
+        //  loc2.SetRate( 1 );
+        //  loc2.Start();     
+
+
+        //         } else {
+        //      alert("Eroare.Nu ai introdus locatia.Apasa in exterior pentru a inchide alerta");
+        //      return false;             
+        //  }
+        //  }
+        //  }
+
+
+
+
+        localStorage.setItem("lladr", null);
+    </script>
+    <style>
+        .btn {
+            width: 100%;
+            height: auto;
+        }
+
+        .btn-large {
+            width: 100%;
+            height: auto;
+        }
+
+        #section1 {
+            display: block;
+            height: 10%;
+        }
+
+        #section2 {
+            height: 90%;
+            display: block;
+        }
+
+        #section3 {
+            display: block;
+            height: 10%;
+        }
+
+        #section4 {
+            display: block;
+            height: 150%;
+        }
+
+        .button {
+            background-color: #26A69A;
+            /* Green */
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
+            width: 100%;
+            height: 15%;
+        }
+
+        .pac-item {
+            height: 50px;
+            font-size: 12px;
+        }
+
+        .pac-item-query {
+            height: 50px;
+            font-size: 16px;
+        }
+
+        #adresa3 {
+            border: 2px solid #84D7FF;
+            height: 70px;
+            border-radius: 10px;
+            font-size: 20px;
+            color: white;
+        }
+
+        .titlu {
+            /* Green */
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+        }
+
+        #radiogroup1 label {
+            font-size: 20px;
+        }
+
+        #adresa3,
+        #adresa61 {
+            border: 2px solid #84D7FF;
+            height: 70px;
+            border-radius: 10px;
+            font-size: 20px;
+            color: blue;
+        }
+    </style>
+</head>
+
+<body onload="app.Start();incarcaLocatii();activeazagpsul();" style="background-color:white;">
+    <audio id="myAudio">
+        <source src="Snd/a.ogg" type="audio/ogg">
+    </audio>
+    <nav class="light-blue lighten-3 ">
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center">
+                <script>document.write(language.titlu)</script></a>
+            <ul class="left">
+                <li> <a href="#" style="width:100px;" data-activates="slide-out"
+                        class="sidenav-trigger orange darken-4 btn"><i class="material-icons">menu</i></a></li>
+            </ul>
+            <ul class="right">
+                <li> <a href="#modal1" style="width:100px;" data-activates='dropdown1'
+                        class="sidenav-trigger orange darken-4 btn dropdown-button">
+                        <i class="material-icons">language</i>
+                    </a></li>
+            </ul>
+        </div>
+    </nav>
+    <ul id='dropdown1' class='dropdown-content'>
+        <li><a href="coordonatelelocatiei.html"
+                onclick="localStorage.setItem('lang','ro');alert('Limba Selectata:Romana');">Romanian</a></li>
+        <li><a href="coordonatelelocatiei.html"
+                onclick="localStorage.setItem('lang','en');alert('Selected Language:English');">English</a></li>
+    </ul>
+    <ul id="slide-out" class="side-nav light-blue lighten-3">
+
+        <div id="container">
+            <div class="section" id="section4">
+                <div class="row">
+
+                    <div class="col s12  m12 l12 xl12">
+                        <p class="waves-effect waves-light titlu orange darken-3">
+                            <script>document.write(language.meniu)</script>
+                            <button class="light-blue lighten-3" onclick="$('.btn').sideNav('hide');return false;"> <i
+                                    class="tiny material-icons">clear</i></button>
+                            &nbsp;&nbsp;&nbsp;<button class="light-blue lighten-3" onclick="exit();"> <i
+                                    class="tiny material-icons">exit_to_app</i></button>
+                        </p>
+                    </div>
+                </div>
+
+
+                <hr />
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="_main_.html">
+                                <script>document.write(language.login)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="distanta2.html">
+                                <script>document.write(language.buton9)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="noutati.html">
+                                <script>document.write(language.noutati)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large"
+                                href="distantadelalocatiacurentalaoadresa.html">
+                                <script>document.write(language.buton4)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="distantadintredouaadrese.html">
+                                <script>document.write(language.buton5)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <!--<div class="row">-->
+
+                <!--	<div class="col s12  m4 l4 xl4"></div>-->
+                <!--	<div class="col s12  m4 l4 xl4">-->
+                <!--		<p><a class="waves-effect waves-light btn-large modal-trigger"  href="#modal1" onclick="goforward()">-->
+                <!--				<script>document.write(language.buton6)</script></a></p>-->
+                <!--	</div>-->
+                <!--	<div class="col s12  m4 l4 xl4"></div>-->
+                <!--</div>-->
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="coordonatelelocatiei.html">
+                                <script>document.write(language.buton14)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+                <!--<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large modal-trigger"  href="plandezbor.html">
+							<script>document.write(language.plan)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>-->
+
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="plandezbor.html">
+                                <script>document.write(language.plan)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="locatii.html">
+                                <script>document.write(language.locatii)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="rute.html">
+                                <script>document.write(language.rute)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="contact.html">
+                                <script>document.write(language.contact)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="dmstodd.html">
+                                <script>document.write(language.dmstodd)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <br /><br /><br />
+            </div>
+
+        </div>
+    </ul>
+    <script>
+        $(".btn").sideNav();
+// 		 $(document).ready(function(){
+//     // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+//       $('.modal').modal({
+//       dismissible: true, // Modal can be dismissed by clicking outside of the modal
+//       opacity: 0.8, // Opacity of modal background
+//     });
+//       });
+
+    </script>
+
+    <div id="container" class="container">
+        <div class="section" id="section1"></div>
+        <div class="section" id="section2">
+            <div class="row" style="background-color:#bbdefb;">
+                <div class="input-field col s12  m12 l12 xl12">
+                    <!--<script>document.write("<input placeholder=\"" + language.placeholderadresa1 + "\" id=\"adresa3\" type=\"text\" class=\"validate\">");</script>-->
+                    <script>if (localStorage.getItem('latadr') != '0' && localStorage.getItem('lngadr') != '0') { var adresaadr2 = localStorage.getItem('adresaadr'); } else { adresaadr2 = ""; }</script>
+                    <table>
+                        <tr>
+                            <td>
+                                <script>document.write("<input placeholder=\"" + language.placeholderadresa1 + "\" id=\"adresa61\" type=\"text\" class=\"validate\"  oninput=\"hk();\" value=\"" + adresaadr2 + "\" />");</script>
+                            </td>
+                            <td><a href="#" id="rst1" class="btn btn-large"
+                                    onclick=" latadr=0;lngadr=0;adresaadr='';localStorage.setItem('latadr', 0);localStorage.setItem('lngadr', 0);localStorage.setItem('adresaadr','');$('#adresa71').html('');document.getElementById('adresa61').value='';playbeep();return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="adresa71"></div>
+                    <table>
+                        <tr>
+                            <td>
+                                <select id="locatie1" onchange="playbeep();">
+
+                                </select>
+                            </td>
+                            </td>
+                            <td>
+                                <a href="#" id="rstw4" class="btn btn-large"
+                                    onclick="latadr2=0;lngadr2=0;localStorage.setItem('latadr2', 0);localStorage.setItem('lngadr2', 0);localStorage.setItem('adresaadr','');adresaadr='';document.getElementById('locatie1').value='0'; $('#locatie1').trigger('change'); $('#locatie1').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!--<p id="radiogroup1">-->
+                <!--    <input name="group1" type="radio" id="test1" name="tiplinie" checked value="da" />-->
+                <!--    <label for="test1">-->
+                <!--        <script>document.write(language.radio1)</script></label>-->
+                <!--    <input name="group1" type="radio" id="test2" name="tiplinie" value="nu" />-->
+                <!--    <label for="test2">-->
+                <!--        <script>document.write(language.radio2)</script></label>-->
+                <!--</p>-->
+                <p><a class="waves-effect waves-light btn-large modal-trigger"
+                        onclick="playbeep();if ((localStorage.getItem('latadr')!='0' && localStorage.getItem('lngadr')!='0') || (localStorage.getItem('latadr2')!='0' && localStorage.getItem('lngadr2')!='0')){ setInterval(function(){location.href='coordonatelelocatiei2.html';},300);} else { alert(language.nuaiintrodusniciolocatie);}">
+                        <script>document.write(language.buton13)</script></a></p>
+                <p><a class="waves-effect waves-light btn-large" href="#" onclick="playbeep();return reset();">
+                        <script>document.write(language.buton8)</script></a></p>
+            </div>
+            <div id="modal1" class="modal" style="width:100%;height:50%;padding-top:30%;">
+                <div class="progress" id="loader" style="width:100%;height:20%;">
+                    <div class="indeterminate"></div>
+                </div>
+            </div>
+        </div>
+        <div class="section" id="section3"></div>
+    </div>
+    <script>
+        $(document).ajaxComplete(function () {
+
+            console.log(window["raspuns"]);
+            var data = JSON.parse(window["raspuns"]);
+
+            if (data[1].includes("succes")) {
+
+
+                if (localStorage.getItem("latlngadr") == "") {
+                    $("#locatie1").append('<option value="0" selected="selected" >' + language.sauselecteazaolocatie + '</option>');
+                } else {
+                    $("#locatie1").append('<option value="0"  >' + language.sauselecteazaolocatie + '</option>');
+                }
+                data[2].forEach(function (item, index) {
+
+                    if (localStorage.getItem("latlngadr") == (item.lat + '===' + item.lng)) {
+                        $("#locatie1").append('<option selected value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');//alert("1---"+localStorage.getItem("latlng20"))   ;       
+                    } else {
+                        $("#locatie1").append('<option value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');//alert(localStorage.getItem("2---"+"latlng20"))   ;          
+                    }
+
+
+
+                });
+                $("#locatie1").trigger('contentChanged');
+            } else if (data.includes("Date incorecte!!!")) {
+                alert(language.dateincorecte);
+            } else {
+                alert(language.alertalogare6);
+            }
+
+
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1698 @@
+<html>
+
+<head>
+
+    <title>Mobile tutorial - Leaflet</title>
+    <script src='file:///android_asset/app.js'></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+    <link rel="stylesheet" href="leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="leaflet.css" />
+    <script src="leaflet.js"></script>
+    <script src="leaflet-routing-machine.js"></script>
+    <link rel="stylesheet" href="Control.Geocoder.css" />
+    <script src="Control.Geocoder.js"></script>
+    <link rel="stylesheet" href="Control.Geocoder.css" />
+    <script src="Control.Geocoder.js"></script>
+    <script src="language.js"></script>
+    <link href="font.css" rel="stylesheet">
+    <link rel="stylesheet" href="materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+    <script src="materialize.min.js"></script>
+    <script src="Leaflet.Control.Custom.js"></script>
+    <script src="dom-to-image.min.js"></script>
+    <script>
+        //  window.addEventListener("error", function (e) {
+        //   location.reload();alert();
+        //   return false;
+        // });
+        localStorage.setItem("frompl1", "da");
+        var that = new XMLHttpRequest();
+        that.open('GET', 'http://google.com', false);
+        try {
+            that.send();
+        } catch (exception) {
+            if (exception.name == 'NetworkError') {
+                alert("Nu esti conectat la internet!!!");
+            }
+        }
+        app.SetOnError(function () {
+            //window.location.href = "plandezbor2.html";
+        });
+        function playbeep() {
+            var x = document.getElementById("myAudio");
+            x.currentTime = 0;
+            x.volume = 0.05;
+            x.play();
+        }
+    </script>
+    <script>
+        var selectedLanguage = localStorage.getItem('lang');
+        var language = "";
+        if (selectedLanguage == "ro") {
+            language = lang.ro;
+        }
+        if (selectedLanguage == "en") {
+            language = lang.en;
+        }
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        #map {
+            width: 600px;
+            height: 400px;
+        }
+    </style>
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        #map {
+            height: 100%;
+            width: 100vw;
+        }
+
+        .brand-logo2 {
+            color: #fff;
+            display: inline-block;
+            font-size: 2.1rem;
+            padding: 0;
+            text-align: center;
+        }
+
+        #header2 {
+            display: none;
+            margin: 0px;
+        }
+
+        #header3 {
+            display: none;
+            margin: 0px;
+        }
+
+        #header4 {
+            display: none;
+            margin: 0px;
+        }
+
+        #header5 {
+            display: none;
+            margin: 0px;
+        }
+
+        .alertw3 {
+            padding: 5px;
+            background-color: #2FB886;
+            color: white;
+            margin-bottom: 15px;
+            border: 3px solid white;
+            font-weight: bold;
+        }
+
+        .button {
+            background-color: #26A69A;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .flex-container {
+            display: flex;
+        }
+
+
+
+        .titlu {
+            /* Green */
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+        }
+
+        .btn-large {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+    <script>
+        app.SetOnKey(OnKey);
+        function OnKey(action, name, code, extra) {
+            if (code == 4 && action == "Up") {
+                playbeep();
+                setTimeout(function () {
+                    window.location.href = "plandezbor.html";
+                }, 350);
+            }
+        }
+        function exit() {
+            var yesNo = app.CreateYesNoDialog("Exit App?");
+            yesNo.SetOnTouch(yesNo_OnTouch);
+            yesNo.Show();
+        }
+        function yesNo_OnTouch(result) {
+            if (result == "Yes") app.Exit();
+        }
+    </script>
+    <script>
+        console.log(localStorage.getItem("planadresa1") + "X");
+        console.log(localStorage.getItem("planadresa2") + "X");
+        console.log(localStorage.getItem("planadresa3") + "X");
+        console.log(localStorage.getItem("planadresa4") + "X");
+        console.log(localStorage.getItem("planadresa5") + "X");
+        console.log(localStorage.getItem("planadresa6") + "X");
+        console.log(localStorage.getItem("planadresa7") + "X");
+        console.log(localStorage.getItem("planadresa8") + "X");
+        $(document).ready(function () {
+            /*  if (localStorage.getItem("tiplinie") == "da") {
+                  $('.meniu1').css("display", "block");
+                  $('.meniu2').css("display", "none");
+              } else {
+                  $('.meniu1').css("display", "none");
+                  $('.meniu2').css("display", "block");
+              }*/
+            $('.meniu1').css("display", "none");
+            $('.meniu2').css("display", "block");
+            $("#stangasus").click(function () {
+                var textctrl = L.control.custom({
+                    position: 'topleft',
+                    content: divv,
+                    classes: 'tabelctrl',
+                    style:
+                    {
+                        marginTop: '-20%',
+                        display: 'block',
+                        width: '100%'
+                    },
+                    datas:
+                    {
+                        'foo': 'bar',
+                    },
+                    events:
+                    {
+                        click: function (data) {
+
+                        },
+                        dblclick: function (data) {
+
+                        },
+                        contextmenu: function (data) {
+                        },
+                    }
+                });
+                $(".tabelctrl").remove();
+                textctrl.addTo(map);
+            });
+
+
+            $("#stangajos").click(function () {
+                var textctrl = L.control.custom({
+                    position: 'bottomleft',
+                    content: divv,
+                    classes: 'tabelctrl',
+                    style:
+                    {
+                        marginBottom: '100px',
+                        display: 'block',
+                        width: '100%'
+                    },
+                    datas:
+                    {
+                        'foo': 'bar',
+                    },
+                    events:
+                    {
+                        click: function (data) {
+
+                        },
+                        dblclick: function (data) {
+
+                        },
+                        contextmenu: function (data) {
+                        },
+                    }
+                });
+                $(".tabelctrl").remove();
+                textctrl.addTo(map);
+            });
+
+            $("#dreaptasus").click(function () {
+                var textctrl = L.control.custom({
+                    position: 'topright',
+                    content: divv,
+                    classes: 'tabelctrl',
+                    style:
+                    {
+                        marginTop: '1px',
+                        marginLeft: '1%',
+                        display: 'block',
+                        width: '100%'
+                    },
+                    datas:
+                    {
+                        'foo': 'bar',
+                    },
+                    events:
+                    {
+                        click: function (data) {
+
+                        },
+                        dblclick: function (data) {
+
+                        },
+                        contextmenu: function (data) {
+                        },
+                    }
+                });
+                $(".tabelctrl").remove();
+                textctrl.addTo(map);
+            });
+
+
+
+            $("#dreaptajos").click(function () {
+                var textctrl = L.control.custom({
+                    position: 'bottomright',
+                    content: divv,
+                    classes: 'tabelctrl',
+                    style:
+                    {
+                        marginBottom: '50px',
+                        marginLeft: '1%',
+                        display: 'block',
+                        width: '100%'
+                    },
+                    datas:
+                    {
+                        'foo': 'bar',
+                    },
+                    events:
+                    {
+                        click: function (data) {
+
+                        },
+                        dblclick: function (data) {
+
+                        },
+                        contextmenu: function (data) {
+                        },
+                    }
+                });
+                $(".tabelctrl").remove();
+                textctrl.addTo(map);
+            });
+
+
+
+            $("#stergetabel").click(function () {
+
+                $(".tabelctrl").remove();
+            });
+        });
+        console.log(localStorage.getItem("tiplinie") + "AAAAA");
+
+        function goforward() {
+            $('.btn').sideNav('hide');
+            loc2 = app.CreateLocator("GPS");
+            loc2.SetOnChange(function (pos) {
+                localStorage.setItem("lat6", pos.latitude);
+                localStorage.setItem("lng6", pos.longitude);
+                localStorage.setItem("lat42", "0");
+                localStorage.setItem("lng42", "0");
+                loc2.Stop();
+                window.location.href = "locatiacurenta.html";
+            });
+            loc2.SetRate(1);
+            loc2.Start();
+        }
+    </script>
+    <style>
+        tr,
+        td {
+            margin: 0px;
+            padding: 0px
+        }
+
+        table {
+            background-color: cyan
+        }
+
+        table,
+        tr,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse
+        }
+    </style>
+    <style>
+        .planscr>tr,
+        .planscr>td {
+            margin: 0px;
+            padding: 0px
+        }
+
+        table.planscr {
+            background-color: white
+        }
+
+        table.planscr,
+        table.planscr tr,
+        table.planscr tr td {
+            border: 0;
+        }
+    </style>
+</head>
+
+<body onload="app.Start()">
+    <audio id="myAudio">
+        <source src="Snd/a.ogg" type="audio/ogg">
+    </audio>
+    <nav class="light-blue blue lighten-3">
+        <div class="nav-wrapper" style="text-align:center;">
+            <a href="#" class="brand-logo center  hide-on-small-and-down">
+                <script>document.write(language.plan + " : ")</script><span id="distanta" class="text-white"></span></a>
+            <a href="#" class="brand-logo2 hide-on-med-and-up">
+                <script>document.write(language.plan + " : ")</script><span id="distanta2"
+                    class="text-white"></span></a>
+            <a href="#" class="dropdown-button left orange darken-4 btn" style="height:100%;"
+                data-activates='dropdown1'><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+    <div id="header2" class="alertw3">
+        <div class="center  hide-on-small-and-down">
+            <div id="localitate" class="text-white"></div>
+        </div>
+        <div class="center hide-on-med-and-up">
+            <div id="localitate2" class="text-white"></div>
+        </div>
+    </div>
+    <div id="header3" class="alertw3">
+        <div class="center  hide-on-small-and-down">
+            <div id="localitate3" class="text-white"></div>
+        </div>
+        <div class="center hide-on-med-and-up">
+            <div id="localitate4" class="text-white"></div>
+        </div>
+    </div>
+    <div id="header4" class="alertw3">
+        <div class="center  hide-on-small-and-down">
+            <div id="localitate5" class="text-white"></div>
+        </div>
+        <div class="center hide-on-med-and-up">
+            <div id="localitate6" class="text-white"></div>
+        </div>
+    </div>
+    <div id="header5" class="alertw3">
+        <div class="center  hide-on-small-and-down">
+            <div id="localitate7" class="text-white"></div>
+        </div>
+        <div class="center hide-on-med-and-up">
+            <div id="localitate8" class="text-white"></div>
+        </div>
+    </div>
+
+
+
+    <ul id='dropdown1' class='dropdown-content'>
+        <li class="meniu1"><a href="#!"
+                onclick="map.fitBounds(polyline.getBounds(), { padding: [20, 20] });icon.bindTooltip(window['tooltip1'][2], { permanent: true, offset: [0, 12] });icon2.bindTooltip(window['tooltip2'][2], { permanent: true, offset: [0, 12] });$('#header2').css('display','none');$('#header3').css('display','none');$('#header4').css('display','none');$('#header5').css('display','none');">Inchide</a>
+        </li>
+        <li class="meniu1"><a href="distantadintredouaadrese.html">Inapoi</a>
+        </li>
+        <li class="meniu1"><a href="amap.html">Acasa</a>
+        </li>
+        <li class="meniu1"><a onclick="map.fitBounds(polyline.getBounds(), { padding: [20, 20] });">Centreaza Harta</a>
+        </li>
+        <li class="meniu1"> <a href="#" data-activates="slide-out" class="sidenav-trigger btn2">Meniu</a></li>
+
+
+        <li class="meniu2"><a href="plandezbor.html">
+                <script>document.write(language.inapoi)</script></a>
+        </li>
+        <li class="meniu2"><a href="distanta2.html">
+                <script>document.write(language.acasa)</script></a>
+        </li>
+        <li class="meniu2"><a onclick="map.fitBounds(polyline.getBounds(), { padding: [20, 20] });">
+                <script>document.write(language.centreazaharta)</script></a>
+        </li>
+        <li class="meniu2"> <a href="#" data-activates="slide-out" class="sidenav-trigger btn2">
+                <script>document.write(language.meniu2)</script></a></li>
+        <li class="meniu2"><a href="#" id="stangasus">
+                <script>document.write(language.stangasus)</script></a></li>
+        <li class="meniu2"><a href="#" id="stangajos">
+                <script>document.write(language.stangajos)</script></a></li>
+        <li class="meniu2"><a href="#" id="dreaptasus">
+                <script>document.write(language.dreaptasus)</script></a></li>
+        <li class="meniu2"><a href="#" id="dreaptajos">
+                <script>document.write(language.dreaptajos)</script></a></li>
+        <li class="meniu2"><a href="#" id="stergetabel">
+                <script>document.write(language.stergetabel)</script></a></li>
+        <li><a href='#' class='' onclick="playbeep();doscreenshot();return false;">
+                <script>document.write(language.doscreenshot);</script></a>
+        </li>
+        <li><a href='#' class='' onclick="playbeep();openlastscreenshoot();return false;">
+                <script>document.write(language.openlastscreenshoot);</script></a></li>
+        <li><a href='#' class='' onclick="playbeep();shareroutscreenshoot();return false;">
+                <script>document.write(language.openroutesfolder);</script></a>
+        </li>
+        <li><a href='#' class='' id='drp1' onclick="playbeep();listarutesalvate();return false;">
+                <script>document.write(language.listarutesalvate);</script></a>
+        </li>
+    </ul>
+
+    <ul id="slide-out" class="side-nav light-blue lighten-3">
+
+        <div id="container">
+            <div class="section" id="section4">
+                <div class="row">
+
+                    <div class="col s12  m12 l12 xl12">
+                        <p class="waves-effect waves-light titlu orange darken-3">
+                            <script>document.write(language.meniu)</script>
+                            <button class="light-blue lighten-3" onclick="$('.btn').sideNav('hide');return false;"> <i
+                                    class="tiny material-icons">clear</i></button>
+                            &nbsp;&nbsp;&nbsp;<button class="light-blue lighten-3" onclick="exit();"> <i
+                                    class="tiny material-icons">exit_to_app</i></button>
+                        </p>
+                    </div>
+                </div>
+
+
+                <hr />
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="_main_.html">
+                                <script>document.write(language.login)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="distanta2.html">
+                                <script>document.write(language.buton9)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="noutati.html">
+                                <script>document.write(language.noutati)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large"
+                                href="distantadelalocatiacurentalaoadresa.html">
+                                <script>document.write(language.buton4)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="distantadintredouaadrese.html">
+                                <script>document.write(language.buton5)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large modal-trigger" href="#modal1"
+                                onclick="goforward()">
+                                <script>document.write(language.buton6)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="coordonatelelocatiei.html">
+                                <script>document.write(language.buton14)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+                <!--<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large modal-trigger"  href="plandezbor.html">
+							<script>document.write(language.plan)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>-->
+
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="plandezbor.html">
+                                <script>document.write(language.plan)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="locatii.html">
+                                <script>document.write(language.locatii)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="rute.html">
+                                <script>document.write(language.rute)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="contact.html">
+                                <script>document.write(language.contact)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="dmstodd.html">
+                                <script>document.write(language.dmstodd)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <br /><br /><br />
+            </div>
+
+        </div>
+    </ul>
+
+
+    <script>
+
+
+    </script>
+
+
+
+    <script>
+        $(".btn2").sideNav();
+        $(document).ready(function () {
+            // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+            $('.modal').modal({
+                dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                opacity: 0.8, // Opacity of modal background
+            }
+            );
+        });
+    </script>
+    <script>
+        $('.dropdown-trigger').dropdown({
+            belowOrigin: false
+        });
+    </script>
+
+
+
+
+    </div>
+
+    <div id="listaplan"></div>
+    <div id="modal1" class="modal" style="width:100%;height:50%;display:absolute;top:20%;">
+        <div class="progress" id="loader" style="width:100%;height:20%;">
+            <div class="indeterminate"></div>
+        </div>
+    </div>
+    <div id="modal2" class="modal"
+        style="width:100%;height:90%;padding-top:10%;overflow-y:auto;overflow-x: scroll !important;">
+
+    </div>
+    <div id='map' style="position:fixed;"></div>
+
+    <script>
+        // alert(localStorage.getItem("lat4") + "---" + localStorage.getItem("lng4") + "---" + localStorage.getItem("lat5") + "---" + localStorage.getItem("lng5"));        
+        window["tooltip1"] = [];
+        window["tooltip2"] = [];
+        window["tooltip3"] = [];
+        window["tooltip4"] = [];
+        window["tooltip5"] = [];
+        window["tooltip6"] = [];
+        window["tooltip7"] = [];
+        window["tooltip8"] = [];
+        var ajaxcomplete = 0;
+        window["ajaxcomplete2"] = 0;
+        function gettooltip(latlng, name) {
+            var texttemp = ""; var texttemp2 = ""; var texttemp3 = "";
+            $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latlng.lat + "," + latlng.lng + "&key=AIzaSyAPi8VTcgjj3U2xF_BBmJaq32f3W96YsUQ", function (data, status) {
+                window["ajaxcomplete2"] = window["ajaxcomplete2"] + 1;
+                var adresa = data;
+                console.log(adresa);
+                adresa.results[0].address_components.forEach(function (item) {
+                    if (item.types[0] == "locality") {
+                        texttemp = texttemp + item.long_name;
+                        texttemp2 = texttemp2 + item.long_name;
+                        texttemp3 = texttemp3 + item.long_name;
+                    }
+                    if (item.types[0] == "administrative_area_level_2") {
+                        texttemp = texttemp + "," + item.long_name;
+                    }
+                    if (item.types[0] == "administrative_area_level_1") {
+                        texttemp = texttemp + "," + item.long_name;
+                    }
+                    if (item.types[0] == "country") {
+                        texttemp = texttemp + "," + item.long_name;
+                        texttemp2 = texttemp2 + " , " + item.long_name + "<br/>Lat: " + latlng.lat + " Long:" + latlng.lng;
+                        texttemp3 = texttemp3 + " , " + item.long_name;// + "<br/>Lat: " + latlng.lat + " <br/>Long:" + latlng.lng;
+                    }
+                });
+                window[name] = [texttemp, texttemp2, texttemp3];
+            });
+
+
+        }
+        var dist1 = 0;
+        var dist2 = 0;
+        var dist3 = 0;
+        var dist4 = 0;
+        var dist5 = 0;
+        var dist6 = 0;
+        var dist7 = 0;
+        var dist8 = 0;
+        if (localStorage.getItem("webmapadresa1lat") != 0 && localStorage.getItem("webmapadresa1lng") != 0) {
+            var latlng = L.latLng(localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng"));
+        } else {
+            var latlng = L.latLng(localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng"));
+        }
+
+
+        var map = L.map('map',{zoomSnap: 0.1}).panTo(latlng).setZoom(15);
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2VsdWJ0NSIsImEiOiJja3RraDFrNngxbHVsMm5wZWtraDN3aG4yIn0.GjYTCP7lP23SC__l-I7wWQ', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1
+        }).addTo(map);
+
+
+        var popup = L.popup({ maxWidth: 1000 });
+        map.on('contextmenu', function (e) {
+            //        alert(e.latlng);
+            popup.setLatLng(e.latlng).openOn(map);
+        });
+
+
+
+        if ((localStorage.getItem("planadresa1lat") != 0 && localStorage.getItem("planadresa1lng") != 0) || (localStorage.getItem("webmapadresa1lat") != 0 && localStorage.getItem("webmapadresa1lng") != 0)) {
+
+            ajaxcomplete++;
+
+        }
+        if ((localStorage.getItem("planadresa2lat") != 0 && localStorage.getItem("planadresa2lng") != 0) || (localStorage.getItem("webmapadresa2lat") != 0 && localStorage.getItem("webmapadresa2lng") != 0)) {
+
+            ajaxcomplete++;
+
+        }
+        if ((localStorage.getItem("planadresa3lat") != 0 && localStorage.getItem("planadresa3lng") != 0) || (localStorage.getItem("webmapadresa3lat") != 0 && localStorage.getItem("webmapadresa3lng") != 0)) {
+
+            ajaxcomplete++;
+        }
+        if ((localStorage.getItem("planadresa4lat") != 0 && localStorage.getItem("planadresa4lng") != 0) || (localStorage.getItem("webmapadresa4lat") != 0 && localStorage.getItem("webmapadresa4lng") != 0)) {
+
+            ajaxcomplete++;
+        }
+        if ((localStorage.getItem("planadresa5lat") != 0 && localStorage.getItem("planadresa5lng") != 0) || (localStorage.getItem("webmapadresa5lat") != 0 && localStorage.getItem("webmapadresa5lng") != 0)) {
+
+            ajaxcomplete++;
+        }
+        if ((localStorage.getItem("planadresa6lat") != 0 && localStorage.getItem("planadresa6lng") != 0) || (localStorage.getItem("webmapadresa6lat") != 0 && localStorage.getItem("webmapadresa6lng") != 0)) {
+
+            ajaxcomplete++;
+        }
+        if ((localStorage.getItem("planadresa7lat") != 0 && localStorage.getItem("planadresa7lng") != 0) || (localStorage.getItem("webmapadresa7lat") != 0 && localStorage.getItem("webmapadresa7lng") != 0)) {
+
+            ajaxcomplete++;
+        }
+        if ((localStorage.getItem("planadresa8lat") != 0 && localStorage.getItem("planadresa8lng") != 0) || (localStorage.getItem("webmapadresa8lat") != 0 && localStorage.getItem("webmapadresa8lng") != 0)) {
+
+            ajaxcomplete++;
+        }
+
+
+
+
+
+
+
+
+
+
+
+        if (localStorage.getItem("webmapadresa1lat") != 0 && localStorage.getItem("webmapadresa1lng") != 0) {
+            var latlng1 = L.latLng(localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng"));
+            var icon1 = L.marker(latlng1);
+            icon1.setLatLng(latlng1);
+            icon1.addTo(map);
+            gettooltip(latlng1, "tooltip1");
+        } else {
+            if (localStorage.getItem("planadresa1lat") != 0 && localStorage.getItem("planadresa1lng") != 0) {
+                var latlng1 = L.latLng(localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng"));
+                var icon1 = L.marker(latlng1);
+                icon1.setLatLng(latlng1);
+                icon1.addTo(map);
+                gettooltip(latlng1, "tooltip1");
+
+
+            }
+        }
+        if (localStorage.getItem("webmapadresa2lat") != 0 && localStorage.getItem("webmapadresa2lng") != 0) {
+            var latlng2 = L.latLng(localStorage.getItem("webmapadresa2lat"), localStorage.getItem("webmapadresa2lng"));
+            var myIcon = L.icon({
+                iconUrl: 'Img/1.png',
+                iconSize: [28, 28],
+                iconAnchor: [14, 28],
+                popupAnchor: [-3, -76],
+            });
+            var icon2 = L.marker(latlng2, { icon: myIcon });
+            icon2.setLatLng(latlng2);
+            icon2.addTo(map);
+            gettooltip(latlng2, "tooltip2");
+
+        } else {
+            if (localStorage.getItem("planadresa2lat") != 0 && localStorage.getItem("planadresa2lng") != 0) {
+                var latlng2 = L.latLng(localStorage.getItem("planadresa2lat"), localStorage.getItem("planadresa2lng"));
+                var myIcon = L.icon({
+                    iconUrl: 'Img/1.png',
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 28],
+                    popupAnchor: [-3, -76],
+                });
+                var icon2 = L.marker(latlng2, { icon: myIcon });
+                icon2.setLatLng(latlng2);
+                icon2.addTo(map);
+                gettooltip(latlng2, "tooltip2");
+
+
+            }
+        }
+
+
+
+
+
+        if (localStorage.getItem("webmapadresa3lat") != 0 && localStorage.getItem("webmapadresa3lng") != 0) {
+            var latlng3 = L.latLng(localStorage.getItem("webmapadresa3lat"), localStorage.getItem("webmapadresa3lng"));
+            var myIcon = L.icon({
+                iconUrl: 'Img/2.png',
+                iconSize: [28, 28],
+                iconAnchor: [14, 28],
+                popupAnchor: [-3, -76],
+            });
+            var icon3 = L.marker(latlng3, { icon: myIcon });
+            icon3.setLatLng(latlng3);
+            icon3.addTo(map);
+            gettooltip(latlng3, "tooltip3");
+
+        } else {
+            if (localStorage.getItem("planadresa3lat") != 0 && localStorage.getItem("planadresa3lng") != 0) {
+                var myIcon = L.icon({
+                    iconUrl: 'Img/2.png',
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 28],
+                    popupAnchor: [-3, -76],
+                });
+                var latlng3 = L.latLng(localStorage.getItem("planadresa3lat"), localStorage.getItem("planadresa3lng"));
+                var icon3 = L.marker(latlng3, { icon: myIcon });
+                icon3.setLatLng(latlng3);
+                icon3.addTo(map);
+                gettooltip(latlng3, "tooltip3");
+
+            }
+        }
+
+
+
+
+        if (localStorage.getItem("webmapadresa4lat") != 0 && localStorage.getItem("webmapadresa4lng") != 0) {
+            var latlng4 = L.latLng(localStorage.getItem("webmapadresa4lat"), localStorage.getItem("webmapadresa4lng"));
+            var myIcon = L.icon({
+                iconUrl: 'Img/3.png',
+                iconSize: [28, 28],
+                iconAnchor: [14, 28],
+                popupAnchor: [-3, -76],
+            });
+            var icon4 = L.marker(latlng4, { icon: myIcon });
+            icon4.setLatLng(latlng4);
+            icon4.addTo(map);
+            gettooltip(latlng4, "tooltip4");
+
+        } else {
+            if (localStorage.getItem("planadresa4lat") != 0 && localStorage.getItem("planadresa4lng") != 0) {
+                var myIcon = L.icon({
+                    iconUrl: 'Img/3.png',
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 28],
+                    popupAnchor: [-3, -76],
+                });
+                var latlng4 = L.latLng(localStorage.getItem("planadresa4lat"), localStorage.getItem("planadresa4lng"));
+                var icon4 = L.marker(latlng4, { icon: myIcon });
+                icon4.setLatLng(latlng4);
+                icon4.addTo(map);
+                gettooltip(latlng4, "tooltip4");
+
+            }
+        }
+
+        // if (localStorage.getItem("planadresa4lat") != 0 && localStorage.getItem("planadresa4lng") != 0) {
+        //     var myIcon = L.icon({
+        //     iconUrl: 'Img/3.png',
+        //      iconSize: [28, 28],
+        //     iconAnchor: [14,28],
+        //     popupAnchor: [-3, -76],    
+        //   });
+        //     var latlng4 = L.latLng(localStorage.getItem("planadresa4lat"), localStorage.getItem("planadresa4lng"));
+        //     var icon4 = L.marker(latlng4,{icon: myIcon});
+        //     icon4.setLatLng(latlng4);
+        //     icon4.addTo(map);
+        //     gettooltip(latlng4, "tooltip4");
+        // }
+
+
+
+
+
+
+
+
+
+        if (localStorage.getItem("webmapadresa5lat") != 0 && localStorage.getItem("webmapadresa5lng") != 0) {
+            var latlng5 = L.latLng(localStorage.getItem("webmapadresa5lat"), localStorage.getItem("webmapadresa5lng"));
+            var myIcon = L.icon({
+                iconUrl: 'Img/4.png',
+                iconSize: [28, 28],
+                iconAnchor: [14, 28],
+                popupAnchor: [-3, -76],
+            });
+            var icon5 = L.marker(latlng5, { icon: myIcon });
+            icon5.setLatLng(latlng5);
+            icon5.addTo(map);
+            gettooltip(latlng5, "tooltip5");
+
+        } else {
+
+            if (localStorage.getItem("planadresa5lat") != 0 && localStorage.getItem("planadresa5lng") != 0) {
+                var myIcon = L.icon({
+                    iconUrl: 'Img/4.png',
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 28],
+                    popupAnchor: [-3, -76],
+                });
+                var latlng5 = L.latLng(localStorage.getItem("planadresa5lat"), localStorage.getItem("planadresa5lng"));
+                var icon5 = L.marker(latlng5, { icon: myIcon });
+                icon5.setLatLng(latlng5);
+                icon5.addTo(map);
+                gettooltip(latlng5, "tooltip5");
+
+            }
+        }
+
+
+        if (localStorage.getItem("webmapadresa6lat") != 0 && localStorage.getItem("webmapadresa6lng") != 0) {
+            var latlng6 = L.latLng(localStorage.getItem("webmapadresa6lat"), localStorage.getItem("webmapadresa6lng"));
+            var myIcon = L.icon({
+                iconUrl: 'Img/5.png',
+                iconSize: [28, 28],
+                iconAnchor: [14, 28],
+                popupAnchor: [-3, -76],
+            });
+            var icon6 = L.marker(latlng6, { icon: myIcon });
+            icon6.setLatLng(latlng6);
+            icon6.addTo(map);
+            gettooltip(latlng6, "tooltip6");
+
+        } else {
+            if (localStorage.getItem("planadresa6lat") != 0 && localStorage.getItem("planadresa6lng") != 0) {
+                var myIcon = L.icon({
+                    iconUrl: 'Img/5.png',
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 28],
+                    popupAnchor: [-3, -76],
+                });
+                var latlng6 = L.latLng(localStorage.getItem("planadresa6lat"), localStorage.getItem("planadresa6lng"));
+                var icon6 = L.marker(latlng6, { icon: myIcon });
+                icon6.setLatLng(latlng6);
+                icon6.addTo(map);
+                gettooltip(latlng6, "tooltip6");
+
+            }
+        }
+
+
+
+        if (localStorage.getItem("webmapadresa7lat") != 0 && localStorage.getItem("webmapadresa7lng") != 0) {
+            var latlng7 = L.latLng(localStorage.getItem("webmapadresa7lat"), localStorage.getItem("webmapadresa7lng"));
+            var myIcon = L.icon({
+                iconUrl: 'Img/6.png',
+                iconSize: [28, 28],
+                iconAnchor: [14, 28],
+                popupAnchor: [-3, -76],
+            });
+            var icon7 = L.marker(latlng7, { icon: myIcon });
+            icon7.setLatLng(latlng7);
+            icon7.addTo(map);
+            gettooltip(latlng7, "tooltip7");
+
+        } else {
+            if (localStorage.getItem("planadresa7lat") != 0 && localStorage.getItem("planadresa7lng") != 0) {
+                var myIcon = L.icon({
+                    iconUrl: 'Img/6.png',
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 28],
+                    popupAnchor: [-3, -76],
+                });
+                var latlng7 = L.latLng(localStorage.getItem("planadresa7lat"), localStorage.getItem("planadresa7lng"));
+                var icon7 = L.marker(latlng7, { icon: myIcon });
+                icon7.setLatLng(latlng7);
+                icon7.addTo(map);
+                gettooltip(latlng7, "tooltip7");
+
+            }
+        }
+
+
+        if (localStorage.getItem("webmapadresa8lat") != 0 && localStorage.getItem("webmapadresa8lng") != 0) {
+            var latlng8 = L.latLng(localStorage.getItem("webmapadresa8lat"), localStorage.getItem("webmapadresa8lng"));
+            var myIcon = L.icon({
+                iconUrl: 'Img/7.png',
+                iconSize: [28, 28],
+                iconAnchor: [14, 28],
+                popupAnchor: [-3, -76],
+            });
+            var icon8 = L.marker(latlng8, { icon: myIcon });
+            icon8.setLatLng(latlng8);
+            icon8.addTo(map);
+            gettooltip(latlng8, "tooltip8");
+
+        } else {
+            if (localStorage.getItem("planadresa8lat") != 0 && localStorage.getItem("planadresa8lng") != 0) {
+                var myIcon = L.icon({
+                    iconUrl: 'Img/7.png',
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 28],
+                    popupAnchor: [-3, -76],
+                });
+                var latlng8 = L.latLng(localStorage.getItem("planadresa8lat"), localStorage.getItem("planadresa8lng"));
+                var icon8 = L.marker(latlng8, { icon: myIcon });
+                icon8.setLatLng(latlng8);
+                icon8.addTo(map);
+                gettooltip(latlng8, "tooltip8");
+
+            }
+        }
+
+
+
+        console.log(localStorage.getItem("planadresa1lat")); console.log(localStorage.getItem("planadresa1lng"));
+        map.panTo(latlng).setZoom(10);
+        var div = "<div style=\"width:300px;>";
+
+
+
+        if ((localStorage.getItem("webmapadresa1lat") != 0 && localStorage.getItem("webmapadresa1lng") != 0 && localStorage.getItem("webmapadresa2lat") != 0 && localStorage.getItem("webmapadresa2lng") != 0)) {
+            var latlngs1 = [
+                [localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng")],
+                [localStorage.getItem("webmapadresa2lat"), localStorage.getItem("webmapadresa2lng")]
+            ];
+            var point1 = L.latLng(localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng"));
+            var point2 = L.latLng(localStorage.getItem("webmapadresa2lat"), localStorage.getItem("webmapadresa2lng"));
+            var polyline = L.polyline(latlngs1, { color: 'red' }).addTo(map);
+            var km = point1.distanceTo(point2) / 1000;
+            var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+            dist1 = dist_from_P1_to_P2;
+            div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem('webmapadresa1') + "</div>";
+            div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem("webmapadresa2") + ": " + dist_from_P1_to_P2 + "</div >";
+            console.log(localStorage.getItem("webmapadresa2"));
+            console.log(localStorage.getItem("webmapadresa1"));
+        } else {
+            if (localStorage.getItem("planadresa1lat") != 0 && localStorage.getItem("planadresa1lng") != 0 && localStorage.getItem("planadresa2lat") != 0 && localStorage.getItem("planadresa2lng") != 0) {
+                var latlngs1 = [
+                    [localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng")],
+                    [localStorage.getItem("planadresa2lat"), localStorage.getItem("planadresa2lng")]
+                ];
+                var point1 = L.latLng(localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng"));
+                var point2 = L.latLng(localStorage.getItem("planadresa2lat"), localStorage.getItem("planadresa2lng"));
+                var polyline = L.polyline(latlngs1, { color: 'red' }).addTo(map);
+                var km = point1.distanceTo(point2) / 1000;
+                var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+                dist1 = dist_from_P1_to_P2;
+                div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem('planadresa1') + "</div>";
+                div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem("planadresa2") + ": " + dist_from_P1_to_P2 + "</div >";
+
+
+            }
+        }
+
+
+
+
+        if ((localStorage.getItem("webmapadresa1lat") != 0 && localStorage.getItem("webmapadresa1lng") != 0 && localStorage.getItem("webmapadresa3lat") != 0 && localStorage.getItem("webmapadresa3lng") != 0)) {
+            var point1 = L.latLng(localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng"));
+            var point2 = L.latLng(localStorage.getItem("webmapadresa3lat"), localStorage.getItem("webmapadresa3lng"));
+            var km = point1.distanceTo(point2) / 1000;
+            var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+            dist2 = dist_from_P1_to_P2;
+
+            div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem("webmapadresa3") + ": " + dist_from_P1_to_P2 + "</div >";
+
+
+            var latlngs2 = [
+                [localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng")],
+                [localStorage.getItem("webmapadresa3lat"), localStorage.getItem("webmapadresa3lng")]
+            ];
+            var polyline2 = L.polyline(latlngs2, { color: 'red' }).addTo(map);
+
+
+        } else {
+            if (localStorage.getItem("planadresa1lat") != 0 && localStorage.getItem("planadresa1lng") != 0 &&
+                localStorage.getItem("planadresa3lat") != 0 && localStorage.getItem("planadresa3lng") != 0) {
+                var point1 = L.latLng(localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng"));
+                var point2 = L.latLng(localStorage.getItem("planadresa3lat"), localStorage.getItem("planadresa3lng"));
+                var km = point1.distanceTo(point2) / 1000;
+                var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+                dist2 = dist_from_P1_to_P2;
+                div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem('planadresa3') + ": " + dist_from_P1_to_P2 + "</div>";
+                var latlngs2 = [
+                    [localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng")],
+                    [localStorage.getItem("planadresa3lat"), localStorage.getItem("planadresa3lng")]
+                ];
+                var polyline2 = L.polyline(latlngs2, { color: 'red' }).addTo(map);
+            }
+        }
+
+
+
+        if ((localStorage.getItem("webmapadresa1lat") != 0 && localStorage.getItem("webmapadresa1lng") != 0 && localStorage.getItem("webmapadresa4lat") != 0 && localStorage.getItem("webmapadresa4lng") != 0)) {
+            var point1 = L.latLng(localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng"));
+            var point2 = L.latLng(localStorage.getItem("webmapadresa4lat"), localStorage.getItem("webmapadresa4lng"));
+            var km = point1.distanceTo(point2) / 1000;
+            var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+            dist3 = dist_from_P1_to_P2;
+
+            div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem("webmapadresa4") + ": " + dist_from_P1_to_P2 + "</div >";
+
+
+            var latlngs3 = [
+                [localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng")],
+                [localStorage.getItem("webmapadresa4lat"), localStorage.getItem("webmapadresa4lng")]
+            ];
+            var polyline3 = L.polyline(latlngs3, { color: 'red' }).addTo(map);
+
+
+        } else {
+            if (localStorage.getItem("planadresa1lat") != 0 && localStorage.getItem("planadresa1lng") != 0 &&
+                localStorage.getItem("planadresa4lat") != 0 && localStorage.getItem("planadresa4lng") != 0) {
+                var point1 = L.latLng(localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng"));
+                var point2 = L.latLng(localStorage.getItem("planadresa4lat"), localStorage.getItem("planadresa4lng"));
+                var km = point1.distanceTo(point2) / 1000;
+                var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+                dist3 = dist_from_P1_to_P2;
+                div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem('planadresa4') + ": " + dist_from_P1_to_P2 + "</div>";
+                var latlngs3 = [
+                    [localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng")],
+                    [localStorage.getItem("planadresa4lat"), localStorage.getItem("planadresa4lng")]
+                ];
+                var polyline3 = L.polyline(latlngs3, { color: 'red' }).addTo(map);
+            }
+        }
+
+
+
+
+        if ((localStorage.getItem("webmapadresa1lat") != 0 && localStorage.getItem("webmapadresa1lng") != 0 && localStorage.getItem("webmapadresa5lat") != 0 && localStorage.getItem("webmapadresa5lng") != 0)) {
+            var point1 = L.latLng(localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng"));
+            var point2 = L.latLng(localStorage.getItem("webmapadresa5lat"), localStorage.getItem("webmapadresa5lng"));
+            var km = point1.distanceTo(point2) / 1000;
+            var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+            dist4 = dist_from_P1_to_P2;
+
+            div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem("webmapadresa5") + ": " + dist_from_P1_to_P2 + "</div >";
+
+
+            var latlngs4 = [
+                [localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng")],
+                [localStorage.getItem("webmapadresa5lat"), localStorage.getItem("webmapadresa5lng")]
+            ];
+            var polyline4 = L.polyline(latlngs4, { color: 'red' }).addTo(map);
+
+
+        } else {
+            if (localStorage.getItem("planadresa1lat") != 0 && localStorage.getItem("planadresa1lng") != 0 &&
+                localStorage.getItem("planadresa5lat") != 0 && localStorage.getItem("planadresa5lng") != 0) {
+                var point1 = L.latLng(localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng"));
+                var point2 = L.latLng(localStorage.getItem("planadresa5lat"), localStorage.getItem("planadresa5lng"));
+                var km = point1.distanceTo(point2) / 1000;
+                var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+                dist4 = dist_from_P1_to_P2;
+                div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem('planadresa5') + ": " + dist_from_P1_to_P2 + "</div>";
+                var latlngs4 = [
+                    [localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng")],
+                    [localStorage.getItem("planadresa5lat"), localStorage.getItem("planadresa5lng")]
+                ];
+                var polyline4 = L.polyline(latlngs4, { color: 'red' }).addTo(map);
+            }
+        }
+
+
+
+        if ((localStorage.getItem("webmapadresa1lat") != 0 && localStorage.getItem("webmapadresa1lng") != 0 && localStorage.getItem("webmapadresa6lat") != 0 && localStorage.getItem("webmapadresa6lng") != 0)) {
+            var point1 = L.latLng(localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng"));
+            var point2 = L.latLng(localStorage.getItem("webmapadresa6lat"), localStorage.getItem("webmapadresa6lng"));
+            var km = point1.distanceTo(point2) / 1000;
+            var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+            dist5 = dist_from_P1_to_P2;
+
+            div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem("webmapadresa5") + ": " + dist_from_P1_to_P2 + "</div >";
+
+
+            var latlngs5 = [
+                [localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng")],
+                [localStorage.getItem("webmapadresa6lat"), localStorage.getItem("webmapadresa6lng")]
+            ];
+            var polyline5 = L.polyline(latlngs5, { color: 'red' }).addTo(map);
+
+
+        } else {
+            if (localStorage.getItem("planadresa1lat") != 0 && localStorage.getItem("planadresa1lng") != 0 &&
+                localStorage.getItem("planadresa6lat") != 0 && localStorage.getItem("planadresa6lng") != 0) {
+                var point1 = L.latLng(localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng"));
+                var point2 = L.latLng(localStorage.getItem("planadresa6lat"), localStorage.getItem("planadresa6lng"));
+                var km = point1.distanceTo(point2) / 1000;
+                var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+                dist5 = dist_from_P1_to_P2;
+                div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem('planadresa6') + ": " + dist_from_P1_to_P2 + "</div>";
+                var latlngs5 = [
+                    [localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng")],
+                    [localStorage.getItem("planadresa6lat"), localStorage.getItem("planadresa6lng")]
+                ];
+                var polyline5 = L.polyline(latlngs5, { color: 'red' }).addTo(map);
+            }
+        }
+
+
+
+        if ((localStorage.getItem("webmapadresa1lat") != 0 && localStorage.getItem("webmapadresa1lng") != 0 && localStorage.getItem("webmapadresa7lat") != 0 && localStorage.getItem("webmapadresa7lng") != 0)) {
+            var point1 = L.latLng(localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng"));
+            var point2 = L.latLng(localStorage.getItem("webmapadresa7lat"), localStorage.getItem("webmapadresa7lng"));
+            var km = point1.distanceTo(point2) / 1000;
+            var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+            dist6 = dist_from_P1_to_P2;
+
+            div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem("webmapadresa7") + ": " + dist_from_P1_to_P2 + "</div >";
+
+
+            var latlngs6 = [
+                [localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng")],
+                [localStorage.getItem("webmapadresa7lat"), localStorage.getItem("webmapadresa7lng")]
+            ];
+            var polyline6 = L.polyline(latlngs6, { color: 'red' }).addTo(map);
+
+
+        } else {
+            if (localStorage.getItem("planadresa1lat") != 0 && localStorage.getItem("planadresa1lng") != 0 &&
+                localStorage.getItem("planadresa7lat") != 0 && localStorage.getItem("planadresa7lng") != 0) {
+                var point1 = L.latLng(localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng"));
+                var point2 = L.latLng(localStorage.getItem("planadresa7lat"), localStorage.getItem("planadresa7lng"));
+                var km = point1.distanceTo(point2) / 1000;
+                var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+                dist6 = dist_from_P1_to_P2;
+                div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem('planadresa7') + ": " + dist_from_P1_to_P2 + "</div>";
+                var latlngs6 = [
+                    [localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng")],
+                    [localStorage.getItem("planadresa7lat"), localStorage.getItem("planadresa7lng")]
+                ];
+                var polyline6 = L.polyline(latlngs6, { color: 'red' }).addTo(map);
+            }
+        }
+
+
+        if ((localStorage.getItem("webmapadresa1lat") != 0 && localStorage.getItem("webmapadresa1lng") != 0 && localStorage.getItem("webmapadresa8lat") != 0 && localStorage.getItem("webmapadresa8lng") != 0)) {
+            var point1 = L.latLng(localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng"));
+            var point2 = L.latLng(localStorage.getItem("webmapadresa8lat"), localStorage.getItem("webmapadresa8lng"));
+            var km = point1.distanceTo(point2) / 1000;
+            var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+            dist7 = dist_from_P1_to_P2;
+
+            div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem("webmapadresa8") + ": " + dist_from_P1_to_P2 + "</div >";
+
+
+            var latlngs7 = [
+                [localStorage.getItem("webmapadresa1lat"), localStorage.getItem("webmapadresa1lng")],
+                [localStorage.getItem("webmapadresa8lat"), localStorage.getItem("webmapadresa8lng")]
+            ];
+            var polyline7 = L.polyline(latlngs7, { color: 'red' }).addTo(map);
+
+
+        } else {
+            if (localStorage.getItem("planadresa1lat") != 0 && localStorage.getItem("planadresa1lng") != 0 &&
+                localStorage.getItem("planadresa8lat") != 0 && localStorage.getItem("planadresa8lng") != 0) {
+                var point1 = L.latLng(localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng"));
+                var point2 = L.latLng(localStorage.getItem("planadresa8lat"), localStorage.getItem("planadresa8lng"));
+                var km = point1.distanceTo(point2) / 1000;
+                var dist_from_P1_to_P2 = km.toFixed(2) + " km";
+                dist7 = dist_from_P1_to_P2;
+                div = div + "<div style=\"width:300px;\" class=\"alertw3\">" + localStorage.getItem('planadresa8') + ": " + dist_from_P1_to_P2 + "</div>";
+                var latlngs7 = [
+                    [localStorage.getItem("planadresa1lat"), localStorage.getItem("planadresa1lng")],
+                    [localStorage.getItem("planadresa8lat"), localStorage.getItem("planadresa8lng")]
+                ];
+                var polyline7 = L.polyline(latlngs7, { color: 'red' }).addTo(map);
+            }
+        }
+
+
+        div = div + "</div>";
+        $('#listadistanta').html(div);
+        var divv = "";
+        $(document).ajaxComplete(function () {
+            divv = "";
+            // if (localStorage.getItem("planadresa1lat") != 0 && localStorage.getItem("planadresa1lng") != 0) {
+            //     icon1.unbindTooltip();
+            //     icon1.bindTooltip(window["tooltip1"][2], { permanent: true, offset: [0, 12] });
+
+            // }
+            // if (localStorage.getItem("planadresa2lat") != 0 && localStorage.getItem("planadresa2lng") != 0) {
+
+            //     icon2.unbindTooltip();
+            //     icon2.bindTooltip(window["tooltip2"][2] +"<br/>"+ dist1, { permanent: true, offset: [0, 12] });
+            // }
+            // if (localStorage.getItem("planadresa3lat") != 0 && localStorage.getItem("planadresa3lng") != 0) {
+            //     icon3.unbindTooltip();
+            //     icon3.bindTooltip(window["tooltip3"][2] +"<br/>"+ dist2, { permanent: true, offset: [0, 12] });
+            // }
+            // if (localStorage.getItem("planadresa4lat") != 0 && localStorage.getItem("planadresa4lng") != 0) {
+            //     icon4.unbindTooltip();
+            //     icon4.bindTooltip(window["tooltip4"][2] +"<br/>"+ dist3 , { permanent: true, offset: [0, 12] });
+            // }
+            // if (localStorage.getItem("planadresa5lat") != 0 && localStorage.getItem("planadresa5lng") != 0) {
+            //     icon5.unbindTooltip();
+            //     icon5.bindTooltip(window["tooltip5"][2]+"<br/>"+ dist4, { permanent: true, offset: [0, 12] });
+            // }
+            // if (localStorage.getItem("planadresa6lat") != 0 && localStorage.getItem("planadresa6lng") != 0) {
+            //     icon6.unbindTooltip();
+            //     icon6.bindTooltip(window["tooltip6"][2]+"<br/>"+ dist5, { permanent: true, offset: [0, 12] });
+            // }
+            // if (localStorage.getItem("planadresa7lat") != 0 && localStorage.getItem("planadresa7lng") != 0) {
+            //     icon7.unbindTooltip();
+            //     icon7.bindTooltip(window["tooltip7"][2] +"<br/>"+ dist6, { permanent: true, offset: [0, 12] });
+            // }
+            // if (localStorage.getItem("planadresa8lat") != 0 && localStorage.getItem("planadresa8lng") != 0) {
+            //     icon8.unbindTooltip();
+            //     icon8.bindTooltip(window["tooltip8"][2] +"<br/>"+ dist7, { permanent: true, offset: [0, 12] });
+            // }  
+
+            var startad1 = "";
+            var startad2 = "";
+            if (localStorage.getItem("planadresa1") != "") {
+                var startad1 = localStorage.getItem("planadresa1");
+            }
+            if (localStorage.getItem("webmapadresa1") != "") {
+                var startad2 = localStorage.getItem("webmapadresa1");
+            }
+            if (localStorage.getItem("webmapadresa1lat") != 0 && localStorage.getItem("webmapadresa1lng") != 0) {
+                icon1.unbindTooltip();
+                icon1.bindTooltip("Start", { permanent: true, offset: [0, 12] });
+
+                divv = divv + "<table id='tabel' style='width:100%;font-size:12px;'><tr><td >Start - " + window["tooltip1"][2] + "</td><td>" + startad2 + "</td></tr>";
+            } else {
+
+                if (localStorage.getItem("planadresa1lat") != 0 && localStorage.getItem("planadresa1lng") != 0) {
+                    icon1.unbindTooltip();
+                    icon1.bindTooltip("Start", { permanent: true, offset: [0, 12] });
+
+                    divv = divv + "<table id='tabel' style='width:100%;font-size:12px;'><tr><td >Start - " + window["tooltip1"][2] + "</td><td>" + startad1 + "</td></tr>";
+                }
+            }
+
+
+            if (localStorage.getItem("webmapadresa2lat") != 0 && localStorage.getItem("webmapadresa2lng") != 0) {
+                divv = divv + "<tr><td>1. " + window["tooltip2"][2] + "</td><td>" + localStorage.getItem("webmapadresa2") + "</td><td>" + dist1 + "</td></tr>";
+            } else {
+                if (localStorage.getItem("planadresa2lat") != 0 && localStorage.getItem("planadresa2lng") != 0) {
+
+                    //icon2.unbindTooltip();
+                    //icon2.bindTooltip("1", { permanent: true, offset: [0, 12] });
+                    divv = divv + "<tr><td>1. " + window["tooltip2"][2] + "</td><td>" + dist1 + "</td></tr>";
+                }
+            }
+
+
+
+
+            if (localStorage.getItem("webmapadresa3lat") != 0 && localStorage.getItem("webmapadresa3lng") != 0) {
+                divv = divv + "<tr><td>2. " + window["tooltip3"][2] + "</td><td>" + localStorage.getItem("webmapadresa3") + "</td><td>" + dist2 + "</td></tr>";
+            } else {
+                if (localStorage.getItem("planadresa3lat") != 0 && localStorage.getItem("planadresa3lng") != 0) {
+                    //icon3.unbindTooltip();
+                    //icon3.bindTooltip("2", { permanent: true, offset: [0, 12] });
+                    divv = divv + "<tr><td>2. " + window["tooltip3"][2] + "</td><td>" + dist2 + "</td></tr>";
+                }
+            }
+
+
+
+            if (localStorage.getItem("webmapadresa4lat") != 0 && localStorage.getItem("webmapadresa4lng") != 0) {
+                divv = divv + "<tr><td>3. " + window["tooltip4"][2] + "</td><td>" + localStorage.getItem("webmapadresa4") + "</td><td>" + dist3 + "</td></tr>";
+            } else {
+                if (localStorage.getItem("planadresa4lat") != 0 && localStorage.getItem("planadresa4lng") != 0) {
+                    //icon4.unbindTooltip();
+                    //icon4.bindTooltip("3" , { permanent: true, offset: [0, 12] });
+                    divv = divv + "<tr><td>3. " + window["tooltip4"][2] + "</td><td>" + dist3 + "</td></tr>";
+                }
+            }
+
+
+            if (localStorage.getItem("webmapadresa5lat") != 0 && localStorage.getItem("webmapadresa5lng") != 0) {
+                divv = divv + "<tr><td>4. " + window["tooltip5"][2] + "</td><td>" + localStorage.getItem("webmapadresa5") + "</td><td>" + dist4 + "</td></tr>";
+            } else {
+                if (localStorage.getItem("planadresa5lat") != 0 && localStorage.getItem("planadresa5lng") != 0) {
+                    //icon5.unbindTooltip();
+                    //icon5.bindTooltip("4", { permanent: true, offset: [0, 12] });
+                    divv = divv + "<tr><td>4. " + window["tooltip5"][2] + "</td><td>" + dist4 + "</td></tr>";
+                }
+            }
+
+            if (localStorage.getItem("webmapadresa6lat") != 0 && localStorage.getItem("webmapadresa6lng") != 0) {
+                divv = divv + "<tr><td>5. " + window["tooltip6"][2] + "</td><td>" + localStorage.getItem("webmapadresa6") + "</td><td>" + dist5 + "</td></tr>";
+            } else {
+                if (localStorage.getItem("planadresa6lat") != 0 && localStorage.getItem("planadresa6lng") != 0) {
+                    //icon6.unbindTooltip();
+                    //icon6.bindTooltip("5", { permanent: true, offset: [0, 12] });
+                    divv = divv + "<tr><td>5. " + window["tooltip6"][2] + "</td><td>" + dist5 + "</td></tr>";
+                }
+            }
+
+            if (localStorage.getItem("webmapadresa7lat") != 0 && localStorage.getItem("webmapadresa7lng") != 0) {
+                divv = divv + "<tr><td>6. " + window["tooltip7"][2] + "</td><td>" + localStorage.getItem("webmapadresa7") + "</td><td>" + dist6 + "</td></tr>";
+            } else {
+                if (localStorage.getItem("planadresa7lat") != 0 && localStorage.getItem("planadresa7lng") != 0) {
+                    //icon7.unbindTooltip();
+                    //icon7.bindTooltip("6", { permanent: true, offset: [0, 12] });
+                    divv = divv + "<tr><td>6. " + window["tooltip7"][2] + "</td><td>" + dist6 + "</td></tr>";
+                }
+            }
+            if (localStorage.getItem("webmapadresa8lat") != 0 && localStorage.getItem("webmapadresa8lng") != 0) {
+                divv = divv + "<tr><td>7. " + window["tooltip8"][2] + "</td><td>" + localStorage.getItem("webmapadresa8") + "</td><td>" + dist7 + "</td></tr>";
+            } else {
+                if (localStorage.getItem("planadresa8lat") != 0 && localStorage.getItem("planadresa8lng") != 0) {
+                    //icon8.unbindTooltip();
+                    //icon8.bindTooltip("7", { permanent: true, offset: [0, 12] });
+                    divv = divv + "<tr><td>8. " + window["tooltip8"][2] + "</td><td>" + dist7 + "</td></tr>";
+                }
+
+            }
+            divv = divv + "</table>";
+            popup.setContent(divv);
+
+
+
+        });
+
+
+
+
+        var sv1 = 0; var vr = 0; var sv2 = 3;
+        if (!app.FolderExists(app.GetSpecialFolder("Pictures") + "/" + "screenshots")) {
+            app.MakeFolder(app.GetSpecialFolder("Pictures") + "/" + "screenshots");
+        }
+        if (app.FolderExists(app.GetSpecialFolder("Pictures") + "/" + "screenshots")) {
+            sv1 = 1;
+        }
+        if (sv1 == 1) {
+            app.CreateFile(app.GetSpecialFolder("Pictures") + "/" + "screenshots" + "/" + "testscreenshot5.jpg", "rw");
+        }
+        if (app.FileExists(app.GetSpecialFolder("Pictures") + "/" + "screenshots" + "/" + "testscreenshot5.jpg")) {
+            localStorage.setItem('adresascreeshot', app.GetSpecialFolder("Pictures") + "/" + "screenshots");
+            sv1 = 2;
+        }
+        if (sv1 < 2) {
+            if (!app.FolderExists(app.GetPrivateFolder("", "external") + "/" + "screenshots")) {
+                app.MakeFolder(app.GetPrivateFolder("", "external") + "/" + "screenshots");
+            }
+            if (app.FolderExists(app.GetPrivateFolder("", "external") + "/" + "screenshots")) {
+                sv2 = 4;
+            }
+            if (sv2 == 4) {
+                app.CreateFile(app.GetPrivateFolder("", "external") + "/" + "screenshots" + "/" + "testscreenshot5.jpg", "rw");
+            }
+            if (app.FileExists(app.GetPrivateFolder("", "external") + "/" + "screenshots" + "/" + "testscreenshot5.jpg")) {
+                localStorage.setItem('adresascreeshot', app.GetPrivateFolder("", "external") + "/" + "screenshots");
+                sv2 = 5;
+            }
+
+        }
+
+        if (sv1 < 2 && sv2 < 5) {
+            localStorage.setItem('adresascreeshot', null);
+        }
+
+        function listarutesalvate() {
+            if (localStorage.getItem('adresascreeshot') == null) {
+                alert(language.nusuportascreenshotdinaplicatie);
+            } else {
+                var lr = app.ListFolder(localStorage.getItem('adresascreeshot'));
+                var lr3 = new Array();
+                lr.forEach(function (value, index) {
+                    if (value.includes("plan")) {
+                        lr3.push(value);
+                    }
+                });
+                var htmllr = "Screensots Folder Location:<br/>" + localStorage.getItem('adresascreeshot') + "<br/><a href='#' class='waves-effect waves-light btn' onclick=\"deschidescrfolder();return false;\">" + language.deschidescrfolder + "</a><br/><br/>Works with Total Commander  , X-plore (tested) ...or try another custom file explorer from google play !!!<br/><hr/><a href='#' class='waves-effect waves-light btn' onclick=\"$('#modal2').modal('close');return false;\">" + language.inchide + "</a><br/><br/><table style='width:100%'><tr><td>Nr.</td><td>" + language.imagine + "</td></tr>";
+                if (lr3.length > 1) {
+                    var lr2 = lr3.sort((a, b) => (a > b ? -1 : 1));
+                } else {
+                    lr2 = lr3;
+                }
+                lr2.forEach(function (value, index) {
+                    htmllr = htmllr + "<tr><td>" + (index + 1) + "</td><td >" + value + "</td><td></tr><tr><td colspan='2'><div style='display: flex;'><div style='width:30%;'>" + "<a data-value='" + value + "' class='sharee2 waves-effect waves-light btn'  href='#' >" + language.openscreenshot + "</a></div>" + "<div style='width:30%;margin-left:3%'><a data-value='" + value + "' class='sharee waves-effect waves-light btn'  href='#' >" + language.share + "</a></div>" + "<div style='width:30%;margin-left:3%'><a data-value='" + value + "' class='deletero waves-effect waves-light btn'  href='#' >" + language.deletero + "</a></div></div></td></tr><tr><td colspan='2'><hr /></td></tr>";
+                });
+                console.log(lr2);
+                htmllr = htmllr + "</table>";
+                document.getElementById("modal2").innerHTML = htmllr;
+
+                var elements = document.getElementsByClassName("sharee");
+
+                var myFunction = function () {
+                    var attribute = this.getAttribute("data-value");
+                    playbeep(); alert(attribute); app.SendImage(localStorage.getItem('adresascreeshot') + "/" + attribute);
+                };
+
+                for (var i = 0; i < elements.length; i++) {
+                    elements[i].addEventListener('click', myFunction, false);
+                }
+                var elements2 = document.getElementsByClassName("sharee2");
+
+                var myFunction2 = function () {
+                    var attribute = this.getAttribute("data-value");
+                    playbeep(); alert(attribute); app.OpenFile(localStorage.getItem('adresascreeshot') + "/" + attribute, "image/jpeg", "Choose Editor");
+                };
+
+                for (var i = 0; i < elements2.length; i++) {
+                    elements2[i].addEventListener('click', myFunction2, false);
+                }
+                var elements3 = document.getElementsByClassName("deletero");
+
+                var myFunction3 = function () {
+                    var attribute = this.getAttribute("data-value");
+                    playbeep(); alert(attribute); app.DeleteFile(localStorage.getItem('adresascreeshot') + "/" + attribute);
+                    if (app.FileExists(localStorage.getItem('adresascreeshot') + "/" + attribute))
+                        alert("File was not deleted!");
+
+                    else
+                        alert("File was deleted!");
+                    $('#modal2').modal('close');
+                    setTimeout(function () { document.getElementById('drp1').click(); }, 500);
+
+                };
+
+                for (var i = 0; i < elements3.length; i++) {
+                    elements3[i].addEventListener('click', myFunction3, false);
+                }
+                $('#modal2').modal('open');
+            }
+        }
+        function deschidescrfolder() {
+            if (sv1 == 2) {
+                app.OpenFile(localStorage.getItem("adresascreeshot"), "resource/folder", "Choose");
+            } else {
+                if (sv2 == 5) {
+                    app.OpenFile(localStorage.getItem("adresascreeshot"), "resource/folder", "Choose");
+                }
+            }
+
+        }
+        function shareroutscreenshoot() {
+            if (localStorage.getItem('adresascreeshot') == null) {
+                alert(language.nusuportascreenshotdinaplicatie);
+            } else {
+                app.SendImage(localStorage.getItem("lastplan"));
+            }
+        }
+        function openlastscreenshoot() {
+            if (localStorage.getItem('adresascreeshot') == null) {
+                alert(language.nusuportascreenshotdinaplicatie);
+            } else {
+                app.OpenFile(localStorage.getItem("lastplan"), "image/jpeg", "Choose Editor");
+            }
+        }
+        function doscreenshot() {
+            if (localStorage.getItem('adresascreeshot') == null) {
+                alert(language.nusepoatefacescrenshot);
+            } else {
+                //   var dt = new Date();      
+                //   var path = app.GetSpecialFolder( "Pictures" )+"/Routes/"+dt.toISOString().replaceAll(":","")+".png";              
+                //  setTimeout(function(){ app.ScreenShot(path);   alert(language.efectuat + "\n" + path); app.OpenFile( path , "image/jpeg", "Choose Editor" );},500);
+                //  setTimeout(function(){    
+                // domtoimage.toJpeg(document.body)
+                // .then(function (dataUrl) {
+                //      var dt = new Date(); 
+                //     var path = app.GetSpecialFolder( "Pictures" )+"/Routes/"+dt.toISOString().replaceAll(":","")+".jpg";
+                //     img = app.CreateImage( null,.3,.15);
+                //     img.SetPixelData(dataUrl );
+                //     img.Save(path);
+                //     //app.WriteFile(path,dataUrl);
+                //     alert(language.efectuat + "\n" + path);
+                //     app.OpenFile( path , "image/jpeg", "Choose Editor" );
+                //     //   $.post("https://evidentacolumbofila.eu/public/save_jpgd",{datad:dataUrl}, function(data, status){
+                //     //  // alert("Data: " + data + "\nStatus: " + status);
+                //     //  app.SendFile(data,"AAA","AAA","AAA");
+                //     //   });
+                // });
+                //  },500);
+
+                setTimeout(function () {
+                    const node = document.body;
+                    const scale = 3000 / node.offsetWidth;
+                    this.shot_loading = true;
+
+                    domtoimage
+                        .toJpeg(node, {
+                            height: node.offsetHeight * scale,
+                            width: node.offsetWidth * scale,
+                            style: {
+                                transform: "scale(" + scale + ")",
+                                transformOrigin: "top left",
+                                width: node.offsetWidth + "px",
+                                height: node.offsetHeight + "px"
+                            }
+                        })
+                        .then(dataUrl => {
+
+                            $.get("https://evidentacolumbofila.eu/public/dt", function (data, status) {
+                                dt = new Date(parseInt(data) * 1000);
+                                console.log(dt + "-" + data);
+
+
+                                var path = localStorage.getItem('adresascreeshot') + "/" + "plan_" + formatDate(dt) + ".jpg";
+                                localStorage.setItem("lastplan", path);
+                                //   var path2 = app.GetPrivateFolder("files", "external") + "/" + "Routes";
+                                //  if (!app.FolderExists(path2))
+                                //     app.MakeFolder(path2);
+
+                                img = app.CreateImage(null, .3, .15);
+                                img.SetPixelData(dataUrl);
+                                img.Save(path);
+                                
+                                   while (!app.FileExists(path )) {}
+
+                                   app.ScanFile( path );
+                                //app.WriteFile(path,dataUrl);
+
+                                alert(language.efectuat + "\n" + path);
+                                app.OpenFile(path, "image/jpeg", "Choose Editor");
+                            }).fail(function (data) {
+
+                                alert("Error");
+                            });
+
+
+                        })
+                        .catch(error => {
+                            this.shot_loading = false;
+                            console.error("oops, something went wrong!", error);
+                        });
+                }, 500);
+            }
+        }
+
+        function padTo2Digits(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        function formatDate(date) {
+            return (
+                [
+                    date.getFullYear(),
+                    padTo2Digits(date.getMonth() + 1),
+                    padTo2Digits(date.getDate()),
+                ].join('_') +
+                '_' +
+                [
+                    padTo2Digits(date.getHours()),
+                    padTo2Digits(date.getMinutes()),
+                    padTo2Digits(date.getSeconds()),
+                ].join('_')
+            );
+        }
+    </script>
+</body>
+
+</html>

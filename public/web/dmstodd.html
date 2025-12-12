@@ -1,0 +1,535 @@
+<html>
+	<head>
+  <script src='file:///android_asset/app.js'></script>
+  	<link href="font.css" rel="stylesheet">
+	<link rel="stylesheet" href="materialize.min.css">
+<script src="jquery-3.4.1.min.js"></script>
+<script src="materialize.min.js"></script>
+<script src="language.js"></script>
+  <script>
+//  window.addEventListener("error", function (e) {
+//   location.reload();alert();
+//   return false;
+// });
+var that = new XMLHttpRequest();
+that.open('GET', 'http://google.com', false);
+try {
+  that.send();
+} catch(exception) {
+ if(exception.name == 'NetworkError'){
+  alert("Nu esti conectat la internet!!!");
+}
+}
+app.SetOnError(function(){
+ 
+});
+function playbeep() {
+            var x = document.getElementById("myAudio");
+            x.currentTime = 0;
+            x.volume = 0.05;
+            x.play();
+        }
+ </script>
+	<script>
+		var selectedLanguage = localStorage.getItem('lang');
+		var language = "";
+		if (selectedLanguage == "ro") {
+			language = lang.ro;
+		}
+		if (selectedLanguage == "en") {
+			language = lang.en;
+		}
+	</script>
+   <script>
+        app.SetOnKey(OnKey);
+        function OnKey(action, name, code, extra) {
+            if (code == 4 && action == "Up") {
+                playbeep();
+              setTimeout(function(){
+                    window.location.href="distanta2.html";
+                    },350);
+            }
+        }       
+          function exit()
+             {
+                var yesNo = app.CreateYesNoDialog("Exit App?");
+				yesNo.SetOnTouch(yesNo_OnTouch);
+				yesNo.Show();  
+            }
+     		function yesNo_OnTouch(result) {
+			if (result == "Yes") app.Exit();
+		}
+    </script>
+<script>
+
+window["raspuns"]="";
+//  function noutati(){
+//              $(document).ready(function(){ 
+//              var email=localStorage.getItem("email");
+// 	         var parola=localStorage.getItem("parola");
+//              $.get("https://evidentacolumbofila.eu/public/noutati?email="+email+"&parola="+parola, function (data, status) {
+//              window["raspuns"]=data;
+//              var data2=JSON.parse(data);
+//              if (data2[1]==0)
+//              {
+//                  if (data2[5]==1)
+//                  {
+//                      var alerta2=language.utilizatorulnuexista;
+//                  }
+//              if (data2[5]==2)
+//                  {
+//                      var alerta2=language.continactiv;
+//                  }
+//             if (data2[5]==4)
+//                  {
+//                      var alerta2=language.eroare;
+//                  }
+             
+                              
+//              }
+//              if (data2[1]==1)
+//              {
+//                  if (localStorage.getItem("lang").includes("en"))
+//                  {
+//                   $('#body').html(data2[4]);
+//                  } else {
+//                   $('#body').html(data2[3]);                     
+//                  }
+//             //alert(data2[0]);
+//              }
+              
+//          });
+//     });             
+// }
+
+         function goforward()
+         {              
+         $('.btn').sideNav('hide');             
+         loc2 = app.CreateLocator("GPS");
+         loc2.SetOnChange(function(pos){
+         localStorage.setItem("lat6", pos.latitude);
+         localStorage.setItem("lng6", pos.longitude);
+         localStorage.setItem("lat42","0");
+         localStorage.setItem("lng42","0");
+         loc2.Stop();
+         window.location.href="locatiacurenta.html";
+         });
+         loc2.SetRate( 1 );
+         loc2.Start();     
+         }
+         function converteste(x)
+		{
+		   $(document).ready(function(){ 
+			d = $("#x1").val();
+			m = $("#x2").val();
+			s = $("#x3").val();
+			if( d=='') d='0';
+			if( m=='') m='0';
+			if( s=='') s='0';
+			if( m<0 ) m=-m;
+			if( s<0 ) s=-s;
+			m0=m; s0=s;
+			if( d<0 || d=='-0' ) {m=-m; s=-s;}
+			y = parseFloat(d)+parseFloat(m)/60+parseFloat(s)/3600;
+			//y = roundnum(y,6);
+		 	$("#result").text(y.toFixed(6));
+		   });
+		 	return false;
+		}
+		function reset()
+		{
+		   $(document).ready(function(){  
+		  	$("#x1").val("");
+			$("#x2").val("");
+			$("#x3").val("");  
+			$("#result").text("");
+		   });
+		   return false;
+		}
+			function reseteazavariabile()
+		{		   
+		   localStorage.setItem("var1","");
+		   localStorage.setItem("var3","");
+		   localStorage.setItem("var2","");
+		   localStorage.setItem("var4","");		   
+		   return false;
+		}
+</script>
+<script>
+ $(document).ready(function() {
+$("#selectt").change(function(){
+copieinvar($(this).val());
+});  
+});
+function genselect()
+{
+  $(document).ready(function() {
+      $("#selectt").empty();
+      $("#selectt").append("<option value='---' selected='selected' >"+language.copieinvar+"</option>");
+      $("#selectt").append("<option value='1' >"+language.copieinvar1+"</option>");
+      $("#selectt").append("<option value='2' >"+language.copieinvar2+"</option>");
+      $("#selectt").append("<option value='3' >"+language.copieinvar3+"</option>");
+      $("#selectt").append("<option value='4' >"+language.copieinvar4+"</option>");
+  
+$('select').material_select();
+
+  });
+}
+function copieinvar(x)
+{
+      if (x=="---")
+  {
+      alert(localStorage.getItem("var1")+"==="+localStorage.getItem("var2")+"==="+localStorage.getItem("var3")+"==="+localStorage.getItem("var4"));
+  }
+ if (x=="1")
+  {
+  localStorage.setItem("var1",document.getElementById("result").innerText);
+  alert("ok");
+  }
+  if (x=="2")
+  {
+  localStorage.setItem("var2",document.getElementById("result").innerText);
+  alert("ok");
+  }
+    if (x=="3")
+  {
+  localStorage.setItem("var3",document.getElementById("result").innerText);
+  alert("ok");
+  }
+    if (x=="4")
+  {
+      
+  localStorage.setItem("var4",document.getElementById("result").innerText);
+  alert("ok");
+  }
+  genselect();
+}
+
+</script> 
+<style>
+		.btn {
+			width: 100%;
+			height: auto;
+		}
+
+		.btn-large {
+			width: 100%;
+			height: auto;
+		}
+
+
+
+
+		#section2 {
+			height: 90%;
+			display: block;
+		}
+
+		#section3 {
+			display: block;
+			height: 10%;
+		}
+		#section4 {
+			display: block;
+			height: 150%;
+		}
+            	.button {
+			background-color: #26A69A;
+			/* Green */
+			border: none;
+			color: white;
+			text-align: center;
+			text-decoration: none;
+			display: block;
+			font-size: 18px;
+			width: 100%;
+			height:15%;
+			margin: auto;		
+		}
+		 	.titlu {
+			/* Green */
+			border: none;
+			color: white;
+			text-align: center;
+			text-decoration: none;
+			display: block;
+			font-size: 18px;
+			width: 100%;
+			height:50px;
+			padding:10px;
+		}
+		   #x1,#x2,#x3{
+            border: 2px solid #84D7FF;
+            height: 50px;
+            border-radius: 10px;
+            font-size:20px;
+            color:white;
+        }
+        #y1,#y2,#y3{
+            font-size:17px;
+            color:white;
+        }
+        #z1,#z2,#z3{
+            font-size:35px;
+        }
+        	#combtn,#combtn2{
+		    display: flex;                  
+            flex-direction: row;            
+            flex-wrap: nowrap;              
+            justify-content: space-between;
+            background-color: lightyellow;
+		}
+		#combtn3 {
+		    
+		    
+		    }
+	
+	</style>
+</head>
+<body  onload="genselect();">
+<audio id="myAudio">
+  <source src="Snd/a.ogg" type="audio/ogg">  
+</audio>
+<nav class="light-blue lighten-3 ">
+		<div class="nav-wrapper">
+			<a href="#" class="brand-logo center">
+				<script>document.write(language.titlu)</script></a>
+			<ul class="left" >
+				<li> <a href="#" style="width:100px;" data-activates="slide-out" class="sidenav-trigger orange darken-4 btn"><i 
+							class="material-icons">menu</i></a></li>
+			</ul>
+				<ul class="right">
+				<li> <a href="#modal1" style="width:100px;" data-activates='dropdown1' class="sidenav-trigger orange darken-4 btn dropdown-button">
+				<i class="material-icons">language</i>
+				</a></li>
+			</ul>
+		</div>
+	</nav>
+	  <ul id='dropdown1' class='dropdown-content'>
+    <li><a href="dmstodd.html" onclick="localStorage.setItem('lang','ro');alert('Limba Selectata:Romana');">Romanian</a></li>
+    <li><a href="dmstodd.html" onclick="localStorage.setItem('lang','en');alert('Selected Language:English');">English</a></li>
+  </ul>	
+<ul id="slide-out" class="side-nav light-blue lighten-3">
+
+		<div id="container">			
+			<div class="section" id="section4">
+			<div class="row">
+
+					<div class="col s12  m12 l12 xl12">
+						<p class="waves-effect waves-light titlu orange darken-3">
+								<script>document.write(language.meniu)</script>
+								<button class="light-blue lighten-3" onclick="$('.btn').sideNav('hide');return false;"> <i class="tiny material-icons">clear</i></button>
+								&nbsp;&nbsp;&nbsp;<button class="light-blue lighten-3" onclick="exit();"> <i class="tiny material-icons">exit_to_app</i></button>
+								</p>
+					
+					</div>
+				</div>
+	
+		
+			<hr/>			
+						<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="_main_.html">
+							<script>document.write(language.login)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="distanta2.html">
+							<script>document.write(language.buton9)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="noutati.html">
+							<script>document.write(language.noutati)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="distantadelalocatiacurentalaoadresa.html">
+							<script>document.write(language.buton4)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="distantadintredouaadrese.html">
+							<script>document.write(language.buton5)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large modal-trigger"  href="#modal1" onclick="goforward()">
+							<script>document.write(language.buton6)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+
+	<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large"  href="coordonatelelocatiei.html" >
+							<script>document.write(language.buton14)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+
+			 <!--<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large modal-trigger"  href="plandezbor.html">
+							<script>document.write(language.plan)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>-->
+			
+			
+				<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="plandezbor.html">
+							<script>document.write(language.plan)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+				<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="locatii.html">
+							<script>document.write(language.locatii)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="rute.html">
+							<script>document.write(language.rute)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+			
+				<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="contact.html">
+							<script>document.write(language.contact)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+				<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="dmstodd.html">
+							<script>document.write(language.dmstodd)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+			<br/><br/><br/>
+		</div>
+		
+		</div>
+	</ul>
+
+  <div id="modal1" class="modal" style="width:100%;height:50%;padding-top:30%;">
+     <div class="progress" id="loader" style="width:100%;height:10%;">
+     <div class="indeterminate" ></div>
+     </div>
+  </div>
+  
+  
+	<script>
+		$(".btn").sideNav();	         
+				 $(document).ready(function(){
+    // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+       $('.modal').modal({
+      dismissible: true, // Modal can be dismissed by clicking outside of the modal
+      opacity: 0.8, // Opacity of modal background
+    }
+  );
+      });
+	</script>
+<div id="body">
+    <div class="row">
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title"><script>document.write(language.convertdmstodd);</script></span>
+<table class="teal lighten-2">
+<tbody><tr>
+<td><label for="x1" id="y1"><script>document.write(language.grade)</script>:</label></td>
+<td ><input type="text"  id="x1" name="x1"  > </td>
+<td id="z1" >°</td>
+</tr>
+<tr>
+<td><label for="x2" id="y2"><script>document.write(language.minute)</script>:</label></td>
+<td ><input type="text"  id="x2" name="x2" > </td>
+<td  id="z2">'</td>
+</tr>
+<tr>
+<td><label for="x3" id="y3"><script>document.write(language.secunde)</script>:</label></td>
+<td ><input type="text"  id="x3" name="x3" > </td>
+<td  id="z3">"</td>
+</tr>
+</tbody></table>
+ 
+	<div id="combtn3" class="cyan lighten-5 blue-grey-text text-darken-4">
+	<p style="font-size:20px;"><script>document.write(language.rezultat)</script>:</p>
+	<table>
+	<tr>
+	<td><div id="result" style="font-size:20px;"></div></td>
+	<td>
+	 <div class="input-field col s12" >
+   <select id="selectt" onchange="playbeep();">
+   
+   </select>
+
+  </div>
+	</td>
+	</tr>
+	</table>
+	
+	</div>
+	</div>	
+	<div id="combtn"><a class="waves-effect waves-light btn-large" onclick="playbeep();return converteste();" href="#" style="margin:5px;">
+							<script>document.write(language.converteste)</script></a>
+	<a class="waves-effect waves-light btn-large" onclick="playbeep();return reset();" href="#" style="margin:5px;">
+							<script>document.write(language.reset)</script></a><br/>				
+							</div>
+								<div id="combtn2">
+							<a class="waves-effect waves-light btn-large" onclick="playbeep();return reseteazavariabile();" href="#" style="margin:5px;">
+							<script>document.write(language.reseteazavariabile)</script></a>
+							</div>	
+							
+	<!--<div id="combtn2"><a class="waves-effect waves-light btn-large" onclick="return schimba();" href="#" style="margin:5px;">-->
+	<!--						<script>document.write(language.schimba)</script></a></div>-->
+
+            </div>           
+          </div>
+        </div>
+      </div>
+</div>
+</body>
+</html>

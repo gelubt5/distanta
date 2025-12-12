@@ -1,0 +1,958 @@
+<html>
+
+<head>
+	<title>Distanta</title>
+	<meta name="viewport" content="width=device-width">
+	<script src='file:///android_asset/app.js'></script>
+	<!-- Compiled and minified CSS -->
+	<link href="font.css" rel="stylesheet">
+	<link rel="stylesheet" href="materialize.min.css">
+
+	<!-- Compiled and minified JavaScript -->
+	<script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+	<script src="materialize.min.js"></script>
+
+	<script src="language.js"></script>
+	<script>
+		//  window.addEventListener("error", function (e) {
+		//   location.reload();alert();
+		//   return false;
+		// });
+		app.HideProgress();
+		var that = new XMLHttpRequest();
+		that.open('GET', 'http://google.com', false);
+		try {
+			that.send();
+		} catch (exception) {
+			if (exception.name == 'NetworkError') {
+				alert("Nu esti conectat la internet!!!");
+			}
+		}
+		app.SetOnError(function () {
+
+		});
+
+	</script>
+
+	<script>
+		
+	</script>
+	<script>
+		var selectedLanguage = localStorage.getItem('lang');
+		var language = "";
+		if (selectedLanguage == "ro") {
+			language = lang.ro;
+		}
+		if (selectedLanguage == "en") {
+			language = lang.en;
+		}
+	</script>
+	<script>
+		function OnStart() {
+			app.EnableBackKey(false);
+		}
+		app.SetOnKey(OnKey);
+		function yesNo_OnTouch(result) {
+			if (result == "Yes") app.Exit();
+		}
+		function OnKey(action, name, code, extra) {
+			if (code == 4 && action == "Up") {
+				var yesNo = app.CreateYesNoDialog("Exit App?");
+				yesNo.SetOnTouch(yesNo_OnTouch);
+				yesNo.Show();
+			}
+		}
+		function exit() {
+			var yesNo = app.CreateYesNoDialog("Exit App?");
+			yesNo.SetOnTouch(yesNo_OnTouch);
+			yesNo.Show();
+		}
+
+	</script>
+	<script>
+
+		function goforward() {
+			$('.btn').sideNav('hide');
+			loc2 = app.CreateLocator("GPS");
+			loc2.SetOnChange(function (pos) {
+				localStorage.setItem("lat6", pos.latitude);
+				localStorage.setItem("lng6", pos.longitude);
+				localStorage.setItem("lat42", "0");
+				localStorage.setItem("lng42", "0");
+				loc2.Stop();
+				window.location.href = "locatiacurenta.html";
+			});
+			loc2.SetRate(1);
+			loc2.Start();
+		}
+	</script>
+	<script>
+		function activeazagpsul() {
+			var locEnabled = app.IsLocationEnabled('GPS');
+			if (locEnabled == true) {
+			} else {
+				alert(language.activeazagpsul);
+			}
+		}
+
+		function logare() {
+			var email = localStorage.getItem("email");
+			var parola = localStorage.getItem("parola");
+			$(document).ready(function () {
+				$.post("https://evidentacolumbofila.eu/public/listacomentarii", { 'email': email, 'parola': parola, 'cheie': localStorage.getItem('cheie') }, function (data, status) {
+					window["raspuns"] = data;
+					var data_sv = JSON.parse(data);
+					if (typeof data_sv[0] === 'string' || data_sv[0] instanceof String) {
+						//alert(data_sv[0]);
+						if (data_sv[3] == 1) {
+							alert(language.utilizatorulnuexista);
+						}
+						if (data_sv[3] == 2) {
+							alert(language.alertalogare6);
+						}
+						if (data_sv[3] == 4) {
+							alert(language.eroare);
+						}
+						if (data_sv[3] == 5) {
+							alert(language.eroarelabazadedate);
+						}
+					} else {
+						var lista = data_sv[0];
+						var utilizator = data_sv[1];
+						var html = "<a name='comentarii'></a><h5 style='background-color:white;text-align:center;'><b>" + language.adaugacomentariu + ":</b></h5><div class='card'><div class='container'> <div class='form-group'><label for='comentariunou' style='font-size:20px;'>" + language.adaugacomentariu + ":</label><textarea  class='form-control' id='comentariunou' ></textarea><br/><br/></div><a id='salveazacomentariunou' href='#' class='btn btn-primary' role='button' onclick='return salveazacomentariunou();'>" + language.salveaza + "</a><br/><br/></div></div><br/><h5 style='background-color:white;text-align:center;'><b>" + language.listacomentarii + ":</b></h5>";
+						lista.forEach(function (item, index) {
+							var data_mesaj = new Date(item.created_at * 1000);
+							html = html + "<div class='card' style='border:1px solid blue;margin:2px;'><div class='container'><div style='font-size:20px;'>" + (index + 1) + ". &nbsp;<b>" + language.nume + ":" + item.numecrescator + "</b></div><div style='font-size:17px;'><b>" + language.email + ":" + item.emailcrescator + "</b></div> <div style='font-size:17px;'><b>" + language.data + ": " + item.created_at + "</div></b><hr/><br/><h5>" + item.comentariu.replace(/\n/g, "<br />") + "</h5> </div>";
+							html = html + "<div style='display:none;border:1px solid orange;margin:5px;' id='editeazacomentariu_card" + item.id + "' class='editeazacomentariu_card'><h5 style='background-color:white;text-align:center;'><b>" + language.editeazacomentariu + ":</b></h5><div class='card'><div class='container'> <div class='form-group'><label for='comentariunou' style='font-size:20px;'>" + language.comentariu + ":</label><textarea  class='form-control' id='comentariunou" + item.id + "'  >" + item.comentariu + "</textarea><br/><br/></div><a class='salveazacomentariunou' id='editeazacomentariunou" + item.id + "' href='#'  role='button' onclick=\"return editeazacomentariu('" + item.id + "');\">" + language.editeaza + "</a><br/><br/><a class='salveazacomentariunou' id='inchidecomentariunou" + item.id + "' href='#'  role='button' onclick=\"$('#editeazacomentariu_card" + item.id + "').css('display','none');return false;\">" + language.inchideeditarea + "</a><br/></div></div></div>";
+							if (item.emailcrescator == localStorage.getItem("email") && utilizator.tip.localeCompare("utilizator") == 0) {
+								html = html + "<div id='combtn'><div><a href='#' class='btn btn-primary' role='button' onclick=\"$('.editeazacomentariu_card').css('display','none');$('#editeazacomentariu_card" + item.id + "').css('display','block');$('#comentariunou" + item.id + "').css({'border':'2px solid #84D7FF','height':'140px','border-radius': '10px','font-size':'20px','color':'blue'});$('#editeazacomentariunou" + item.id + "').removeClass();$('#editeazacomentariunou" + item.id + "').addClass('btn btn-primary');$('#inchidecomentariunou" + item.id + "').removeClass();$('#inchidecomentariunou" + item.id + "').addClass('btn btn-primary');return false;\">" + language.editeaza + "</a></div>";
+
+							}
+							if (item.emailcrescator == localStorage.getItem("email") && utilizator.tip.localeCompare("admin") == 0) {
+								html = html + "<div id='combtn'><div style='width:50%;'><a href='#' style='width:70%;' class='btn btn-primary' role='button' onclick=\"$('.editeazacomentariu_card').css('display','none');$('#editeazacomentariu_card" + item.id + "').css('display','block');$('#comentariunou" + item.id + "').css({'border':'2px solid #84D7FF','height':'140px','border-radius': '10px','font-size':'20px','color':'blue'});$('#editeazacomentariunou" + item.id + "').removeClass();$('#editeazacomentariunou" + item.id + "').addClass('btn btn-primary');$('#inchidecomentariunou" + item.id + "').removeClass();$('#inchidecomentariunou" + item.id + "').addClass('btn btn-primary');return false;\">" + language.editeaza + "</a></div>";
+
+							}
+							if (utilizator.tip == "admin") {
+								html = html + "<div></div><div style='width:50%;text-align:right;'><a href='#' style='width:70%;' class='btn btn-success' role='button' onclick=\"return stergecomentariu('" + item.id + "')\">" + language.sterge + "</a></div><div></div>";
+							}
+							html = html + "</div></div><br/><hr/>";
+						});
+						$("#com").html(html);
+						alert(language.listacomentaridescarcatasucces);
+					}
+				}).fail(function (data) {
+
+
+					console.log(data.responseJSON["error"]);
+					if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
+						alert(language.nuestilogat);
+						window.location.href = "_main_.html";
+					} else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
+						alert(language.nuestilogat);
+						window.location.href = "_main_.html";
+					} else {
+						alert(language.eroare);
+					}
+				});
+			});
+			return false;
+		}
+		function salveazacomentariunou() {
+			$(document).ready(function () {
+				var email = localStorage.getItem("email");
+				var parola = localStorage.getItem("parola");
+				var comentariu = $("#comentariunou").val();
+				$.post("https://evidentacolumbofila.eu/public/salveazacomentariunou", { 'email': email, 'parola': parola, 'comentariu': comentariu, 'cheie': localStorage.getItem('cheie') }, function (data, status) {
+					logare(email, parola);
+					if (data.includes("eroare - utilizatorul nu exista")) {
+						alert(language.utilizatorulnuexista);
+					}
+					if (data.includes("Eroare!!!")) {
+						alert(language.eroare);
+					}
+					if (data.includes("Comentariu Adaugat cu Succes")) {
+						alert(language.comentariuadugatcusucces);
+					}
+
+					if (data.includes("cont inactiv")) {
+						alert(language.alertalogare6);
+					}
+					if (data.includes("Eroare la Baza de date")) {
+						alert(language.eroarelabazadedate);
+					}
+
+				}).fail(function (data) {
+
+
+					console.log(data.responseJSON["error"]);
+					if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
+						alert(language.nuestilogat);
+						window.location.href = "_main_.html";
+					} else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
+						alert(language.nuestilogat);
+						window.location.href = "_main_.html";
+					} else {
+						alert(language.eroare);
+					}
+				});
+
+			});
+			return false;
+		}
+		function editeazacomentariu(id) {
+			$(document).ready(function () {
+				var email = localStorage.getItem("email");
+				var parola = localStorage.getItem("parola");
+				var comentariu = $("#comentariunou" + id).val();
+				// alert(email+"--"+parola+"--"+comentariu+"--"+id)
+				$.post("https://evidentacolumbofila.eu/public/editeazacomentariu", { 'id': id, 'email': email, 'parola': parola, 'comentariu': comentariu, 'cheie': localStorage.getItem('cheie') }, function (data, status) {
+					logare(email, parola);
+					if (data.includes("eroare - utilizatorul nu exista")) {
+						alert(language.utilizatorulnuexista);
+					}
+					if (data.includes("Eroare!!!")) {
+						alert(language.eroare);
+					}
+					if (data.includes("Comentariu editat cu Succes")) {
+						alert(language.comentariueditatcusucces);
+					}
+					if (data.includes("cont inactiv")) {
+						alert(language.alertalogare6);
+					}
+					if (data.includes("Comentariul nu exista")) {
+						alert(language.comentariulnuexista);
+					}
+					if (data.includes("Eroare la Baza de date")) {
+						alert(language.eroarelabazadedate);
+					}
+
+
+				}).fail(function (data) {
+
+
+					console.log(data.responseJSON["error"]);
+					if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
+						alert(language.nuestilogat);
+						window.location.href = "_main_.html";
+					} else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
+						alert(language.nuestilogat);
+						window.location.href = "_main_.html";
+					} else {
+						alert(language.eroare);
+					}
+				});
+
+			});
+			return false;
+		}
+
+		function stergecomentariu(id) {
+			$(document).ready(function () {
+				let confirmAction = confirm(language.sigurvreisastergicomentariul);
+				if (confirmAction) {
+					var email = localStorage.getItem("email");
+					var parola = localStorage.getItem("parola");
+					var comentariu = $("#comentariunou" + id).val();
+					// alert(email+"--"+parola+"--"+comentariu+"--"+id)
+					$.post("https://evidentacolumbofila.eu/public/stergecomentariu", { 'id': id, 'email': email, 'parola': parola, 'cheie': localStorage.getItem('cheie') }, function (data, status) {
+						logare(email, parola);
+						if (data.includes("eroare - utilizatorul nu exista")) {
+							alert(language.utilizatorulnuexista);
+						}
+						if (data.includes("Nu esti admin")) {
+							alert(language.nuestiadmin);
+						}
+						if (data.includes("cont inactiv")) {
+							alert(language.alertalogare6);
+						}
+						if (data.includes("Comentariul a fost sters cu succes!!!")) {
+							alert(language.comentariulafoststerscusucces);
+						}
+
+						if (data.includes("Eroare!!!")) {
+							alert(language.eroare);
+						}
+
+						if (data.includes("Eroare la Baza de date")) {
+							alert(language.eroarelabazadedate);
+						}
+
+
+					}).fail(function (data) {
+
+
+						console.log(data.responseJSON["error"]);
+						if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
+							alert(language.nuestilogat);
+							window.location.href = "_main_.html";
+						} else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
+							alert(language.nuestilogat);
+							window.location.href = "_main_.html";
+						} else {
+							alert(language.eroare);
+						}
+					});
+				} else {
+					alert(language.actiuneanulata);
+				}
+			});
+			return false;
+		}
+
+		function detaliicont() {
+
+			$(document).ready(function () {
+
+				var email = localStorage.getItem("email");
+				var parola = localStorage.getItem("parola");
+				$.post("https://evidentacolumbofila.eu/public/detaliicont", { "email": email, "parola": parola }, function (data, status) {
+
+					var data2 = JSON.parse(data);
+					if (data2[5] == 3) {
+						if (localStorage.getItem('lang') == "en") {
+							$("#detaliicont").text(data2[4]);
+						} else {
+							$("#detaliicont").text(data2[3]);
+						}
+					}
+					if (data2[5] == 1) {
+						alert(language.utilizatorulnuexista);
+					}
+					if (data2[5] == 2) {
+						alert(language.continactiv);
+					}
+					if (data2[5] == 4) {
+						alert(language.eroare);
+					}
+				}).fail(function () {
+					alert(language.eroare);
+				});
+			});
+		}
+
+
+
+		if (localStorage.getItem("automaticlogin") == null) {
+			localStorage.setItem("automaticlogin", "nu");
+			console.log(localStorage.getItem("automaticlogin"));
+		}
+
+
+
+
+		function automaticlogin() {
+			if ($("#filled-in-box").is(':checked')) {
+				localStorage.setItem("automaticlogin", "da");
+			} else {
+				localStorage.setItem("automaticlogin", "nu");
+			}
+			console.log(localStorage.getItem("automaticlogin"));
+		}
+
+
+
+	</script>
+	<style>
+		.btn {
+			width: 100%;
+			height: auto;
+		}
+
+		.btn-large {
+			width: 100%;
+			height: auto;
+		}
+
+
+
+
+		#section2 {
+			height: 90%;
+			display: block;
+		}
+
+		#section3 {
+			display: block;
+			height: 10%;
+		}
+
+		#section4 {
+			display: block;
+			height: 150%;
+		}
+
+		.button {
+			background-color: #26A69A;
+			/* Green */
+			border: none;
+			color: white;
+			text-align: center;
+			text-decoration: none;
+			display: block;
+			font-size: 18px;
+			width: 100%;
+			height: 15%;
+			margin: auto;
+		}
+
+		.titlu {
+			/* Green */
+			border: none;
+			color: white;
+			text-align: center;
+			text-decoration: none;
+			display: block;
+			font-size: 18px;
+			width: 100%;
+			height: 50px;
+			padding: 10px;
+		}
+
+		#combtn {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			justify-content: space-beftween;
+			background-color: lightyellow;
+		}
+
+		#comentariunou {
+			border: 2px solid #84D7FF;
+			height: 140px;
+			border-radius: 10px;
+			font-size: 20px;
+			color: blue;
+		}
+	</style>
+	<script>
+
+		if (localStorage.getItem("idata") != "" && localStorage.getItem("idata").includes("https://da.me/")) {
+			setTimeout(function () { openModal(); }, 200);
+			setTimeout(function () {
+
+				var idata1 = localStorage.getItem("idata");
+				//var idata2=idata1.split("https://da.me/coordonatelelocatiei2/22/44");
+				var idata2 = idata1.split("https://da.me/");
+				var vari = idata2[1].split("/");
+
+				var page = vari[0];
+				if (page == "coordonatelelocatiei2") {
+					var lat1 = vari[1];
+					var lng1 = vari[2];
+					localStorage.setItem("latadr", lat1);
+					localStorage.setItem("lngadr", lng1);
+					localStorage.setItem("lladr", "da");
+					localStorage.setItem("idata", "");
+				}
+				if (page == "distantadintredouaadresehartamap") {
+					var lat1 = vari[1];
+					var lng1 = vari[2];
+					var lat2 = vari[3];
+					var lng2 = vari[4];
+					var tiplinie = vari[5];
+					localStorage.setItem("lat2", lat1);
+					localStorage.setItem("lng2", lng1);
+					localStorage.setItem("lat3", lat2);
+					localStorage.setItem("lng3", lng2);
+					localStorage.setItem("tiplinie", tiplinie);
+					localStorage.setItem("lladr", "da");
+					localStorage.setItem("idata", "");
+				}
+				//alert(page + " - " + lat1 + " - " + " - " + lng1);
+
+				window.location.href = page + ".html";
+
+
+
+			}, 1000);
+		}
+
+
+	if (localStorage.getItem("idata") != "" && localStorage.getItem("idata").includes("geo")) {
+			setTimeout(function () { openModal(); }, 200);
+			setTimeout(function () {
+                //alert(localStorage.getItem("idata"));
+				var idata1 = localStorage.getItem("idata");
+				//var idata2=idata1.split("https://da.me/coordonatelelocatiei2/22/44");
+				var idata2 = idata1.split("geo:");
+				var vari = idata2[1].split("?");
+				var vari2 = vari[0].split(",");
+				
+
+			
+					var lat1 = vari2[0];
+					var lng1 = vari2[1];
+				//	alert(vari2[0]+","+vari2[1]);
+					localStorage.setItem("latadr", lat1);
+					localStorage.setItem("lngadr", lng1);
+					localStorage.setItem("lladr", "da");
+					localStorage.setItem("idata", "");
+				
+				window.location.href = "coordonatelelocatiei2.html";               
+			}, 1000);
+		}
+
+
+	</script>
+</head>
+
+<body style="background-color:white;" onload="app.Start();activeazagpsul();detaliicont();">
+	<div id="fb-root"></div>
+	<nav class="light-blue lighten-3 ">
+		<div class="nav-wrapper">
+			<a href="#" class="brand-logo center">
+				<script>document.write(language.titlu)</script></a>
+			<ul class="left">
+				<li> <a href="#" style="width:100px;" data-activates="slide-out"
+						class="sidenav-trigger orange darken-4 btn"><i class="material-icons">menu</i></a></li>
+			</ul>
+			<ul class="right">
+				<li> <a href="#modal1" style="width:100px;" data-activates='dropdown1'
+						class="sidenav-trigger orange darken-4 btn dropdown-button">
+						<i class="material-icons">language</i>
+					</a></li>
+			</ul>
+		</div>
+	</nav>
+	<ul id='dropdown1' class='dropdown-content'>
+		<li><a href="distanta2.html"
+				onclick="localStorage.setItem('lang','ro');alert('Limba Selectata:Romana');">Romanian</a></li>
+		<li><a href="distanta2.html"
+				onclick="localStorage.setItem('lang','en');alert('Selected Language:English');">English</a></li>
+	</ul>
+	<div class="row">
+		<div class="col s12 m6">
+			<div class="card blue-grey darken-1">
+				<div class="card-content white-text ">
+
+					<p id="detaliicont" style="font-size:17px;color:red;text-align:center;">
+					</p>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<ul id="slide-out" class="side-nav light-blue lighten-3">
+
+		<div id="container">
+			<div class="section" id="section4">
+				<div class="row">
+
+					<div class="col s12  m12 l12 xl12">
+						<p class="waves-effect waves-light titlu orange darken-3">
+							<script>document.write(language.meniu)</script>
+							<button class="light-blue lighten-3" onclick="$('.btn').sideNav('hide');return false;"> <i
+									class="tiny material-icons">clear</i></button>
+							&nbsp;&nbsp;&nbsp;<button class="light-blue lighten-3" onclick="exit();"> <i
+									class="tiny material-icons">exit_to_app</i></button>
+						</p>
+
+					</div>
+				</div>
+				<div class="row" style="text-align:center;height:70px;padding-top:20px;">
+					<script>
+						document.write("<input type=\"checkbox\" class=\"filled-in\" id=\"filled-in-box\"");
+						if (localStorage.getItem("automaticlogin") == "da") {
+							document.write("checked=\"checked\"");
+						}
+						document.write("style=\"width:50px;height:auto;display:block;\" onclick=\"automaticlogin();\" />");
+					</script>
+					<label for="filled-in-box" style="font-size:20px;color:white;">
+						<script>document.write("" + language.autologin + "");</script></label>
+				</div>
+
+
+				<hr />
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="distanta.html">
+								<script>document.write(language.login)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="distanta2.html">
+								<script>document.write(language.buton9)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="noutati.html">
+								<script>document.write(language.noutati)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large"
+								href="distantadelalocatiacurentalaoadresa.html">
+								<script>document.write(language.buton4)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="distantadintredouaadrese.html">
+								<script>document.write(language.buton5)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large modal-trigger" href="#modal1"
+								onclick="goforward()">
+								<script>document.write(language.buton6)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+
+				<!--<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large modal-trigger"  href="plandezbor.html">
+							<script>document.write(language.plan)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>-->
+
+
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="plandezbor.html">
+								<script>document.write(language.plan)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="locatii.html">
+								<script>document.write(language.locatii)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="rute.html">
+								<script>document.write(language.rute)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="contact.html">
+								<script>document.write(language.contact)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<div class="row">
+
+					<div class="col s12  m4 l4 xl4"></div>
+					<div class="col s12  m4 l4 xl4">
+						<p><a class="waves-effect waves-light btn-large" href="dmstodd.html">
+								<script>document.write(language.dmstodd)</script></a></p>
+					</div>
+					<div class="col s12  m4 l4 xl4"></div>
+				</div>
+				<br /><br /><br />
+			</div>
+
+		</div>
+	</ul>
+	<style>
+		/*body{*/
+		/*  font-family: fantasy;*/
+		/*  font-size: 20px;*/
+		/*  line-height: 1.6;*/
+		/*}*/
+
+
+
+
+		.modal-overlayC {
+			display: none;
+			position: fixed;
+			z-index: 2;
+			left: 0;
+			top: 0;
+			height: 100%;
+			width: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.5);
+			padding-top: 75%;
+		}
+	</style>
+
+	<div id="simpleModalC" class="modal-overlayC">
+
+		<div style="width:100%;height:50%;background-color:white;">
+			<style>
+				.tdloader {
+					width: 11%;
+					height: 11%;
+
+				}
+			</style>
+			<table id="loadertable" style="width:100%;height:100%;display:block;">
+				<tr>
+					<td class="tdloader"></td>
+					<td class="tdloader"></td>
+					<td class="tdloader"></td>
+				</tr>
+				<tr>
+					<td class="tdloader"></td>
+					<td class="tdloader" style="text-align:center;">
+						<img src="Img/loading.gif" />
+					</td>
+					<td class="tdloader"></td>
+				</tr>
+				<tr>
+					<td class="tdloader"></td>
+					<td class="tdloader"></td>
+					<td class="tdloader"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+	<script>
+		// Get modal element
+		var modaljs = document.getElementById('simpleModalC');
+		// Get close button
+
+
+
+		// Listen for outside click
+		window.addEventListener('click', outsideClick);
+
+		// Open modal
+		function openModal() {
+			modaljs.style.display = 'block';
+			modaljs.style.zIndex = "3";
+			document.getElementById('container').zIndex = "-1";
+		}
+
+		// Close modal
+		function closeModal() {
+			modaljs.style.display = 'none';
+		}
+
+		// Click outside and close
+		function outsideClick(e) {
+			if (e.target == modaljs) {
+				modaljs.style.display = 'none';
+			}
+		}
+	</script>
+	<script>
+		$(".btn").sideNav();
+		$(document).ready(function () {
+			// the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+			$('.modal').modal({
+				dismissible: true, // Modal can be dismissed by clicking outside of the modal
+				opacity: 0.8, // Opacity of modal background
+			}
+			);
+		});
+
+	</script>
+
+
+	<!-- Modal Structure -->
+
+	<div id="container">
+		<div class="section" id="section2">
+			<div class="row">
+
+				<div class="col s12  m2 l2 xl3"></div>
+				<div class="col s6  m4 l4 xl3">
+					<p><a class="waves-effect waves-light btn-large" href="whatsapp.html">
+							<script>document.write(language.whatsapp)</script></a></p>
+				</div>
+				<div class="col s6  m4 l4 xl3">
+					<p><a class="waves-effect waves-light btn-large" href="important.html">
+							<script>document.write(language.important)</script></a></p>
+				</div>
+				<div class="col s12  m2 l2 xl3"></div>
+			</div>
+			<div class="row">
+
+				<div class="col s12  m2 l2 xl3"></div>
+				<div class="col s6  m4 l4 xl3">
+					<p><a class="waves-effect waves-light btn-large" href="noutati.html">
+							<script>document.write(language.noutati)</script></a></p>
+				</div>
+				<div class="col s6  m4 l4 xl3">
+					<p><a class="waves-effect waves-light btn-large" href="contact.html">
+							<script>document.write(language.contact)</script></a></p>
+				</div>
+				<div class="col s12  m2 l2 xl3"></div>
+			</div>
+
+
+			<!-- <div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="noutati.html">
+							<script>document.write(language.noutati)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div> -->
+
+
+
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="distantadelalocatiacurentalaoadresa.html">
+							<script>document.write(language.buton4)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="distantadintredouaadrese.html">
+							<script>document.write(language.buton5)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large modal-trigger" href="#modal1" onclick="goforward()">
+							<script>document.write(language.buton6)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="coordonatelelocatiei.html">
+							<script>document.write(language.buton14)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+
+			<!--<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large modal-trigger"  href="plandezbor.html">
+							<script>document.write(language.plan)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>-->
+
+
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="plandezbor.html">
+							<script>document.write(language.plan)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="locatii.html">
+							<script>document.write(language.locatii)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="rute.html">
+							<script>document.write(language.rute)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+
+			<!-- <div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="contact.html">
+							<script>document.write(language.contact)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div> -->
+			<div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="dmstodd.html">
+							<script>document.write(language.dmstodd)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
+			<!--<div style="text-align:center;"><iframe src="http://hitcounter.evidentacolumbofila.eu/Index2.html" title="description" width=400 height=50></iframe></div>-->
+
+			<!-- Modal Structure -->
+			<div id="modal1" class="modal" style="width:100%;height:50%;padding-top:30%;">
+				<div class="progress" id="loader" style="width:100%;height:20%;">
+					<div class="indeterminate"></div>
+				</div>
+			</div>
+
+			<div class="row">
+
+				<div class="col s12  m12 l12 xl12">
+					<a class="waves-effect waves-light btn-large" href="#" onclick="return logare();">
+						<script>document.write(language.comentarii)</script></a>
+
+				</div>
+			</div>
+			<div class="row">
+
+				<div class="col s12  m12 l12 xl12">
+					<div id='com'>
+
+					</div>
+
+				</div>
+			</div>
+
+
+		</div>
+		<div class="section" id="section3">
+
+		</div>
+	</div>
+</body>
+
+</html>

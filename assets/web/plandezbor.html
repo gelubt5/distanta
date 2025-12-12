@@ -1,0 +1,1975 @@
+<html>
+
+<head>
+    <script src='file:///android_asset/app.js'></script>
+    <link href="font.css" rel="stylesheet">
+    <link rel="stylesheet" href="materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+    <script src="materialize.min.js"></script>
+    <script>
+        //  window.addEventListener("error", function (e) {
+        //   location.reload();alert();
+        //   return false;
+        // });
+        var sti;
+        function hk(x) {
+            clearInterval(sti);
+            sti = setInterval(function () { app.HideKeyboard(); clearInterval(sti); }, 1000);
+        }
+        if (localStorage.getItem("frompl1") == null) {
+            localStorage.setItem("frompl1", "nu");
+        }
+        if (localStorage.getItem("frompl1") == "da") {
+            localStorage.setItem("frompl1", "nu");
+            location.href = "plandezbor.html";
+
+        }
+        var that = new XMLHttpRequest();
+        that.open('GET', 'http://google.com', false);
+        try {
+            that.send();
+        } catch (exception) {
+            if (exception.name == 'NetworkError') {
+                alert("Nu esti conectat la internet!!!");
+            }
+        }
+        app.SetOnError(function () {
+           
+        });
+
+    </script>
+    <script>
+
+        if (localStorage.getItem("planadresa1") == null) {
+            localStorage.setItem("planadresa1", "");
+        }
+        if (localStorage.getItem("planadresa2") == null) {
+            localStorage.setItem("planadresa2", "");
+        }
+        if (localStorage.getItem("planadresa3") == null) {
+            localStorage.setItem("planadresa3", "");
+        }
+        if (localStorage.getItem("planadresa4") == null) {
+            localStorage.setItem("planadresa4", "");
+        }
+        if (localStorage.getItem("planadresa5") == null) {
+            localStorage.setItem("planadresa5", "");
+        }
+        if (localStorage.getItem("planadresa6") == null) {
+            localStorage.setItem("planadresa6", "");
+        }
+        if (localStorage.getItem("planadresa7") == null) {
+            localStorage.setItem("planadresa7", "");
+        }
+        if (localStorage.getItem("planadresa8") == null) {
+            localStorage.setItem("planadresa8", "");
+        }
+
+        if (localStorage.getItem("planadresa1lat") == null) {
+            localStorage.setItem("planadresa1lat", 0);
+        }
+        if (localStorage.getItem("planadresa2lat") == null) {
+            localStorage.setItem("planadresa2lat", 0);
+        }
+        if (localStorage.getItem("planadresa3lat") == null) {
+            localStorage.setItem("planadresa3lat", 0);
+        }
+        if (localStorage.getItem("planadresa4lat") == null) {
+            localStorage.setItem("planadresa4lat", 0);
+        }
+        if (localStorage.getItem("planadresa5lat") == null) {
+            localStorage.setItem("planadresa5lat", 0);
+        }
+        if (localStorage.getItem("planadresa6lat") == null) {
+            localStorage.setItem("planadresa6lat", 0);
+        }
+        if (localStorage.getItem("planadresa7lat") == null) {
+            localStorage.setItem("planadresa7lat", 0);
+        }
+        if (localStorage.getItem("planadresa8lat") == null) {
+            localStorage.setItem("planadresa8lat", 0);
+        }
+        if (localStorage.getItem("planadresa1lng") == null) {
+            localStorage.setItem("planadresa1lng", 0);
+        }
+        if (localStorage.getItem("planadresa2lng") == null) {
+            localStorage.setItem("planadresa2lng", 0);
+        }
+        if (localStorage.getItem("planadresa3lng") == null) {
+            localStorage.setItem("planadresa3lng", 0);
+        }
+        if (localStorage.getItem("planadresa4lng") == null) {
+            localStorage.setItem("planadresa4lng", 0);
+        }
+        if (localStorage.getItem("planadresa5lng") == null) {
+            localStorage.setItem("planadresa5lng", 0);
+        }
+        if (localStorage.getItem("planadresa6lng") == null) {
+            localStorage.setItem("planadresa6lng", 0);
+        }
+        if (localStorage.getItem("planadresa7lng") == null) {
+            localStorage.setItem("planadresa7lng", 0);
+        }
+        if (localStorage.getItem("planadresa8lng") == null) {
+            localStorage.setItem("planadresa8lng", 0);
+        }
+
+
+        var planadresa1lat = 0;
+        var planadresa1lng = 0;
+        var planadresa2lat = 0;
+        var planadresa2lng = 0;
+        var planadresa3lat = 0;
+        var planadresa3lng = 0;
+        var planadresa4lat = 0;
+        var planadresa4lng = 0;
+        var planadresa5lat = 0;
+        var planadresa5lng = 0;
+        var planadresa6lat = 0;
+        var planadresa6lng = 0;
+        var planadresa7lat = 0;
+        var planadresa7lng = 0;
+        var planadresa8lat = 0;
+        var planadresa8lng = 0;
+
+
+        if (localStorage.getItem("webmapadresa1") == null) {
+            localStorage.setItem("webmapadresa1", "");
+        }
+        if (localStorage.getItem("webmapadresa2") == null) {
+            localStorage.setItem("webmapadresa2", "");
+        }
+        if (localStorage.getItem("webmapadresa3") == null) {
+            localStorage.setItem("webmapadresa3", "");
+        }
+        if (localStorage.getItem("webmapadresa4") == null) {
+            localStorage.setItem("webmapadresa4", "");
+        }
+        if (localStorage.getItem("webmapadresa5") == null) {
+            localStorage.setItem("webmapadresa5", "");
+        }
+        if (localStorage.getItem("webmapadresa6") == null) {
+            localStorage.setItem("webmapadresa6", "");
+        }
+        if (localStorage.getItem("webmapadresa7") == null) {
+            localStorage.setItem("webmapadresa7", "");
+        }
+        if (localStorage.getItem("webmapadresa8") == null) {
+            localStorage.setItem("webmapadresa8", "");
+        }
+
+        if (localStorage.getItem("webmapadresa1lat") == null) {
+            localStorage.setItem("webmapadresa1lat", 0);
+        }
+        if (localStorage.getItem("webmapadresa2lat") == null) {
+            localStorage.setItem("webmapadresa2lat", 0);
+        }
+        if (localStorage.getItem("webmapadresa3lat") == null) {
+            localStorage.setItem("webmapadresa3lat", 0);
+        }
+        if (localStorage.getItem("webmapadresa4lat") == null) {
+            localStorage.setItem("webmapadresa4lat", 0);
+        }
+        if (localStorage.getItem("webmapadresa5lat") == null) {
+            localStorage.setItem("webmapadresa5lat", 0);
+        }
+        if (localStorage.getItem("webmapadresa6lat") == null) {
+            localStorage.setItem("webmapadresa6lat", 0);
+        }
+        if (localStorage.getItem("webmapadresa7lat") == null) {
+            localStorage.setItem("webmapadresa7lat", 0);
+        }
+        if (localStorage.getItem("webmapadresa8lat") == null) {
+            localStorage.setItem("webmapadresa8lat", 0);
+        }
+        if (localStorage.getItem("webmapadresa1lng") == null) {
+            localStorage.setItem("webmapadresa1lng", 0);
+        }
+        if (localStorage.getItem("webmapadresa2lng") == null) {
+            localStorage.setItem("webmapadresa2lng", 0);
+        }
+        if (localStorage.getItem("webmapadresa3lng") == null) {
+            localStorage.setItem("webmapadresa3lng", 0);
+        }
+        if (localStorage.getItem("webmapadresa4lng") == null) {
+            localStorage.setItem("webmapadresa4lng", 0);
+        }
+        if (localStorage.getItem("webmapadresa5lng") == null) {
+            localStorage.setItem("webmapadresa5lng", 0);
+        }
+        if (localStorage.getItem("webmapadresa6lng") == null) {
+            localStorage.setItem("webmapadresa6lng", 0);
+        }
+        if (localStorage.getItem("webmapadresa7lng") == null) {
+            localStorage.setItem("webmapadresa7lng", 0);
+        }
+        if (localStorage.getItem("webmapadresa8lng") == null) {
+            localStorage.setItem("webmapadresa8lng", 0);
+        }
+
+        console.log(localStorage.getItem("planadresa1") + "X");
+        console.log(localStorage.getItem("planadresa2") + "X");
+        console.log(localStorage.getItem("planadresa3") + "X");
+        console.log(localStorage.getItem("planadresa4") + "X");
+        console.log(localStorage.getItem("planadresa5") + "X");
+        console.log(localStorage.getItem("planadresa6") + "X");
+        console.log(localStorage.getItem("planadresa7") + "X");
+        console.log(localStorage.getItem("planadresa8") + "X");
+
+        function initialize() {
+            // var input1 = document.getElementById('planadresa1');
+            // var autocomplete1 = new google.maps.places.Autocomplete(input1);
+            // google.maps.event.addListener(autocomplete1, 'place_changed', function () {
+            //     var place1 = autocomplete1.getPlace();
+            //     // document.getElementById('city2').value = place2.name;
+            //     planadresa1lat = place1.geometry.location.lat();
+            //     planadresa1lng = place1.geometry.location.lng();
+            //     localStorage.setItem("planadresa1lat", planadresa1lat);
+            //     localStorage.setItem("planadresa1lng", planadresa1lng);
+            //     localStorage.setItem("planadresa1", document.getElementById('planadresa1').value);
+            // });
+            // var input2 = document.getElementById('planadresa2');
+            // var autocomplete2 = new google.maps.places.Autocomplete(input2);
+            // google.maps.event.addListener(autocomplete2, 'place_changed', function () {
+            //     var place2 = autocomplete2.getPlace();
+            //     planadresa2lat = place2.geometry.location.lat();
+            //     planadresa2lng = place2.geometry.location.lng();
+            //     localStorage.setItem("planadresa2", document.getElementById('planadresa2').value);
+            //     localStorage.setItem("planadresa2lat", planadresa2lat);
+            //     localStorage.setItem("planadresa2lng", planadresa2lng);
+            // });
+            // var input3 = document.getElementById('planadresa3');
+            // var autocomplete3 = new google.maps.places.Autocomplete(input3);
+            // google.maps.event.addListener(autocomplete3, 'place_changed', function () {
+            //     var place3 = autocomplete3.getPlace();
+            //     planadresa3lat = place3.geometry.location.lat();
+            //     planadresa3lng = place3.geometry.location.lng();
+            //     localStorage.setItem("planadresa3", document.getElementById('planadresa3').value);
+            //     localStorage.setItem("planadresa3lat", planadresa3lat);
+            //     localStorage.setItem("planadresa3lng", planadresa3lng);
+            //     // document.getElementById('city2').value = place3.name;
+            // });
+
+            // var input4 = document.getElementById('planadresa4');
+            // var autocomplete4 = new google.maps.places.Autocomplete(input4);
+            // google.maps.event.addListener(autocomplete4, 'place_changed', function () {
+            //     var place4 = autocomplete4.getPlace();
+            //     planadresa4lat = place4.geometry.location.lat();
+            //     planadresa4lng = place4.geometry.location.lng();
+            //     localStorage.setItem("planadresa4", document.getElementById('planadresa4').value);
+            //     localStorage.setItem("planadresa4lat", planadresa4lat);
+            //     localStorage.setItem("planadresa4lng", planadresa4lng);
+            //     // document.getElementById('city2').value = place3.name;
+            // });
+
+            // var input5 = document.getElementById('planadresa5');
+            // var autocomplete5 = new google.maps.places.Autocomplete(input5);
+            // google.maps.event.addListener(autocomplete5, 'place_changed', function () {
+            //     var place5 = autocomplete5.getPlace();
+            //     planadresa5lat = place5.geometry.location.lat();
+            //     planadresa5lng = place5.geometry.location.lng();
+            //     localStorage.setItem("planadresa5", document.getElementById('planadresa5').value);
+            //     localStorage.setItem("planadresa5lat", planadresa5lat);
+            //     localStorage.setItem("planadresa5lng", planadresa5lng);
+            //     // document.getElementById('city2').value = place3.name;
+            // });
+            // var input6 = document.getElementById('planadresa6');
+            // var autocomplete6 = new google.maps.places.Autocomplete(input6);
+            // google.maps.event.addListener(autocomplete6, 'place_changed', function () {
+            //     var place6 = autocomplete6.getPlace();
+            //     planadresa6lat = place6.geometry.location.lat();
+            //     planadresa6lng = place6.geometry.location.lng();
+            //     localStorage.setItem("planadresa6", document.getElementById('planadresa6').value);
+            //     localStorage.setItem("planadresa6lat", planadresa6lat);
+            //     localStorage.setItem("planadresa6lng", planadresa6lng);
+            //     // document.getElementById('city2').value = place3.name;
+            // });
+            // var input7 = document.getElementById('planadresa7');
+            // var autocomplete7 = new google.maps.places.Autocomplete(input7);
+            // google.maps.event.addListener(autocomplete7, 'place_changed', function () {
+            //     var place7 = autocomplete7.getPlace();
+            //     planadresa7lat = place7.geometry.location.lat();
+            //     planadresa7lng = place7.geometry.location.lng();
+            //     localStorage.setItem("planadresa7", document.getElementById('planadresa7').value);
+            //     localStorage.setItem("planadresa7lat", planadresa7lat);
+            //     localStorage.setItem("planadresa7lng", planadresa7lng);
+            //     // document.getElementById('city2').value = place3.name;
+            // });
+            // var input8 = document.getElementById('planadresa8');
+            // var autocomplete8 = new google.maps.places.Autocomplete(input8);
+            // google.maps.event.addListener(autocomplete8, 'place_changed', function () {
+            //     var place8 = autocomplete8.getPlace();
+            //     planadresa8lat = place8.geometry.location.lat();
+            //     planadresa8lng = place8.geometry.location.lng();
+            //     localStorage.setItem("planadresa8", document.getElementById('planadresa8').value);
+            //     localStorage.setItem("planadresa8lat", planadresa8lat);
+            //     localStorage.setItem("planadresa8lng", planadresa8lng);
+            //     // document.getElementById('city2').value = place3.name;
+            // });
+
+
+
+
+        }
+        //google.maps.event.addDomListener(window, 'load', initialize);
+        function salveazatip() {
+            if ($("#test1").prop("checked")) {
+                localStorage.setItem("tiplinie", "da");
+            }
+            if ($("#test2").prop("checked")) {
+                localStorage.setItem("tiplinie", "nu");
+            }
+
+
+            if (($("#planadresa41").val() != "" || $("#planadresa42").val() != "" || $("#planadresa43").val() != "" || $("#planadresa44").val() != "" || $("#planadresa45").val() != "" || $("#planadresa46").val() != "" || $("#planadresa47").val() != "" || $("#planadresa48").val() != "") && ($("#webmaplocatie1").val() != "0" || $("#webmaplocatie2").val() != "0" || $("#webmaplocatie3").val() != "0" || $("#webmaplocatie4").val() != "0" || $("#webmaplocatie5").val() != "0" || $("#webmaplocatie6").val() != "0" || $("#webmaplocatie7").val() != "0" || $("#webmaplocatie8").val() != "0")) {
+                alert("Eroare.Trebuie sa mergi pe o singura schema !!!");
+            } else {
+                location.href = "plandezbor2.html";
+            }
+        }
+        function goforward() {
+            $('.btn').sideNav('hide');
+            loc2 = app.CreateLocator("GPS");
+            loc2.SetOnChange(function (pos) {
+                localStorage.setItem("lat6", pos.latitude);
+                localStorage.setItem("lng6", pos.longitude);
+                localStorage.setItem("lat42", "0");
+                localStorage.setItem("lng42", "0");
+                loc2.Stop();
+                window.location.href = "locatiacurenta.html";
+            });
+            loc2.SetRate(1);
+            loc2.Start();
+        }
+
+
+
+
+        function cautaadresa(e, i) {
+            $(document).ready(function () {
+                varianta = 2;
+                var email = localStorage.getItem("email");
+                var parola = localStorage.getItem("parola");
+                var search = e.value;
+                $.get("https://evidentacolumbofila.eu/public/places?email=" + email + "&parola=" + parola + "&search=" + search + "&cheie=" + localStorage.getItem("cheie"), function (data, status) {
+                    var data2 = JSON.parse(data);
+                    if (data2[3] == 1) {
+                        alert(language.utilizatorulnuexista);
+                        $("#adresa5" + i).html("");
+                    }
+                    if (data2[3] == 2) {
+                        alert(language.continactiv);
+                        $("#adresa5" + i).html("");
+                    }
+                    if (data2[3] == 3) {
+                        alert(language.eroare);
+                        $("#adresa5" + i).html("");
+                    }
+                    if (data2[3] == 4) {
+                        var html = "<ul class='blue-grey darken-1'>";
+                        data2[1].forEach(function (item) {
+                            var html2 = "<li   style='height:60px;font-size:20px;text-align:center;color:white;' onclick='this.style.backgroundColor=\"" + "#E65100" + "\";playbeep();returneaza(\"" + i + "\",\"" + item[0] + "\");'>" + item[0] + "</li>";
+                            html = html + html2 + "<hr/>";
+                        });
+                        html = html + "<ul>";
+                        $("#adresa5" + i).html("");
+                        $("#adresa5" + i).html(html);
+                    }
+                }).fail(function (data) {
+
+
+                    console.log(data.responseJSON["error"]);
+                    if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
+                        alert(language.nuestilogat);
+                        window.location.href = "_main_.html";
+                    } else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
+                        alert(language.nuestilogat);
+                        window.location.href = "_main_.html";
+                    } else {
+                        alert(language.eroare);
+                    }
+                });
+            });
+
+        }
+        //////
+        //      $('#planadresa42').keyup(function() {  
+        //      varianta=2;
+        //      var email=localStorage.getItem("email");
+        //  var parola=localStorage.getItem("parola");
+        //  var search=$(this).val();
+        //      $.get("https://evidentacolumbofila.eu/public/places?email="+email+"&parola="+parola+"&search="+search, function (data, status) {
+        //     var data2=JSON.parse(data);
+        //     if (data2[3]==1)
+        //     {
+        //          alert(language.utilizatorulnuexista);
+        //          $("#adresa52").html("");
+        //     } 
+        //     if (data2[3]==2)
+        //     {    
+        //          alert(language.continactiv);
+        //          $("#adresa52").html("");
+        //     } 
+        //     if (data2[3]==3)
+        //     {    
+        //          alert(language.eroare);
+        //          $("#adresa52").html("");
+        //     } 
+        //     if (data2[3]==4)
+        //     {            
+        //     var html="<ul class='blue-grey darken-1'>";
+        //     data2[1].forEach(function(item){
+        //         var html2="<li  style='height:60px;font-size:20px;text-align:center;color:white;' onclick='returneaza(2,\""+item[0]+"\");'>"+item[0]+"</li>";
+        //         html=html+html2+"<hr/>";
+        //     });
+        //     html=html+"<ul>";  
+        //     $("#adresa52").html("");
+        //     $("#adresa52").html(html);
+        //     }
+        //   });
+        //   }); 
+
+        function returneaza(x, y) {
+
+
+            $(document).ready(function () {
+                varianta = 2;
+                var email = localStorage.getItem("email");
+                var y2 = decodeURI(y);
+                var parola = localStorage.getItem("parola");
+                $.post("https://evidentacolumbofila.eu/public/returneazalatlngnume", { 'email': email, 'parola': parola, 'search': y, 'cheie': localStorage.getItem('cheie') }, function (data, status) {
+                    //alert(y);
+                    var data3 = JSON.parse(data);
+                    if (data3[5] != null) {
+                        if (data3[5] == 1) {
+                            alert(language.utilizatorulnuexista);
+                        }
+                        if (data3[5] == 2) {
+                            alert(language.continactiv);
+                        }
+                        if (data3[5] == 3) {
+                            alert(language.eroare);
+                        }
+                        if (x == 1) {
+
+                            planadresa1lat = 0;
+                            planadresa1lng = 0;
+                            localStorage.setItem("planadresa1lat", 0);
+                            localStorage.setItem("planadresa1lng", 0);
+                            localStorage.setItem("planadresa1", "");
+                            $("#planadresa41").val("");
+                            $("#adresa51").html("");
+                        }
+                        if (x == 2) {
+                            planadresa2lat = 0;
+                            planadresa2lng = 0;
+                            localStorage.setItem("planadresa2lat", 0);
+                            localStorage.setItem("planadresa2lng", 0);
+                            localStorage.setItem("planadresa2", "");
+                            $("#planadresa42").val("");
+                            $("#adresa52").html("");
+                        }
+                        if (x == 3) {
+                            planadresa3lat = 0;
+                            planadresa3lng = 0;
+                            localStorage.setItem("planadresa3lat", 0);
+                            localStorage.setItem("planadresa3lng", 0);
+                            localStorage.setItem("planadresa3", "");
+                            $("#planadresa43").val("");
+                            $("#adresa53").html("");
+                        }
+                        if (x == 4) {
+                            planadresa4lat = 0;
+                            planadresa4lng = 0;
+                            localStorage.setItem("planadresa4lat", 0);
+                            localStorage.setItem("planadresa4lng", 0);
+                            localStorage.setItem("planadresa4", "");
+                            $("#planadresa44").val("");
+                            $("#adresa54").html("");
+                        }
+                        if (x == 5) {
+                            planadresa5lat = 0;
+                            planadresa5lng = 0;
+                            localStorage.setItem("planadresa5lat", 0);
+                            localStorage.setItem("planadresa5lng", 0);
+                            localStorage.setItem("planadresa5", "");
+                            $("#planadresa45").val("");
+                            $("#adresa55").html("");
+                        }
+                        if (x == 6) {
+                            planadresa6lat = 0;
+                            planadresa6lng = 0;
+                            localStorage.setItem("planadresa6lat", 0);
+                            localStorage.setItem("planadresa6lng", 0);
+                            localStorage.setItem("planadresa6", "");
+                            $("#planadresa46").val("");
+                            $("#adresa56").html("");
+                        }
+                        if (x == 7) {
+                            planadresa7lat = 0;
+                            planadresa7lng = 0;
+                            localStorage.setItem("planadresa7lat", 0);
+                            localStorage.setItem("planadresa7lng", 0);
+                            localStorage.setItem("planadresa7", "");
+                            $("#planadresa47").val("");
+                            $("#adresa57").html("");
+                        }
+                        if (x == 8) {
+                            planadresa8lat = 0;
+                            planadresa8lng = 0;
+                            localStorage.setItem("planadresa8lat", 0);
+                            localStorage.setItem("planadresa8lng", 0);
+                            localStorage.setItem("planadresa8", "");
+                            $("#planadresa48").val("");
+                            $("#adresa58").html("");
+                        }
+                    } else {
+                        if (x == 1) {
+                            var data3 = JSON.parse(data);
+                            var data2 = [];
+                            data2[0] = data3["results"][0]["address_components"][0]["short_name"];
+                            data2[1] = data3["results"][0]["geometry"]["location"]["lat"];
+                            data2[2] = data3["results"][0]["geometry"]["location"]["lng"];
+                            //alert(data2[0]+"==="+data2[1]+"==="+data2[2]);
+                            if (data2[0] == "" && data2[1] == 0 && data2[2] == 0) {
+                                alert("Eroare!!!");
+                                planadresa1lat = 0;
+                                planadresa1lng = 0;
+                                localStorage.setItem("planadresa1lat", planadresa1lat);
+                                localStorage.setItem("planadresa1lng", planadresa1lng);
+                                localStorage.setItem("planadresa1", "");
+                                $("#planadresa41").val("");
+                                $("#adresa51").html("");
+                            } else {
+                                planadresa1lat = data2[1];
+                                planadresa1lng = data2[2];
+                                localStorage.setItem("planadresa1lat", planadresa1lat);
+                                localStorage.setItem("planadresa1lng", planadresa1lng);
+                                localStorage.setItem("planadresa1", data2[0]);
+                                $("#planadresa41").val(data2[0]);
+                                $("#adresa51").html("");
+                            }
+                        }
+                        if (x == 2) {
+                            var data3 = JSON.parse(data);
+                            var data2 = [];
+                            data2[0] = data3["results"][0]["address_components"][0]["short_name"];
+                            data2[1] = data3["results"][0]["geometry"]["location"]["lat"];
+                            data2[2] = data3["results"][0]["geometry"]["location"]["lng"];
+                            if (data2[0] == "" && data2[1] == 0 && data2[2] == 0) {
+                                alert("Eroare!!!");
+                                planadresa2lat = 0;
+                                planadresa2lng = 0;
+                                localStorage.setItem("planadresa2lat", planadresa2lat);
+                                localStorage.setItem("planadresa2lng", planadresa2lng);
+                                localStorage.setItem("planadresa2", "");
+                                $("#planadresa42").val("");
+                                $("#adresa52").html("");
+                            } else {
+                                planadresa2lat = parseFloat(data2[1]);
+                                planadresa2lng = parseFloat(data2[2]);
+                                localStorage.setItem("planadresa2lat", planadresa2lat);
+                                localStorage.setItem("planadresa2lng", planadresa2lng);
+                                localStorage.setItem("planadresa2", data2[0]);
+                                $("#planadresa42").val(data2[0]);
+                                $("#adresa52").html("");
+                            }
+                        }
+                        if (x == 3) {
+                            var data3 = JSON.parse(data);
+                            var data2 = [];
+                            data2[0] = data3["results"][0]["address_components"][0]["short_name"];
+                            data2[1] = data3["results"][0]["geometry"]["location"]["lat"];
+                            data2[2] = data3["results"][0]["geometry"]["location"]["lng"];
+                            if (data2[0] == "" && data2[1] == 0 && data2[2] == 0) {
+                                alert("Eroare!!!");
+                                planadresa3lat = 0;
+                                planadresa3lng = 0;
+                                localStorage.setItem("planadresa3lat", planadresa3lat);
+                                localStorage.setItem("planadresa3lng", planadresa3lng);
+                                localStorage.setItem("planadresa3", "");
+                                $("#planadresa43").val("");
+                                $("#adresa53").html("");
+                            } else {
+                                planadresa3lat = data2[1];
+                                planadresa3lng = data2[2];
+                                localStorage.setItem("planadresa3lat", planadresa3lat);
+                                localStorage.setItem("planadresa3lng", planadresa3lng);
+                                localStorage.setItem("planadresa3", data2[0]);
+                                $("#planadresa43").val(data2[0]);
+                                $("#adresa53").html("");
+                            }
+                        }
+                        if (x == 4) {
+                            var data3 = JSON.parse(data);
+                            var data2 = [];
+                            data2[0] = data3["results"][0]["address_components"][0]["short_name"];
+                            data2[1] = data3["results"][0]["geometry"]["location"]["lat"];
+                            data2[2] = data3["results"][0]["geometry"]["location"]["lng"];
+                            if (data2[0] == "" && data2[1] == 0 && data2[2] == 0) {
+                                alert("Eroare!!!");
+                                planadresa4lat = 0;
+                                planadresa4lng = 0;
+                                localStorage.setItem("planadresa4lat", planadresa4lat);
+                                localStorage.setItem("planadresa4lng", planadresa4lng);
+                                localStorage.setItem("planadresa4", "");
+                                $("#planadresa44").val("");
+                                $("#adresa54").html("");
+                            } else {
+                                planadresa4lat = data2[1];
+                                planadresa4lng = data2[2];
+                                localStorage.setItem("planadresa4lat", planadresa4lat);
+                                localStorage.setItem("planadresa4lng", planadresa4lng);
+                                localStorage.setItem("planadresa4", data2[0]);
+                                $("#planadresa44").val(data2[0]);
+                                $("#adresa54").html("");
+                            }
+                        }
+
+                        if (x == 5) {
+                            var data3 = JSON.parse(data);
+                            var data2 = [];
+                            data2[0] = data3["results"][0]["address_components"][0]["short_name"];
+                            data2[1] = data3["results"][0]["geometry"]["location"]["lat"];
+                            data2[2] = data3["results"][0]["geometry"]["location"]["lng"];
+                            if (data2[0] == "" && data2[1] == 0 && data2[2] == 0) {
+                                alert("Eroare!!!");
+                                planadresa5lat = 0;
+                                planadresa5lng = 0;
+                                localStorage.setItem("planadresa5lat", planadresa5lat);
+                                localStorage.setItem("planadresa5lng", planadresa5lng);
+                                localStorage.setItem("planadresa5", "");
+                                $("#planadresa45").val("");
+                                $("#adresa55").html("");
+                            } else {
+                                planadresa5lat = data2[1];
+                                planadresa5lng = data2[2];
+                                localStorage.setItem("planadresa5lat", planadresa5lat);
+                                localStorage.setItem("planadresa5lng", planadresa5lng);
+                                localStorage.setItem("planadresa5", data2[0]);
+                                $("#planadresa45").val(data2[0]);
+                                $("#adresa55").html("");
+                            }
+                        }
+
+                        if (x == 6) {
+                            var data3 = JSON.parse(data);
+                            var data2 = [];
+                            data2[0] = data3["results"][0]["address_components"][0]["short_name"];
+                            data2[1] = data3["results"][0]["geometry"]["location"]["lat"];
+                            data2[2] = data3["results"][0]["geometry"]["location"]["lng"];
+                            if (data2[0] == "" && data2[1] == 0 && data2[2] == 0) {
+                                alert("Eroare!!!");
+                                planadresa6lat = 0;
+                                planadresa6lng = 0;
+                                localStorage.setItem("planadresa6lat", planadresa6lat);
+                                localStorage.setItem("planadresa6lng", planadresa6lng);
+                                localStorage.setItem("planadresa6", "");
+                                $("#planadresa46").val("");
+                                $("#adresa56").html("");
+                            } else {
+                                planadresa6lat = data2[1];
+                                planadresa6lng = data2[2];
+                                localStorage.setItem("planadresa6lat", planadresa6lat);
+                                localStorage.setItem("planadresa6lng", planadresa6lng);
+                                localStorage.setItem("planadresa6", data2[0]);
+                                $("#planadresa46").val(data2[0]);
+                                $("#adresa56").html("");
+                            }
+                        }
+                        if (x == 7) {
+                            var data3 = JSON.parse(data);
+                            var data2 = [];
+                            data2[0] = data3["results"][0]["address_components"][0]["short_name"];
+                            data2[1] = data3["results"][0]["geometry"]["location"]["lat"];
+                            data2[2] = data3["results"][0]["geometry"]["location"]["lng"];
+                            if (data2[0] == "" && data2[1] == 0 && data2[2] == 0) {
+                                alert("Eroare!!!");
+                                planadresa7lat = 0;
+                                planadresa7lng = 0;
+                                localStorage.setItem("planadresa7lat", planadresa7lat);
+                                localStorage.setItem("planadresa7lng", planadresa7lng);
+                                localStorage.setItem("planadresa7", "");
+                                $("#planadresa47").val("");
+                                $("#adresa57").html("");
+                            } else {
+                                planadresa7lat = data2[1];
+                                planadresa7lng = data2[2];
+                                localStorage.setItem("planadresa7lat", planadresa7lat);
+                                localStorage.setItem("planadresa7lng", planadresa7lng);
+                                localStorage.setItem("planadresa7", data2[0]);
+                                $("#planadresa47").val(data2[0]);
+                                $("#adresa57").html("");
+                            }
+                        }
+
+                        if (x == 8) {
+                            var data3 = JSON.parse(data);
+                            var data2 = [];
+                            data2[0] = data3["results"][0]["address_components"][0]["short_name"];
+                            data2[1] = data3["results"][0]["geometry"]["location"]["lat"];
+                            data2[2] = data3["results"][0]["geometry"]["location"]["lng"];
+                            if (data2[0] == "" && data2[1] == 0 && data2[2] == 0) {
+                                alert("Eroare!!!");
+                                planadresa8lat = 0;
+                                planadresa8lng = 0;
+                                localStorage.setItem("planadresa8lat", planadresa8lat);
+                                localStorage.setItem("planadresa8lng", planadresa8lng);
+                                localStorage.setItem("planadresa8", "");
+                                $("#planadresa48").val("");
+                                $("#adresa58").html("");
+                            } else {
+                                planadresa8lat = data2[1];
+                                planadresa8lng = data2[2];
+                                localStorage.setItem("planadresa8lat", planadresa8lat);
+                                localStorage.setItem("planadresa8lng", planadresa8lng);
+                                localStorage.setItem("planadresa8", data2[0]);
+                                $("#planadresa48").val(data2[0]);
+                                $("#adresa58").html("");
+                            }
+                        }
+
+                    }
+
+                }).fail(function (data) {
+
+                    if (x == 1) {
+
+                        planadresa1lat = 0;
+                        planadresa1lng = 0;
+                        localStorage.setItem("planadresa1lat", 0);
+                        localStorage.setItem("planadresa1lng", 0);
+                        localStorage.setItem("planadresa1", "");
+                        $("#planadresa41").val("");
+                        $("#adresa51").html("");
+                    }
+                    if (x == 2) {
+                        planadresa2lat = 0;
+                        planadresa2lng = 0;
+                        localStorage.setItem("planadresa2lat", 0);
+                        localStorage.setItem("planadresa2lng", 0);
+                        localStorage.setItem("planadresa2", "");
+                        $("#planadresa42").val("");
+                        $("#adresa52").html("");
+                    }
+                    if (x == 3) {
+                        planadresa3lat = 0;
+                        planadresa3lng = 0;
+                        localStorage.setItem("planadresa3lat", 0);
+                        localStorage.setItem("planadresa3lng", 0);
+                        localStorage.setItem("planadresa3", "");
+                        $("#planadresa43").val("");
+                        $("#adresa53").html("");
+                    }
+                    if (x == 4) {
+                        planadresa4lat = 0;
+                        planadresa4lng = 0;
+                        localStorage.setItem("planadresa4lat", 0);
+                        localStorage.setItem("planadresa4lng", 0);
+                        localStorage.setItem("planadresa4", "");
+                        $("#planadresa44").val("");
+                        $("#adresa54").html("");
+                    }
+                    if (x == 5) {
+                        planadresa5lat = 0;
+                        planadresa5lng = 0;
+                        localStorage.setItem("planadresa5lat", 0);
+                        localStorage.setItem("planadresa5lng", 0);
+                        localStorage.setItem("planadresa5", "");
+                        $("#planadresa45").val("");
+                        $("#adresa55").html("");
+                    }
+                    if (x == 6) {
+                        planadresa6lat = 0;
+                        planadresa6lng = 0;
+                        localStorage.setItem("planadresa6lat", 0);
+                        localStorage.setItem("planadresa6lng", 0);
+                        localStorage.setItem("planadresa6", "");
+                        $("#planadresa46").val("");
+                        $("#adresa56").html("");
+                    }
+                    if (x == 7) {
+                        planadresa7lat = 0;
+                        planadresa7lng = 0;
+                        localStorage.setItem("planadresa7lat", 0);
+                        localStorage.setItem("planadresa7lng", 0);
+                        localStorage.setItem("planadresa7", "");
+                        $("#planadresa47").val("");
+                        $("#adresa57").html("");
+                    }
+                    if (x == 8) {
+                        planadresa8lat = 0;
+                        planadresa8lng = 0;
+                        localStorage.setItem("planadresa8lat", 0);
+                        localStorage.setItem("planadresa8lng", 0);
+                        localStorage.setItem("planadresa8", "");
+                        $("#planadresa48").val("");
+                        $("#adresa58").html("");
+                    }
+                    console.log(data.responseJSON["error"]);
+                    if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
+                        alert(language.nuestilogat);
+                        window.location.href = "_main_.html";
+                    } else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
+                        alert(language.nuestilogat);
+                        window.location.href = "_main_.html";
+                    } else {
+                        alert(language.eroare);
+                    }
+                });
+            });
+        }           
+    </script>
+    <title>
+        Distanta dintre doua orase
+    </title>
+    <!-- Compiled and minified CSS -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+    <script src="language.js"></script>
+    <script>
+        var selectedLanguage = localStorage.getItem('lang');
+        var language = "";
+        if (selectedLanguage == "ro") {
+            language = lang.ro;
+        }
+        if (selectedLanguage == "en") {
+            language = lang.en;
+        }
+    </script>
+
+    <script>
+        app.SetOnKey(OnKey);
+        function OnKey(action, name, code, extra) {
+            if (code == 4 && action == "Up") {
+                playbeep();
+                setTimeout(function () {
+                    window.location.href = "distanta2.html";
+                }, 350);
+            }
+        }
+        function exit() {
+            var yesNo = app.CreateYesNoDialog("Exit App?");
+            yesNo.SetOnTouch(yesNo_OnTouch);
+            yesNo.Show();
+        }
+        function yesNo_OnTouch(result) {
+            if (result == "Yes") app.Exit();
+        }
+    </script>
+    <script>
+        function reset() {
+            //$('#planadresa1').val("");
+            $('#planadresa41').val("");
+            //$('#planadresa2').val("");
+            $('#planadresa42').val("");
+            //$('#planadresa3').val("");
+            $('#planadresa43').val("");
+            //$('#planadresa4').val("");
+            $('#planadresa44').val("");
+            $//('#planadresa5').val("");
+            $('#planadresa45').val("");
+            //$('#planadresa6').val("");
+            $('#planadresa46').val("");
+            //$('#planadresa7').val("");
+            $('#planadresa47').val("");
+            //$('#planadresa8').val("");
+            $('#planadresa48').val("");
+            localStorage.setItem("planadresa1lat", 0);
+            localStorage.setItem("planadresa1lng", 0);
+            localStorage.setItem("planadresa2lat", 0);
+            localStorage.setItem("planadresa2lng", 0);
+            localStorage.setItem("planadresa3lat", 0);
+            localStorage.setItem("planadresa3lng", 0);
+            localStorage.setItem("planadresa4lat", 0);
+            localStorage.setItem("planadresa4lng", 0);
+            localStorage.setItem("planadresa5lat", 0);
+            localStorage.setItem("planadresa5lng", 0);
+            localStorage.setItem("planadresa6lat", 0);
+            localStorage.setItem("planadresa6lng", 0);
+            localStorage.setItem("planadresa7lat", 0);
+            localStorage.setItem("planadresa7lng", 0);
+            localStorage.setItem("planadresa8lat", 0);
+            localStorage.setItem("planadresa8lng", 0);
+            localStorage.setItem("planadresa1", "");
+            localStorage.setItem("planadresa2", "");
+            localStorage.setItem("planadresa3", "");
+            localStorage.setItem("planadresa4", "");
+            localStorage.setItem("planadresa5", "");
+            localStorage.setItem("planadresa6", "");
+            localStorage.setItem("planadresa7", "");
+            localStorage.setItem("planadresa8", "");
+
+
+
+            localStorage.setItem("webmapadresa1lat", 0);
+
+            localStorage.setItem("webmapadresa2lat", 0);
+
+            localStorage.setItem("webmapadresa3lat", 0);
+
+            localStorage.setItem("webmapadresa4lat", 0);
+
+            localStorage.setItem("webmapadresa5lat", 0);
+
+            localStorage.setItem("webmapadresa6lat", 0);
+
+            localStorage.setItem("webmapadresa7lat", 0);
+
+            localStorage.setItem("webmapadresa8lat", 0);
+
+            localStorage.setItem("webmapadresa1lng", 0);
+
+            localStorage.setItem("webmapadresa2lng", 0);
+
+            localStorage.setItem("webmapadresa3lng", 0);
+
+            localStorage.setItem("webmapadresa4lng", 0);
+
+            localStorage.setItem("webmapadresa5lng", 0);
+
+            localStorage.setItem("webmapadresa6lng", 0);
+
+            localStorage.setItem("webmapadresa7lng", 0);
+
+            localStorage.setItem("webmapadresa8lng", 0);
+
+            document.getElementById('webmaplocatie1').value = '0'; $('#webmaplocatie1').trigger('change'); $('#webmaplocatie1').trigger('contentChanged');
+
+            document.getElementById('webmaplocatie2').value = '0'; $('#webmaplocatie2').trigger('change'); $('#webmaplocatie2').trigger('contentChanged');
+
+            document.getElementById('webmaplocatie3').value = '0'; $('#webmaplocatie3').trigger('change'); $('#webmaplocatie3').trigger('contentChanged');
+
+            document.getElementById('webmaplocatie4').value = '0'; $('#webmaplocatie4').trigger('change'); $('#webmaplocatie4').trigger('contentChanged');
+
+            document.getElementById('webmaplocatie5').value = '0'; $('#webmaplocatie5').trigger('change'); $('#webmaplocatie5').trigger('contentChanged');
+
+            document.getElementById('webmaplocatie6').value = '0'; $('#webmaplocatie6').trigger('change'); $('#webmaplocatie6').trigger('contentChanged');
+
+            document.getElementById('webmaplocatie7').value = '0'; $('#webmaplocatie7').trigger('change'); $('#webmaplocatie7').trigger('contentChanged');
+
+            document.getElementById('webmaplocatie8').value = '0'; $('#webmaplocatie8').trigger('change'); $('#webmaplocatie8').trigger('contentChanged');
+
+
+
+
+            return false;
+
+        }
+
+
+        function incarcaLocatii() {
+            $(document).ready(function () {
+                var email = localStorage.getItem("email");
+                var parola = localStorage.getItem("parola");
+                $.get("https://evidentacolumbofila.eu/public/incarcalocatii?email=" + email + "&parola=" + parola + "&cheie=" + localStorage.getItem('cheie'), function (data, status) {
+                    window["raspuns"] = data; varianta = 1;
+                }).fail(function (data) {
+
+
+                    console.log(data.responseJSON["error"]);
+                    if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
+                        alert(language.nuestilogat);
+                        window.location.href = "_main_.html";
+                    } else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
+                        alert(language.nuestilogat);
+                        window.location.href = "_main_.html";
+                    } else {
+                        alert(language.eroare);
+                    }
+                });
+            });
+        }
+
+
+
+
+        $(document).ready(function () {
+            $('select').on('contentChanged', function () {
+                $(this).material_select();
+            });
+            $("#webmaplocatie1").change(function () {
+                if ($(this).val() == "0") {
+                    webmapadresa1lat = 0;
+                    webmapadresa1lng = 0;
+                    localStorage.setItem("webmapadresa1lat", 0);
+                    localStorage.setItem("webmapadresa1lng", 0);
+                } else {
+                    var latlng = $(this).val().split("===");
+                    webmapadresa1lat = latlng[0];
+                    webmapadresa1lng = latlng[1];
+                    localStorage.setItem("webmapadresa1lat", webmapadresa1lat);
+                    localStorage.setItem("webmapadresa1lng", webmapadresa1lng);
+                    localStorage.setItem("webmapadresa1", $("#webmaplocatie1 option:selected").text());
+
+
+                }
+                localStorage.setItem("webmapadresalatlng21", $(this).val());
+                //alert(lat20+"----"+lng20);
+            });
+            $("#webmaplocatie2").change(function () {
+                if ($(this).val() == "0") {
+                    webmapadresa2lat = 0;
+                    webmapadresa2lng = 0;
+                    localStorage.setItem("webmapadresa2lat", 0);
+                    localStorage.setItem("webmapadresa2lng", 0);
+
+                } else {
+
+                    var latlng = $(this).val().split("===");
+                    webmapadresa2lat = latlng[0];
+                    webmapadresa2lng = latlng[1];
+                    localStorage.setItem("webmapadresa2lat", webmapadresa2lat);
+                    localStorage.setItem("webmapadresa2lng", webmapadresa2lng);
+                    localStorage.setItem("webmapadresa2", $("#webmaplocatie2 option:selected").text());
+                }
+                localStorage.setItem("webmapadresalatlng22", $(this).val());
+                //alert(lat20+"----"+lng20);
+            });
+
+
+
+
+
+
+            $("#webmaplocatie3").change(function () {
+                if ($(this).val() == "0") {
+                    webmapadresa3lat = 0;
+                    webmapadresa3lng = 0;
+                    localStorage.setItem("webmapadresa3lat", 0);
+                    localStorage.setItem("webmapadresa3lng", 0);
+                } else {
+                    var latlng = $(this).val().split("===");
+                    webmapadresa3lat = latlng[0];
+                    webmapadresa3lng = latlng[1];
+                    localStorage.setItem("webmapadresa3lat", webmapadresa3lat);
+                    localStorage.setItem("webmapadresa3lng", webmapadresa3lng);
+                    localStorage.setItem("webmapadresa3", $("#webmaplocatie3 option:selected").text());
+                }
+                localStorage.setItem("webmapadresalatlng23", $(this).val());
+                //alert(lat20+"----"+lng20);
+            });
+
+
+            $("#webmaplocatie4").change(function () {
+                if ($(this).val() == "0") {
+                    webmapadresa4lat = 0;
+                    webmapadresa4lng = 0;
+                    localStorage.setItem("webmapadresa4lat", 0);
+                    localStorage.setItem("webmapadresa4lng", 0);
+                } else {
+                    var latlng = $(this).val().split("===");
+                    webmapadresa4lat = latlng[0];
+                    webmapadresa4lng = latlng[1];
+                    localStorage.setItem("webmapadresa4lat", webmapadresa4lat);
+                    localStorage.setItem("webmapadresa4lng", webmapadresa4lng);
+                    localStorage.setItem("webmapadresa4", $("#webmaplocatie4 option:selected").text());
+                }
+                localStorage.setItem("webmapadresalatlng24", $(this).val());
+                //alert(lat20+"----"+lng20);
+            });
+
+            $("#webmaplocatie5").change(function () {
+                if ($(this).val() == "0") {
+                    webmapadresa5lat = 0;
+                    webmapadresa5lng = 0;
+                    localStorage.setItem("webmapadresa5lat", 0);
+                    localStorage.setItem("webmapadresa5lng", 0);
+                } else {
+                    var latlng = $(this).val().split("===");
+                    webmapadresa5lat = latlng[0];
+                    webmapadresa5lng = latlng[1];
+                    localStorage.setItem("webmapadresa5lat", webmapadresa5lat);
+                    localStorage.setItem("webmapadresa5lng", webmapadresa5lng);
+                    localStorage.setItem("webmapadresa5", $("#webmaplocatie5 option:selected").text());
+                }
+                localStorage.setItem("webmapadresalatlng25", $(this).val());
+                //alert(lat20+"----"+lng20);
+            });
+
+
+            $("#webmaplocatie6").change(function () {
+                if ($(this).val() == "0") {
+                    webmapadresa6lat = 0;
+                    webmapadresa6lng = 0;
+                    localStorage.setItem("webmapadresa6lat", 0);
+                    localStorage.setItem("webmapadresa6lng", 0);
+                } else {
+                    var latlng = $(this).val().split("===");
+                    webmapadresa6lat = latlng[0];
+                    webmapadresa6lng = latlng[1];
+                    localStorage.setItem("webmapadresa6lat", webmapadresa6lat);
+                    localStorage.setItem("webmapadresa6lng", webmapadresa6lng);
+                    localStorage.setItem("webmapadresa6", $("#webmaplocatie6 option:selected").text());
+                }
+                localStorage.setItem("webmapadresalatlng26", $(this).val());
+                //alert(lat20+"----"+lng20);
+            });
+
+            $("#webmaplocatie7").change(function () {
+                if ($(this).val() == "0") {
+                    webmapadresa7lat = 0;
+                    webmapadresa7lng = 0;
+                    localStorage.setItem("webmapadresa7lat", 0);
+                    localStorage.setItem("webmapadresa7lng", 0);
+                } else {
+                    var latlng = $(this).val().split("===");
+                    webmapadresa7lat = latlng[0];
+                    webmapadresa7lng = latlng[1];
+                    localStorage.setItem("webmapadresa7lat", webmapadresa7lat);
+                    localStorage.setItem("webmapadresa7lng", webmapadresa7lng);
+                    localStorage.setItem("webmapadresa7", $("#webmaplocatie7 option:selected").text());
+                }
+                localStorage.setItem("webmapadresalatlng27", $(this).val());
+                //alert(lat20+"----"+lng20);
+            });
+
+
+            $("#webmaplocatie8").change(function () {
+                if ($(this).val() == "0") {
+                    webmapadresa8lat = 0;
+                    webmapadresa8lng = 0;
+                    localStorage.setItem("webmapadresa8lat", 0);
+                    localStorage.setItem("webmapadresa8lng", 0);
+                } else {
+                    var latlng = $(this).val().split("===");
+                    webmapadresa8lat = latlng[0];
+                    webmapadresa8lng = latlng[1];
+                    localStorage.setItem("webmapadresa8lat", webmapadresa8lat);
+                    localStorage.setItem("webmapadresa8lng", webmapadresa8lng);
+                    localStorage.setItem("webmapadresa8", $("#webmaplocatie8 option:selected").text());
+                }
+                localStorage.setItem("webmapadresalatlng28", $(this).val());
+
+                //alert(lat20+"----"+lng20);
+            });
+
+
+
+        });
+
+
+        console.log("----------------------------");
+        console.log(localStorage.getItem("webmapadresa1lat") + "---" + localStorage.getItem("webmapadresa1lng"));
+        console.log(localStorage.getItem("webmapadresa2lat") + "---" + localStorage.getItem("webmapadresa2lng"));
+        console.log(localStorage.getItem("webmapadresa3lat") + "---" + localStorage.getItem("webmapadresa3lng"));
+        console.log(localStorage.getItem("webmapadresa4lat") + "---" + localStorage.getItem("webmapadresa4lng"));
+        console.log(localStorage.getItem("webmapadresa5lat") + "---" + localStorage.getItem("webmapadresa5lng"));
+        console.log(localStorage.getItem("webmapadresa5lat") + "---" + localStorage.getItem("webmapadresa5lng"));
+        console.log(localStorage.getItem("webmapadresa6lat") + "---" + localStorage.getItem("webmapadresa6lng"));
+        console.log(localStorage.getItem("webmapadresa7lat") + "---" + localStorage.getItem("webmapadresa7lng"));
+        console.log(localStorage.getItem("webmapadresa8lat") + "---" + localStorage.getItem("webmapadresa8lng"));
+        console.log(localStorage.getItem("webmapadresalatlng21") + "\n");
+        console.log(localStorage.getItem("webmapadresalatlng22") + "\n");
+        console.log(localStorage.getItem("webmapadresalatlng23") + "\n");
+        console.log(localStorage.getItem("webmapadresalatlng24") + "\n");
+        console.log(localStorage.getItem("webmapadresalatlng25") + "\n");
+        console.log(localStorage.getItem("webmapadresalatlng26") + "\n");
+        console.log(localStorage.getItem("webmapadresalatlng27") + "\n");
+        console.log(localStorage.getItem("webmapadresalatlng28") + "\n");
+        function playbeep() {
+            var x = document.getElementById("myAudio");
+            x.currentTime = 0;
+            x.volume = 0.05;
+            x.play();
+        }
+    </script>
+    <style>
+        .btn {
+            width: 100%;
+            height: auto;
+        }
+
+        .btn-large {
+            width: 100%;
+            height: auto;
+        }
+
+
+        #section1 {
+            display: block;
+        }
+
+        #section2 {
+            display: block;
+        }
+
+        #section3 {
+            display: block;
+        }
+
+        #section1 {
+            display: block;
+            height: 10%;
+        }
+
+        #section4 {
+            display: block;
+            height: 150%;
+        }
+
+        .button {
+            background-color: #26A69A;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .titlu {
+            /* Green */
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+        }
+
+        #adresa1,
+        #adresa2 {
+            border: 2px solid #84D7FF;
+            height: 70px;
+            border-radius: 10px;
+            font-size: 20px;
+        }
+
+        .pac-item {
+            height: 50px;
+            font-size: 12px;
+        }
+
+        .pac-item-query {
+            height: 50px;
+            font-size: 16px;
+        }
+
+        #radiogroup1 label {
+            font-size: 20px;
+        }
+
+        .validate {
+            color: white;
+        }
+
+        #planadresa1,
+        #planadresa2,
+        #planadresa3,
+        #planadresa4,
+        #planadresa5,
+        #planadresa6,
+        #planadresa7,
+        #planadresa8 {
+            border: 2px solid #84D7FF;
+            height: 70px;
+            border-radius: 10px;
+            font-size: 20px;
+            color: blue;
+        }
+
+        #planadresa41,
+        #planadresa42,
+        #planadresa43,
+        #planadresa44,
+        #planadresa45,
+        #planadresa46,
+        #planadresa47,
+        #planadresa48 {
+            border: 2px solid #84D7FF;
+            height: 70px;
+            border-radius: 10px;
+            font-size: 20px;
+            color: blue;
+        }
+
+        .row {}
+
+        ::placeholder {
+            color: #e57373;
+        }
+
+        .tblinp {
+            border: 1px solid blue;
+            background-color: #bbdefb;
+        }
+
+        .tblinp2 {
+            border: 1px solid blue;
+            background-color: #b2dfdb;
+        }
+    </style>
+</head>
+
+<body onload="app.Start();incarcaLocatii();" style="background-color:white;">
+    <audio id="myAudio">
+        <source src="Snd/a.ogg" type="audio/ogg">
+    </audio>
+    <nav class="light-blue lighten-3 ">
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center">
+                <script>document.write(language.titlu)</script></a>
+            <ul class="left">
+                <li> <a href="#" style="width:100px;" data-activates="slide-out"
+                        class="sidenav-trigger orange darken-4 btn"><i class="material-icons">menu</i></a></li>
+            </ul>
+            <ul class="right">
+                <li> <a href="#modal1" style="width:100px;" data-activates='dropdown1'
+                        class="sidenav-trigger orange darken-4 btn dropdown-button">
+                        <i class="material-icons">language</i>
+                    </a></li>
+            </ul>
+        </div>
+    </nav>
+    <ul id='dropdown1' class='dropdown-content'>
+        <li><a href="plandezbor.html"
+                onclick="localStorage.setItem('lang','ro');alert('Limba Selectata:Romana');">Romanian</a></li>
+        <li><a href="plandezbor.html"
+                onclick="localStorage.setItem('lang','en');alert('Selected Language:English');">English</a></li>
+    </ul>
+    <div class="container">
+        <p><a class="waves-effect waves-light btn-large" href="#" onclick="return reset();">
+                <script>document.write(language.buton8)</script></a></p>
+    </div>
+    <ul id="slide-out" class="side-nav light-blue lighten-3">
+
+        <div id="container">
+            <div class="section" id="section4">
+                <div class="row">
+
+                    <div class="col s12  m12 l12 xl12">
+                        <p class="waves-effect waves-light titlu orange darken-3">
+                            <script>document.write(language.meniu)</script>
+                            <button class="light-blue lighten-3" onclick="$('.btn').sideNav('hide');return false;"> <i
+                                    class="tiny material-icons">clear</i></button>
+                            &nbsp;&nbsp;&nbsp;<button class="light-blue lighten-3" onclick="exit();"> <i
+                                    class="tiny material-icons">exit_to_app</i></button>
+                        </p>
+                    </div>
+                </div>
+
+
+                <hr />
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="_main_.html">
+                                <script>document.write(language.login)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="distanta2.html">
+                                <script>document.write(language.buton9)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="noutati.html">
+                                <script>document.write(language.noutati)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large"
+                                href="distantadelalocatiacurentalaoadresa.html">
+                                <script>document.write(language.buton4)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="distantadintredouaadrese.html">
+                                <script>document.write(language.buton5)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large modal-trigger" href="#modal1"
+                                onclick="goforward()">
+                                <script>document.write(language.buton6)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="coordonatelelocatiei.html">
+                                <script>document.write(language.buton14)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+                <!--<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large modal-trigger"  href="plandezbor.html">
+							<script>document.write(language.plan)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>-->
+
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="plandezbor.html">
+                                <script>document.write(language.plan)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="locatii.html">
+                                <script>document.write(language.locatii)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="rute.html">
+                                <script>document.write(language.rute)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="contact.html">
+                                <script>document.write(language.contact)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <div class="row">
+
+                    <div class="col s12  m4 l4 xl4"></div>
+                    <div class="col s12  m4 l4 xl4">
+                        <p><a class="waves-effect waves-light btn-large" href="dmstodd.html">
+                                <script>document.write(language.dmstodd)</script></a></p>
+                    </div>
+                    <div class="col s12  m4 l4 xl4"></div>
+                </div>
+                <br /><br /><br />
+            </div>
+
+        </div>
+    </ul>
+
+    <div id="modal1" class="modal" style="width:100%;height:50%;padding-top:30%;">
+        <div class="progress" id="loader" style="width:100%;height:20%;">
+            <div class="indeterminate"></div>
+        </div>
+    </div>
+
+
+
+    <script>
+        $(document).ready(function () {
+            // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+            $('.modal').modal({
+                dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                opacity: 0.8, // Opacity of modal background
+            }
+            );
+        });
+        $(".btn").sideNav();
+    </script>
+
+
+    <div id="container">
+        <!--<div class="section" id="section1"></div>-->
+        <div class="section" id="section2">
+
+            <div class="row">
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+                <div class="input-field col s12  m12 l2 xl12">
+                    <!--<script>document.write("<input placeholder=\"" + language.start + "\" id=\"planadresa1\" type=\"text\" class=\"validate\" value=\"" + localStorage.getItem("planadresa1") + "\">");</script>-->
+
+                    <table class="tblinp">
+                        <tr>
+                            <td>Schema 1 :
+                                <script>document.write("<input placeholder=\"" + language.start + "\" id=\"planadresa41\" type=\"text\" class=\"validate\"   onkeyup=\"cautaadresa(this,1);\" value=\"" + localStorage.getItem("planadresa1") + "\" oninput=\"hk(this);\" />");</script>
+                            </td>
+                            <td><a href="#" id="rst1" class="btn btn-large"
+                                    onclick="playbeep();localStorage.setItem('planadresa1lat', 0);localStorage.setItem('planadresa1lng', 0);localStorage.setItem('planadresa1', '');$('#adresa51').html('');document.getElementById('planadresa41').value='';return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div id="adresa51"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Schema 2:
+                                <select id="webmaplocatie1" onchange="playbeep();">
+
+                                </select>
+                            </td>
+                            <td>
+                                <a href="#" id="rstw1" class="btn btn-large"
+                                    onclick="localStorage.setItem('webmapadresa1lat', 0);localStorage.setItem('webmapadresa1lng', 0);localStorage.setItem('webmapadresa1', '');document.getElementById('webmaplocatie1').value='0'; $('#webmaplocatie1').trigger('change'); $('#webmaplocatie1').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+            </div>
+            <div class="row">
+
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+                <div class="input-field col s12  m12 l12 xl12">
+                    <!--<script>document.write("<input placeholder=\"" + language.placeholderadresa2 + "\" id=\"planadresa2\" type=\"text\" class=\"validate\" value=\"" + localStorage.getItem("planadresa2") + "\">");</script>-->
+                    <table class="tblinp2">
+                        <tr>
+                            <td>Schema 1 :
+                                <script>document.write("<input placeholder=\"" + language.placeholderadresa2 + "\" id=\"planadresa42\" type=\"text\" onkeyup=\"cautaadresa(this,2);\" class=\"validate\"   value=\"" + localStorage.getItem("planadresa2") + "\"  oninput=\"hk(this);\" />");</script>
+                            </td>
+                            <td><a href="#" id="rst2" class="btn btn-large"
+                                    onclick="playbeep();localStorage.setItem('planadresa2lat', 0);localStorage.setItem('planadresa2lng', 0);localStorage.setItem('planadresa2', '');$('#adresa52').html('');document.getElementById('planadresa42').value='';return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div id="adresa52"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Schema 2:
+                                <select id="webmaplocatie2" onchange="playbeep();">
+
+                                </select>
+                            </td>
+                            <td>
+                                <a href="#" id="rstw2" class="btn btn-large"
+                                    onclick="localStorage.setItem('webmapadresa2lat', 0);localStorage.setItem('webmapadresa2lng', 0);localStorage.setItem('webmapadresa2', '');document.getElementById('webmaplocatie2').value='0';$('#webmaplocatie2').trigger('change');  $('#webmaplocatie2').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+            </div>
+            <div class="row">
+
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+                <div class="input-field col s12  m12 l12 xl12">
+                    <!--<script>document.write("<input placeholder=\"" + language.placeholderadresa3 + "\" id=\"planadresa3\" type=\"text\" class=\"validate\" value=\"" + localStorage.getItem("planadresa3") + "\">");</script>-->
+                    <table class="tblinp">
+                        <tr>
+                            <td>Schema 1 :
+                                <script>document.write("<input placeholder=\"" + language.placeholderadresa3 + "\" id=\"planadresa43\" type=\"text\" class=\"validate\" onkeyup=\"cautaadresa(this,3);\"  value=\"" + localStorage.getItem("planadresa3") + "\" oninput=\"hk(this);\"  />");</script>
+                            </td>
+                            <td><a href="#" id="rst3" class="btn btn-large"
+                                    onclick="playbeep();localStorage.setItem('planadresa3lat', 0);localStorage.setItem('planadresa3lng', 0);localStorage.setItem('planadresa3', '');$('#adresa53').html('');document.getElementById('planadresa43').value='';return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div id="adresa53"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Schema 2:
+                                <select id="webmaplocatie3" onchange="playbeep();">
+
+                                </select>
+                            </td>
+                            <td>
+                                <a href="#" id="rstw3" class="btn btn-large"
+                                    onclick="localStorage.setItem('webmapadresa3lat', 0);localStorage.setItem('webmapadresa3lng', 0);localStorage.setItem('webmapadresa3', '');document.getElementById('webmaplocatie3').value='0'; $('#webmaplocatie3').trigger('change'); $('#webmaplocatie3').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+            </div>
+            <div class="row">
+
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+                <div class="input-field col s12  m12 l12 xl12">
+                    <!--<script>document.write("<input placeholder=\"" + language.placeholderadresa4 + "\" id=\"planadresa4\" type=\"text\" class=\"validate\" value=\"" + localStorage.getItem("planadresa4") + "\">");</script>-->
+                    <table class="tblinp2">
+                        <tr>
+                            <td>Schema 1 :
+                                <script>document.write("<input placeholder=\"" + language.placeholderadresa4 + "\" id=\"planadresa44\" type=\"text\" class=\"validate\"  onkeyup=\"cautaadresa(this,4);\"  value=\"" + localStorage.getItem("planadresa4") + "\"  oninput=\"hk(this);\" />");</script>
+                            </td>
+                            <td><a href="#" id="rst4" class="btn btn-large"
+                                    onclick="playbeep();localStorage.setItem('planadresa4lat', 0);localStorage.setItem('planadresa4lng', 0);localStorage.setItem('planadresa4', '');$('#adresa54').html('');document.getElementById('planadresa44').value='';return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div id="adresa54"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Schema 2:
+                                <select id="webmaplocatie4" onchange="playbeep();">
+
+                                </select>
+                            </td>
+                            <td>
+                                <a href="#" id="rstw4" class="btn btn-large"
+                                    onclick="localStorage.setItem('webmapadresa4lat', 0);localStorage.setItem('webmapadresa4lng', 0);localStorage.setItem('webmapadresa4', '');document.getElementById('webmaplocatie4').value='0'; $('#webmaplocatie4').trigger('change'); $('#webmaplocatie4').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+            </div>
+            <div class="row">
+
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+                <div class="input-field col s12  m12 l12 xl12">
+                    <!--<script>document.write("<input placeholder=\"" + language.placeholderadresa5 + "\" id=\"planadresa5\" type=\"text\" class=\"validate\" value=\"" + localStorage.getItem("planadresa5") + "\">");</script>-->
+                    <table class="tblinp">
+                        <tr>
+                            <td>Schema 1 :
+                                <script>document.write("<input placeholder=\"" + language.placeholderadresa5 + "\" id=\"planadresa45\" type=\"text\" class=\"validate\"  onkeyup=\"cautaadresa(this,5);\"  value=\"" + localStorage.getItem("planadresa5") + "\"  oninput=\"hk(this);\" />");</script>
+                            </td>
+                            <td><a href="#" id="rst5" class="btn btn-large"
+                                    onclick="playbeep();localStorage.setItem('planadresa5lat', 0);localStorage.setItem('planadresa5lng', 0);localStorage.setItem('planadresa5', '');$('#adresa55').html('');document.getElementById('planadresa45').value='';return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div id="adresa55"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Schema 2:
+                                <select id="webmaplocatie5" onchange="playbeep();">
+
+                                </select>
+                            </td>
+                            <td>
+                                <a href="#" id="rstw5" class="btn btn-large"
+                                    onclick="localStorage.setItem('webmapadresa5lat', 0);localStorage.setItem('webmapadresa5lng', 0);localStorage.setItem('webmapadresa5', '');document.getElementById('webmaplocatie5').value='0';$('#webmaplocatie5').trigger('change');  $('#webmaplocatie5').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+            </div>
+            <div class="row">
+
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+                <div class="input-field col s12  m12 l12 xl12">
+
+                    <!--<script>document.write("<input placeholder=\"" + language.placeholderadresa6 + "\" id=\"planadresa6\" type=\"text\" class=\"validate\" value=\"" + localStorage.getItem("planadresa6") + "\">");</script>-->
+                    <table class="tblinp2">
+                        <tr>
+                            <td>Schema 1 :
+                                <script>document.write("<input placeholder=\"" + language.placeholderadresa6 + "\" id=\"planadresa46\" type=\"text\" class=\"validate\"  onkeyup=\"cautaadresa(this,6);\"  value=\"" + localStorage.getItem("planadresa6") + "\" oninput=\"hk(this);\" />");</script>
+                            </td>
+                            <td><a href="#" id="rst6" class="btn btn-large"
+                                    onclick="playbeep();localStorage.setItem('planadresa6lat', 0);localStorage.setItem('planadresa6lng', 0);localStorage.setItem('planadresa6', '');$('#adresa56').html('');document.getElementById('planadresa46').value='';return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div id="adresa56"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Schema 2:
+                                <select id="webmaplocatie6" onchange="playbeep();">
+
+                                </select>
+                            </td>
+                            <td>
+                                <a href="#" id="rstw6" class="btn btn-large"
+                                    onclick="localStorage.setItem('webmapadresa6lat', 0);localStorage.setItem('webmapadresa6lng', 0);localStorage.setItem('webmapadresa6', '');document.getElementById('webmaplocatie6').value='0';$('#webmaplocatie6').trigger('change');  $('#webmaplocatie6').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+                <div class="input-field col s12  m12 l12 xl12">
+                    <!--<script>document.write("<input placeholder=\"" + language.placeholderadresa7 + "\" id=\"planadresa7\" type=\"text\" class=\"validate\" value=\"" + localStorage.getItem("planadresa7") + "\">");</script>-->
+                    <table class="tblinp">
+                        <tr>
+                            <td>Schema 1 :
+                                <script>document.write("<input placeholder=\"" + language.placeholderadresa7 + "\" id=\"planadresa47\" type=\"text\" class=\"validate\"  onkeyup=\"cautaadresa(this,7);\"  value=\"" + localStorage.getItem("planadresa7") + "\" oninput=\"hk(this);\" />");</script>
+                            </td>
+                            <td><a href="#" id="rst7" class="btn btn-large"
+                                    onclick="playbeep();localStorage.setItem('planadresa7lat', 0);localStorage.setItem('planadresa7lng', 0);localStorage.setItem('planadresa7', '');$('#adresa57').html('');document.getElementById('planadresa47').value='';return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div id="adresa57"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Schema 2:
+                                <select id="webmaplocatie7" onchange="playbeep();">
+
+                                </select>
+                            </td>
+                            <td>
+                                <a href="#" id="rstw7" class="btn btn-large"
+                                    onclick="localStorage.setItem('webmapadresa7lat', 0);localStorage.setItem('webmapadresa7lng', 0);localStorage.setItem('webmapadresa7', '');document.getElementById('webmaplocatie7').value='0'; $('#webmaplocatie7').trigger('change'); $('#webmaplocatie7').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+            </div>
+            <div class="row">
+
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+                <div class="input-field col s12  m12 l12 xl12">
+                    <!--<script>document.write("<input placeholder=\"" + language.placeholderadresa8 + "\" id=\"planadresa8\" type=\"text\" class=\"validate\" value=\"" + localStorage.getItem("planadresa8") + "\">");</script>-->
+                    <table class="tblinp2">
+                        <tr>
+                            <td>Schema 1 :
+                                <script>document.write("<input placeholder=\"" + language.placeholderadresa8 + "\" id=\"planadresa48\" type=\"text\" class=\"validate\"  onkeyup=\"cautaadresa(this,8);\"  value=\"" + localStorage.getItem("planadresa8") + "\"  oninput=\"hk(this);\" />");</script>
+                            </td>
+                            <td><a href="#" id="rst8" class="btn btn-large"
+                                    onclick="playbeep();localStorage.setItem('planadresa8lat', 0);localStorage.setItem('planadresa8lng', 0);localStorage.setItem('planadresa8', '');$('#adresa58').html('');document.getElementById('planadresa48').value='';return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div id="adresa58"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Schema 2 :
+                                <select id="webmaplocatie8" onchange="playbeep();">
+
+                                </select>
+                            </td>
+                            <td>
+                                <a href="#" id="rstw8" class="btn btn-large"
+                                    onclick="localStorage.setItem('webmapadresa8lat', 0);localStorage.setItem('webmapadresa8lng', 0);localStorage.setItem('webmapadresa8', '');document.getElementById('webmaplocatie8').value='0';$('#webmaplocatie8').trigger('change');  $('#webmaplocatie8').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+            </div>
+            <div class="row">
+
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+                <div class="input-field col s12  m12 l12 xl12">
+                    <p><a class="waves-effect waves-light btn-large" href="#" onclick="salveazatip()">
+                            <script>document.write(language.buton13)</script></a></p>
+                    <p><a class="waves-effect waves-light btn-large" href="#" onclick="return reset();">
+                            <script>document.write(language.buton8)</script></a></p>
+                </div>
+                <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
+            </div>
+
+        </div>
+
+        <div class="section" id="section3"></div>
+
+    </div>
+    <script>
+
+        $(document).ajaxComplete(function () {
+
+            if (varianta == 1) {
+                console.log(window["raspuns"]);
+                var data = JSON.parse(window["raspuns"]);
+
+                if (data[1].includes("succes")) {
+
+
+                    if (localStorage.getItem("webmaplatlng21") == "") {
+                        $("#webmaplocatie1").append('<option value="0" selected="selected" >' + language.sauselecteazaolocatie + '</option>');
+                    } else {
+                        $("#webmaplocatie1").append('<option value="0"  >' + language.sauselecteazaolocatie + '</option>');
+                    }
+
+
+
+
+
+                    if (localStorage.getItem("webmapadresalatlng22") == "") {
+                        $("#webmaplocatie2").append('<option value="0" selected="selected" >' + language.sauselecteazaolocatie + '</option>');
+                    } else {
+                        $("#webmaplocatie2").append('<option value="0" >' + language.sauselecteazaolocatie + '</option>');
+                    }
+
+
+                    if (localStorage.getItem("webmapadresalatlng23") == "") {
+                        $("#webmaplocatie3").append('<option value="0" selected="selected" >' + language.sauselecteazaolocatie + '</option>');
+                    } else {
+                        $("#webmaplocatie3").append('<option value="0" >' + language.sauselecteazaolocatie + '</option>');
+                    }
+
+
+
+                    if (localStorage.getItem("webmapadresalatlng24") == "") {
+                        $("#webmaplocatie4").append('<option value="0" selected="selected" >' + language.sauselecteazaolocatie + '</option>');
+                    } else {
+                        $("#webmaplocatie4").append('<option value="0" >' + language.sauselecteazaolocatie + '</option>');
+                    }
+
+
+
+                    if (localStorage.getItem("webmapadresalatlng25") == "") {
+                        $("#webmaplocatie5").append('<option value="0" selected="selected" >' + language.sauselecteazaolocatie + '</option>');
+                    } else {
+                        $("#webmaplocatie5").append('<option value="0" >' + language.sauselecteazaolocatie + '</option>');
+                    }
+
+
+
+                    if (localStorage.getItem("webmapadresalatlng26") == "") {
+                        $("#webmaplocatie6").append('<option value="0" selected="selected" >' + language.sauselecteazaolocatie + '</option>');
+                    } else {
+                        $("#webmaplocatie6").append('<option value="0" >' + language.sauselecteazaolocatie + '</option>');
+                    }
+
+
+
+                    if (localStorage.getItem("webmapadresalatlng27") == "") {
+                        $("#webmaplocatie7").append('<option value="0" selected="selected" >' + language.sauselecteazaolocatie + '</option>');
+                    } else {
+                        $("#webmaplocatie7").append('<option value="0" >' + language.sauselecteazaolocatie + '</option>');
+                    }
+
+
+
+                    if (localStorage.getItem("webmapadresalatlng28") == "") {
+                        $("#webmaplocatie8").append('<option value="0" selected="selected" >' + language.sauselecteazaolocatie + '</option>');
+                    } else {
+                        $("#webmaplocatie8").append('<option value="0" >' + language.sauselecteazaolocatie + '</option>');
+                    }
+
+
+
+
+
+                    data[2].forEach(function (item, index) {
+
+                        if (localStorage.getItem("webmapadresalatlng21") == (item.lat + '===' + item.lng)) {
+                            $("#webmaplocatie1").append('<option selected value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');//alert("1---"+localStorage.getItem("latlng20"))   ;       
+                        } else {
+                            $("#webmaplocatie1").append('<option value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');//alert(localStorage.getItem("2---"+"latlng20"))   ;          
+                        }
+                        if (localStorage.getItem("webmapadresalatlng22") == (item.lat + '===' + item.lng)) {
+                            $("#webmaplocatie2").append('<option  selected="selected" value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');//alert("3---"+localStorage.getItem("latlng21"))   ;       
+                        } else {
+                            $("#webmaplocatie2").append('<option value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');    //alert("4---"+localStorage.getItem("latlng21"))   ;     
+                        }
+
+
+                        if (localStorage.getItem("webmapadresalatlng23") == (item.lat + '===' + item.lng)) {
+                            $("#webmaplocatie3").append('<option  selected="selected" value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');//alert("3---"+localStorage.getItem("latlng21"))   ;       
+                        } else {
+                            $("#webmaplocatie3").append('<option value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');    //alert("4---"+localStorage.getItem("latlng21"))   ;     
+                        }
+
+                        if (localStorage.getItem("webmapadresalatlng24") == (item.lat + '===' + item.lng)) {
+                            $("#webmaplocatie4").append('<option  selected="selected" value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');//alert("3---"+localStorage.getItem("latlng21"))   ;       
+                        } else {
+                            $("#webmaplocatie4").append('<option value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');    //alert("4---"+localStorage.getItem("latlng21"))   ;     
+                        }
+
+                        if (localStorage.getItem("webmapadresalatlng25") == (item.lat + '===' + item.lng)) {
+                            $("#webmaplocatie5").append('<option  selected="selected" value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');//alert("3---"+localStorage.getItem("latlng21"))   ;       
+                        } else {
+                            $("#webmaplocatie5").append('<option value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');    //alert("4---"+localStorage.getItem("latlng21"))   ;     
+                        }
+
+
+                        if (localStorage.getItem("webmapadresalatlng26") == (item.lat + '===' + item.lng)) {
+                            $("#webmaplocatie6").append('<option  selected="selected" value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');//alert("3---"+localStorage.getItem("latlng21"))   ;       
+                        } else {
+                            $("#webmaplocatie6").append('<option value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');    //alert("4---"+localStorage.getItem("latlng21"))   ;     
+                        }
+
+
+                        if (localStorage.getItem("webmapadresalatlng27") == (item.lat + '===' + item.lng)) {
+                            $("#webmaplocatie7").append('<option  selected="selected" value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');//alert("3---"+localStorage.getItem("latlng21"))   ;       
+                        } else {
+                            $("#webmaplocatie7").append('<option value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');    //alert("4---"+localStorage.getItem("latlng21"))   ;     
+                        }
+
+
+                        if (localStorage.getItem("webmapadresalatlng28") == (item.lat + '===' + item.lng)) {
+                            $("#webmaplocatie8").append('<option  selected="selected" value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');//alert("3---"+localStorage.getItem("latlng21"))   ;       
+                        } else {
+                            $("#webmaplocatie8").append('<option value="' + item.lat + '===' + item.lng + '">' + item.nume + '</option>');    //alert("4---"+localStorage.getItem("latlng21"))   ;     
+                        }
+
+
+                    });
+                    $("#webmaplocatie1").trigger('contentChanged');
+                    $("#webmaplocatie2").trigger('contentChanged');
+                    $("#webmaplocatie3").trigger('contentChanged');
+                    $("#webmaplocatie4").trigger('contentChanged');
+                    $("#webmaplocatie5").trigger('contentChanged');
+                    $("#webmaplocatie6").trigger('contentChanged');
+                    $("#webmaplocatie7").trigger('contentChanged');
+                    $("#webmaplocatie8").trigger('contentChanged');
+                    // seteazamode(1);
+                } else if (data.includes("Date incorecte!!!")) {
+                    alert(language.dateincorecte);
+                } else {
+                    alert(language.alertalogare6);
+                }
+            }
+            if (varianta == 2) {
+
+            }
+
+        });
+
+    </script>
+</body>
+
+</html>
