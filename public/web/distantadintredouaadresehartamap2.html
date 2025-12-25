@@ -3,7 +3,7 @@
 <head>
 
     <title>Mobile tutorial - Leaflet</title>
-    <script src='file:///android_asset/app.js'></script>
+    <!-- Web version - app.js removed -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -36,9 +36,7 @@
                 alert("Nu esti conectat la internet!!!");
             }
         }
-        app.SetOnError(function () {
-            //window.location.href="distantadintredouaadresehartamap2.html";
-        });
+        // Web version - app.SetOnError removed
 
     </script>
     <script>
@@ -166,32 +164,26 @@
             x.volume = 0.05;
             x.play();
         }
-        app.SetOnKey(OnKey);
-        function OnKey(action, name, code, extra) {
-            if (code == 4 && action == "Up") {
-                playbeep();
-                setTimeout(function () {
-                    window.location.href = "distantadelalocatiacurentalaoadresa.html";
-                }, 350);
-
-            }
-        }  
+        // Web version - app.SetOnKey removed
+        // Back navigation handled by browser  
     </script>
     <script>
 
         function goforward() {
             $('.btn').sideNav('hide');
-            loc2 = app.CreateLocator("GPS");
-            loc2.SetOnChange(function (pos) {
-                localStorage.setItem("lat6", pos.latitude);
-                localStorage.setItem("lng6", pos.longitude);
-                localStorage.setItem("lat42", "0");
-                localStorage.setItem("lng42", "0");
-                loc2.Stop();
-                window.location.href = "locatiacurenta.html";
-            });
-            loc2.SetRate(1);
-            loc2.Start();
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(pos) {
+                    localStorage.setItem("lat6", pos.coords.latitude);
+                    localStorage.setItem("lng6", pos.coords.longitude);
+                    localStorage.setItem("lat42", "0");
+                    localStorage.setItem("lng42", "0");
+                    window.location.href = "locatiacurenta.html";
+                }, function(err) {
+                    alert('Location error: ' + err.message);
+                });
+            } else {
+                alert('Geolocation not supported');
+            }
         }
 
 
@@ -285,12 +277,9 @@
             return false;
         }
         function exit() {
-            var yesNo = app.CreateYesNoDialog("Exit App?");
-            yesNo.SetOnTouch(yesNo_OnTouch);
-            yesNo.Show();
-        }
-        function yesNo_OnTouch(result) {
-            if (result == "Yes") app.Exit();
+            if (confirm('Exit App?')) {
+                window.close();
+            }
         }
         window["lat5"] = 0; window["lng5"] = 0; window["lat4"] = 0; window["lng4"] = 0;
 
@@ -298,7 +287,7 @@
     </script>
 </head>
 
-<body onload="app.Start()">
+<body>
     <audio id="myAudio">
         <source src="Snd/a.ogg" type="audio/ogg">
     </audio>
@@ -306,7 +295,7 @@
         <div class="center  hide-on-small-and-down">
             <script>document.write(language.distanta + " : " + "<div id=\"distanta\" class=\"text-white\"></div>")</script>
         </div>
-        <div class="center hide-on-med-and-up">
+        <div class="center">
             <table>
                 <tr>
                     <td>
@@ -340,7 +329,7 @@
         </div>
         <div class="center hide-on-med-and-up">
             <div id="localitate2" class="text-white"
-                onclick="app.SetClipboardText(document.getElementById('localitate2').innerHTML);playbeep();var self=this;setTimeout(function(){ self.style.backgroundColor='#2FB886'; },1000);this.style.backgroundColor='#E65100';">
+                onclick="navigator.clipboard.writeText(document.getElementById('localitate2').innerHTML);playbeep();var self=this;setTimeout(function(){ self.style.backgroundColor='#2FB886'; },1000);this.style.backgroundColor='#E65100';">
             </div>
         </div>
     </div>
@@ -350,7 +339,7 @@
         </div>
         <div class="center hide-on-med-and-up">
             <div id="localitate4" class="text-white"
-                onclick="app.SetClipboardText(document.getElementById('localitate4').innerHTML);playbeep();var self=this;setTimeout(function(){ self.style.backgroundColor='#2FB886'; },1000);this.style.backgroundColor='#E65100';">
+                onclick="navigator.clipboard.writeText(document.getElementById('localitate4').innerHTML);playbeep();var self=this;setTimeout(function(){ self.style.backgroundColor='#2FB886'; },1000);this.style.backgroundColor='#E65100';">
             </div>
         </div>
     </div>
@@ -360,7 +349,7 @@
         </div>
         <div class="center hide-on-med-and-up">
             <div id="localitate6" class="text-white"
-                onclick="var datalatlng4=''+window['lat4']+','+window['lng4']+'';app.SetClipboardText(datalatlng4);playbeep();var self=this;setTimeout(function(){ self.style.backgroundColor='#2FB886'; },1000);this.style.backgroundColor='#E65100';">
+                onclick="var datalatlng4=''+window['lat4']+','+window['lng4']+'';navigator.clipboard.writeText(datalatlng4);playbeep();var self=this;setTimeout(function(){ self.style.backgroundColor='#2FB886'; },1000);this.style.backgroundColor='#E65100';">
             </div>
         </div>
     </div>
@@ -370,7 +359,7 @@
         </div>
         <div class="center hide-on-med-and-up">
             <div id="localitate8" class="text-white"
-                onclick="var datalatlng5=''+window['lat5']+','+window['lng5']+'';app.SetClipboardText(datalatlng5);playbeep();var self=this;setTimeout(function(){ self.style.backgroundColor='#2FB886'; },1000);this.style.backgroundColor='#E65100';">
+                onclick="var datalatlng5=''+window['lat5']+','+window['lng5']+'';navigator.clipboard.writeText(datalatlng5);playbeep();var self=this;setTimeout(function(){ self.style.backgroundColor='#2FB886'; },1000);this.style.backgroundColor='#E65100';">
             </div>
         </div>
     </div>
@@ -830,27 +819,35 @@
                 var url = "https://www.google.com/maps/dir/?api=1&origin=" + window["lat4"] + "," + window["lng4"] + "&destination=" + window["lat5"] + "," + window["lng5"] + "&travelmode=driving";
             }
 
-            app.OpenUrl(url);
-            //app.SendIntent("com.google.android.apps.maps",null,"android.intent.action.VIEW","android.intent.category.DEFAULT","geo:0,0?q=" + window["latadr"]+","+window["lngadr"]);
+            window.open(url, '_blank');
         }
 
         function copiazaurlmap() {
-            if (localStorage.getItem("tiplinie") == "da") {
-                app.SendText("https://www.google.com/maps/dir/?api=1&origin=" + window["lat4"] + "," + window["lng4"] + "&destination=" + window["lat5"] + "," + window["lng5"] + "&travelmode=driving", "", "Choose an app");
+            var url = "https://www.google.com/maps/dir/?api=1&origin=" + window["lat4"] + "," + window["lng4"] + "&destination=" + window["lat5"] + "," + window["lng5"] + "&travelmode=driving";
+            if (navigator.share) {
+                navigator.share({ title: 'Route', url: url });
             } else {
-                app.SendText("https://www.google.com/maps/dir/?api=1&origin=" + window["lat4"] + "," + window["lng4"] + "&destination=" + window["lat5"] + "," + window["lng5"] + "&travelmode=driving", "", "Choose an app");
+                navigator.clipboard.writeText(url);
+                alert('URL copied to clipboard');
             }
-
         }
         function shareroutecoord() {
-            if (localStorage.getItem("tiplinie") == "da") {
-                app.SendText(window["lat4"] + "," + window["lng4"] + "\n" + window["lat5"] + "," + window["lng5"], "", "Choose an app");
+            var text = window["lat4"] + "," + window["lng4"] + "\n" + window["lat5"] + "," + window["lng5"];
+            if (navigator.share) {
+                navigator.share({ title: 'Coordinates', text: text });
             } else {
-                app.SendText(window["lat4"] + "," + window["lng4"] + "\n" + window["lat5"] + "," + window["lng5"], "", "Choose an app");
+                navigator.clipboard.writeText(text);
+                alert('Coordinates copied to clipboard');
             }
         }
         function shareroute() {
-            app.SendText("https://da.me/distantadintredouaadresehartamap/" + window["lat4"] + "/" + window["lng4"] + "/" + window["lat5"] + "/" + window["lng5"] + "/" + localStorage.getItem("tiplinie"), "", "Choose an app");
+            var url = "https://da.me/distantadintredouaadresehartamap/" + window["lat4"] + "/" + window["lng4"] + "/" + window["lat5"] + "/" + window["lng5"] + "/" + localStorage.getItem("tiplinie");
+            if (navigator.share) {
+                navigator.share({ title: 'Route', url: url });
+            } else {
+                navigator.clipboard.writeText(url);
+                alert('Link copied to clipboard');
+            }
         }
         if (localStorage.getItem("tiplinie") == "da") {
             var latlng = L.latLng(0, 0);
@@ -1350,206 +1347,29 @@
 
             });
         }
+        // Web version - screenshot folders not supported
         var sv1 = 0; var vr = 0; var sv2 = 3;
-        if (!app.FolderExists(app.GetSpecialFolder("Pictures") + "/" + "screenshots")) {
-            app.MakeFolder(app.GetSpecialFolder("Pictures") + "/" + "screenshots");
-        }
-        if (app.FolderExists(app.GetSpecialFolder("Pictures") + "/" + "screenshots")) {
-            sv1 = 1;
-        }
-        if (sv1 == 1) {
-            app.CreateFile(app.GetSpecialFolder("Pictures") + "/" + "screenshots" + "/" + "testscreenshot2.jpg", "rw");
-        }
-        if (app.FileExists(app.GetSpecialFolder("Pictures") + "/" + "screenshots" + "/" + "testscreenshot2.jpg")) {
-            localStorage.setItem('adresascreeshot', app.GetSpecialFolder("Pictures") + "/" + "screenshots");
-            sv1 = 2;
-        }
-        if (sv1 < 2) {
-            if (!app.FolderExists(app.GetPrivateFolder("", "external") + "/" + "screenshots")) {
-                app.MakeFolder(app.GetPrivateFolder("", "external") + "/" + "screenshots");
-            }
-            if (app.FolderExists(app.GetPrivateFolder("", "external") + "/" + "screenshots")) {
-                sv2 = 4;
-            }
-            if (sv2 == 4) {
-                app.CreateFile(app.GetPrivateFolder("", "external") + "/" + "screenshots" + "/" + "testscreenshot2.jpg", "rw");
-            }
-            if (app.FileExists(app.GetPrivateFolder("", "external") + "/" + "screenshots" + "/" + "testscreenshot2.jpg")) {
-                localStorage.setItem('adresascreeshot', app.GetPrivateFolder("", "external") + "/" + "screenshots");
-                sv2 = 5;
-            }
-
-        }
-
-        if (sv1 < 2 && sv2 < 5) {
-            localStorage.setItem('adresascreeshot', null);
-        }
+        localStorage.setItem('adresascreeshot', null);
+        
         function listarutesalvate() {
-            if (localStorage.getItem('adresascreeshot') == null) {
-                alert(language.nusuportascreenshotdinaplicatie);
-            } else {
-                var lr = app.ListFolder(localStorage.getItem('adresascreeshot'));
-                var lr3 = new Array();
-                lr.forEach(function (value, index) {
-                    if (value.includes("route")) {
-                        lr3.push(value);
-                    }
-                });
-                var htmllr = "Screensots Folder Location:<br/>" + localStorage.getItem('adresascreeshot') + "<br/><a href='#' class='waves-effect waves-light btn' onclick=\"deschidescrfolder();return false;\">" + language.deschidescrfolder + "</a><br/><br/>Works with Total Commander  , X-plore (tested) ...or try another custom file explorer from google play !!!<br/><hr/><a href='#' class='waves-effect waves-light btn' onclick=\"$('#modal2').modal('close');return false;\">" + language.inchide + "</a><br/><br/><table style='width:100%'><tr><td>Nr.</td><td>" + language.imagine + "</td></tr>";
-                if (lr3.length > 1) {
-                    var lr2 = lr3.sort((a, b) => (a > b ? -1 : 1));
-                } else {
-                    lr2 = lr3;
-                }
-                lr2.forEach(function (value, index) {
-                    htmllr = htmllr + "<tr><td>" + (index + 1) + "</td><td >" + value + "</td><td></tr><tr><td colspan='2'><div style='display: flex;'><div style='width:30%;'>" + "<a data-value='" + value + "' class='sharee2 waves-effect waves-light btn'  href='#' >" + language.openscreenshot + "</a></div>" + "<div style='width:30%;margin-left:3%'><a data-value='" + value + "' class='sharee waves-effect waves-light btn'  href='#' >" + language.share + "</a></div>" + "<div style='width:30%;margin-left:3%'><a data-value='" + value + "' class='deletero waves-effect waves-light btn'  href='#' >" + language.deletero + "</a></div></div></td></tr><tr><td colspan='2'><hr /></td></tr>";
-                });
-                console.log(lr2);
-                htmllr = htmllr + "</table>";
-                document.getElementById("modal2").innerHTML = htmllr;
-
-                var elements = document.getElementsByClassName("sharee");
-
-                var myFunction = function () {
-                    var attribute = this.getAttribute("data-value");
-                    playbeep(); alert(attribute); app.SendImage(localStorage.getItem('adresascreeshot') + "/" + attribute);
-                };
-
-                for (var i = 0; i < elements.length; i++) {
-                    elements[i].addEventListener('click', myFunction, false);
-                }
-                var elements2 = document.getElementsByClassName("sharee2");
-
-                var myFunction2 = function () {
-                    var attribute = this.getAttribute("data-value");
-                    playbeep(); alert(attribute); app.OpenFile(localStorage.getItem('adresascreeshot') + "/" + attribute, "image/jpeg", "Choose Editor");
-                };
-
-                for (var i = 0; i < elements2.length; i++) {
-                    elements2[i].addEventListener('click', myFunction2, false);
-                }
-                var elements3 = document.getElementsByClassName("deletero");
-
-                var myFunction3 = function () {
-                    var attribute = this.getAttribute("data-value");
-                    playbeep(); alert(attribute); app.DeleteFile(localStorage.getItem('adresascreeshot') + "/" + attribute);
-                    if (app.FileExists(localStorage.getItem('adresascreeshot') + "/" + attribute))
-                        alert("File was not deleted!");
-
-                    else
-                        alert("File was deleted!");
-                    $('#modal2').modal('close');
-                    setTimeout(function () { document.getElementById('drp1').click(); }, 500);
-
-                };
-
-                for (var i = 0; i < elements3.length; i++) {
-                    elements3[i].addEventListener('click', myFunction3, false);
-                }
-                $('#modal2').modal('open');
-            }
+            // Web version - not supported
+            alert(language.nusuportascreenshotdinaplicatie || 'Screenshots not supported in web browser');
         }
         function deschidescrfolder() {
-            if (sv1 == 2) {
-                app.OpenFile(localStorage.getItem("adresascreeshot"), "resource/folder", "Choose");
-            } else {
-                if (sv2 == 5) {
-                    app.OpenFile(localStorage.getItem("adresascreeshot"), "resource/folder", "Choose");
-                }
-            }
-
+            // Web version - not supported
+            alert('Not supported in web browser');
         }
         function shareroutscreenshoot() {
-            if (localStorage.getItem('adresascreeshot') == null) {
-                alert(language.nusuportascreenshotdinaplicatie);
-            } else {
-                app.SendImage(localStorage.getItem("lastroute"));
-            }
+            // Web version - not supported
+            alert(language.nusuportascreenshotdinaplicatie || 'Not supported in web browser');
         }
         function openlastscreenshoot() {
-            if (localStorage.getItem('adresascreeshot') == null) {
-                alert(language.nusuportascreenshotdinaplicatie);
-            } else {
-                app.OpenFile(localStorage.getItem("lastroute"), "image/jpeg", "Choose Editor");
-            }
+            // Web version - not supported
+            alert(language.nusuportascreenshotdinaplicatie || 'Not supported in web browser');
         }
         function doscreenshot() {
-            if (localStorage.getItem('adresascreeshot') == null) {
-                alert(language.nusepoatefacescrenshot);
-            } else {
-                //   var dt = new Date();      
-                //   var path = app.GetSpecialFolder( "Pictures" )+"/Routes/"+dt.toISOString().replaceAll(":","")+".png";              
-                //  setTimeout(function(){ app.ScreenShot(path);   alert(language.efectuat + "\n" + path); app.OpenFile( path , "image/jpeg", "Choose Editor" );},500);
-                //  setTimeout(function(){    
-                // domtoimage.toJpeg(document.body)
-                // .then(function (dataUrl) {
-                //      var dt = new Date(); 
-                //     var path = app.GetSpecialFolder( "Pictures" )+"/Routes/"+dt.toISOString().replaceAll(":","")+".jpg";
-                //     img = app.CreateImage( null,.3,.15);
-                //     img.SetPixelData(dataUrl );
-                //     img.Save(path);
-                //     //app.WriteFile(path,dataUrl);
-                //     alert(language.efectuat + "\n" + path);
-                //     app.OpenFile( path , "image/jpeg", "Choose Editor" );
-                //     //   $.post("https://evidentacolumbofila.eu/public/save_jpgd",{datad:dataUrl}, function(data, status){
-                //     //  // alert("Data: " + data + "\nStatus: " + status);
-                //     //  app.SendFile(data,"AAA","AAA","AAA");
-                //     //   });
-                // });
-                //  },500);
-
-                setTimeout(function () {
-                    const node = document.body;
-                    const scale = 3000 / node.offsetWidth;
-                    this.shot_loading = true;
-
-                    domtoimage
-                        .toJpeg(node, {
-                            height: node.offsetHeight * scale,
-                            width: node.offsetWidth * scale,
-                            style: {
-                                transform: "scale(" + scale + ")",
-                                transformOrigin: "top left",
-                                width: node.offsetWidth + "px",
-                                height: node.offsetHeight + "px"
-                            }
-                        })
-                        .then(dataUrl => {
-
-                            $.get("https://evidentacolumbofila.eu/public/dt", function (data, status) {
-                                dt = new Date(parseInt(data) * 1000);
-                                console.log(dt + "-" + data);
-
-
-                                var path = localStorage.getItem('adresascreeshot') + "/" + "route_" + formatDate(dt) + ".jpg";
-                                localStorage.setItem("lastroute", path);
-                                //   var path2 = app.GetPrivateFolder("files", "external") + "/" + "Routes";
-                                //  if (!app.FolderExists(path2))
-                                //     app.MakeFolder(path2);
-
-                                img = app.CreateImage(null, .3, .15);
-                                img.SetPixelData(dataUrl);
-                                img.Save(path);
-                                   while (!app.FileExists(path )) {}
-
-                                   app.ScanFile( path );
-                                //app.WriteFile(path,dataUrl);
-
-                                alert(language.efectuat + "\n" + path);
-                                app.OpenFile(path, "image/jpeg", "Choose Editor");
-                            }).fail(function (data) {
-
-                                alert("Error");
-                            });
-
-
-                        })
-                        .catch(error => {
-                            this.shot_loading = false;
-                            console.error("oops, something went wrong!", error);
-                        });
-                }, 500);
-            }
+            // Web version - not supported
+            alert(language.nusepoatefacescrenshot || 'Screenshots not supported in web browser');
         }
 
         function padTo2Digits(num) {

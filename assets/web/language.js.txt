@@ -232,7 +232,10 @@ var lang = {
         'nusuportascreenshotdinaplicatie':'Nu poti sa faci screenshot din aplicatie',
         'deschidescrfolder':'Deschide Folderul cu Screenshot-uri',
         'whatsappgroup':'Grup Whatsapp - Distanta ',
-        'distantacatregeo':'Distanta catre aceasta locatie'
+        'distantacatregeo':'Distanta catre aceasta locatie',
+        'locationnotsupported':'Locatia nu este suportata.',
+        'listaplanurisalvate':'Lista Planuri Salvate',
+        'distribuieultimulplan':'Distribuie Ultimul Plan',
     },
     "en":
     {
@@ -467,6 +470,9 @@ var lang = {
         'nusuportascreenshotdinaplicatie':'You can.t make screenshot from app',
         'deschidescrfolder':'Open Screenshots Folder',
         'whatsappgroup':'Whatsapp Group Distance',
-        'distantacatregeo':'Distance to this location'
+        'distantacatregeo':'Distance to this location',
+        'locationnotsupported':'Location not supported',
+         'listaplanurisalvate':'List of Saved Plans',
+        'distribuieultimulplan':'Share Last Plan',
     },
 };

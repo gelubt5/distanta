@@ -3,7 +3,6 @@
 <head>
 
     <title>Mobile tutorial - Leaflet</title>
-    <script src='file:///android_asset/app.js'></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -26,6 +25,18 @@
     <script src="Leaflet.Control.Custom.js"></script>
     <script src="dom-to-image.min.js"></script>
     <script>
+             function sendToReactNative(action, data) {
+                if (typeof window.ReactNativeWebView !== 'undefined' && window.ReactNativeWebView) {
+                    try {
+                        var message = action + ':' + (typeof data === 'object' ? JSON.stringify(data) : data);
+                        window.ReactNativeWebView.postMessage(message);
+                        return true;
+                    } catch(e) {
+                        return false;
+                    }
+                }
+                return false;
+            }
         //  window.addEventListener("error", function (e) {
         //   location.reload();alert();
         //   return false;
@@ -40,14 +51,23 @@
                 alert("Nu esti conectat la internet!!!");
             }
         }
-        app.SetOnError(function () {
-            //window.location.href = "plandezbor2.html";
-        });
-        function playbeep() {
-            var x = document.getElementById("myAudio");
-            x.currentTime = 0;
-            x.volume = 0.05;
-            x.play();
+       
+         function playbeep() {
+            try {
+                var x = document.getElementById("myAudio");
+                if (x) {
+                    x.currentTime = 0;
+                    x.volume = 0.05;
+                    var playPromise = x.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(function(error) {
+                            console.log('Audio playback failed:', error);
+                        });
+                    }
+                }
+            } catch(e) {
+                console.log('Playbeep error:', e);
+            }
         }
     </script>
     <script>
@@ -160,23 +180,40 @@
         }
     </style>
     <script>
-        app.SetOnKey(OnKey);
-        function OnKey(action, name, code, extra) {
-            if (code == 4 && action == "Up") {
-                playbeep();
-                setTimeout(function () {
-                    window.location.href = "plandezbor.html";
-                }, 350);
+       function goBack() {
+            playbeep();
+            setTimeout(function () {
+                window.location.href = "plandezbor.html";
+            }, 350);
+        }
+        
+        // Listen for back button events
+        window.addEventListener('popstate', function(e) {
+            e.preventDefault();
+            goBack();
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                e.preventDefault();
+                goBack();
             }
-        }
+        });
+        
+        document.addEventListener('backbutton', function(e) {
+            e.preventDefault();
+            goBack();
+        });
+        
         function exit() {
-            var yesNo = app.CreateYesNoDialog("Exit App?");
-            yesNo.SetOnTouch(yesNo_OnTouch);
-            yesNo.Show();
-        }
-        function yesNo_OnTouch(result) {
-            if (result == "Yes") app.Exit();
-        }
+			if (window.ReactNativeWebView) {
+				window.ReactNativeWebView.postMessage('showExitDialog');
+			} else {
+				if (confirm("Exit App?")) {
+					window.close();
+				}
+			}
+		}
     </script>
     <script>
         console.log(localStorage.getItem("planadresa1") + "X");
@@ -335,19 +372,28 @@
         });
         console.log(localStorage.getItem("tiplinie") + "AAAAA");
 
-        function goforward() {
+     
+            function goforward() {
             $('.btn').sideNav('hide');
-            loc2 = app.CreateLocator("GPS");
-            loc2.SetOnChange(function (pos) {
-                localStorage.setItem("lat6", pos.latitude);
-                localStorage.setItem("lng6", pos.longitude);
-                localStorage.setItem("lat42", "0");
-                localStorage.setItem("lng42", "0");
-                loc2.Stop();
-                window.location.href = "locatiacurenta.html";
-            });
-            loc2.SetRate(1);
-            loc2.Start();
+            // Use browser geolocation API instead of app.CreateLocator
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        localStorage.setItem("lat6", position.coords.latitude);
+                        localStorage.setItem("lng6", position.coords.longitude);
+                        localStorage.setItem("lat42", "0");
+                        localStorage.setItem("lng42", "0");
+                        window.location.href = "locatiacurenta.html";
+                    },
+                    function(error) {
+                        console.error('Geolocation error:', error);
+                        alert(language.activeazagpsul || 'Please enable GPS');
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } else {
+                alert(language.locationnotsupported || 'Geolocation not supported');
+            }
         }
     </script>
     <style>
@@ -387,18 +433,18 @@
     </style>
 </head>
 
-<body onload="app.Start()">
+<body onload="">
     <audio id="myAudio">
         <source src="Snd/a.ogg" type="audio/ogg">
     </audio>
     <nav class="light-blue blue lighten-3">
         <div class="nav-wrapper" style="text-align:center;">
-            <a href="#" class="brand-logo center  hide-on-small-and-down">
+            <a href="javascript:void(0)" class="brand-logo center  hide-on-small-and-down">
                 <script>document.write(language.plan + " : ")</script><span id="distanta" class="text-white"></span></a>
-            <a href="#" class="brand-logo2 hide-on-med-and-up">
+            <a href="javascript:void(0)" class="brand-logo2 hide-on-med-and-up">
                 <script>document.write(language.plan + " : ")</script><span id="distanta2"
                     class="text-white"></span></a>
-            <a href="#" class="dropdown-button left orange darken-4 btn" style="height:100%;"
+            <a href="javascript:void(0)" class="dropdown-button left orange darken-4 btn" style="height:100%;"
                 data-activates='dropdown1'><i class="material-icons">menu</i></a>
         </div>
     </nav>
@@ -447,7 +493,7 @@
         </li>
         <li class="meniu1"><a onclick="map.fitBounds(polyline.getBounds(), { padding: [20, 20] });">Centreaza Harta</a>
         </li>
-        <li class="meniu1"> <a href="#" data-activates="slide-out" class="sidenav-trigger btn2">Meniu</a></li>
+        <li class="meniu1"> <a href="javascript:void(0)" data-activates="slide-out" class="sidenav-trigger btn2">Meniu</a></li>
 
 
         <li class="meniu2"><a href="plandezbor.html">
@@ -459,17 +505,17 @@
         <li class="meniu2"><a onclick="map.fitBounds(polyline.getBounds(), { padding: [20, 20] });">
                 <script>document.write(language.centreazaharta)</script></a>
         </li>
-        <li class="meniu2"> <a href="#" data-activates="slide-out" class="sidenav-trigger btn2">
+        <li class="meniu2"> <a href="javascript:void(0)" data-activates="slide-out" class="sidenav-trigger btn2">
                 <script>document.write(language.meniu2)</script></a></li>
-        <li class="meniu2"><a href="#" id="stangasus">
+        <li class="meniu2"><a href="javascript:void(0)" id="stangasus">
                 <script>document.write(language.stangasus)</script></a></li>
-        <li class="meniu2"><a href="#" id="stangajos">
+        <li class="meniu2"><a href="javascript:void(0)" id="stangajos">
                 <script>document.write(language.stangajos)</script></a></li>
-        <li class="meniu2"><a href="#" id="dreaptasus">
+        <li class="meniu2"><a href="javascript:void(0)" id="dreaptasus">
                 <script>document.write(language.dreaptasus)</script></a></li>
-        <li class="meniu2"><a href="#" id="dreaptajos">
+        <li class="meniu2"><a href="javascript:void(0)" id="dreaptajos">
                 <script>document.write(language.dreaptajos)</script></a></li>
-        <li class="meniu2"><a href="#" id="stergetabel">
+        <li class="meniu2"><a href="javascript:void(0)" id="stergetabel">
                 <script>document.write(language.stergetabel)</script></a></li>
         <li><a href='#' class='' onclick="playbeep();doscreenshot();return false;">
                 <script>document.write(language.doscreenshot);</script></a>
@@ -477,10 +523,10 @@
         <li><a href='#' class='' onclick="playbeep();openlastscreenshoot();return false;">
                 <script>document.write(language.openlastscreenshoot);</script></a></li>
         <li><a href='#' class='' onclick="playbeep();shareroutscreenshoot();return false;">
-                <script>document.write(language.openroutesfolder);</script></a>
+                <script>document.write(language.distribuieultimulplan);</script></a>
         </li>
         <li><a href='#' class='' id='drp1' onclick="playbeep();listarutesalvate();return false;">
-                <script>document.write(language.listarutesalvate);</script></a>
+                <script>document.write(language.listaplanurisalvate);</script></a>
         </li>
     </ul>
 
@@ -1466,162 +1512,157 @@
 
         });
 
-
-
-
-        var sv1 = 0; var vr = 0; var sv2 = 3;
-        if (!app.FolderExists(app.GetSpecialFolder("Pictures") + "/" + "screenshots")) {
-            app.MakeFolder(app.GetSpecialFolder("Pictures") + "/" + "screenshots");
-        }
-        if (app.FolderExists(app.GetSpecialFolder("Pictures") + "/" + "screenshots")) {
-            sv1 = 1;
-        }
-        if (sv1 == 1) {
-            app.CreateFile(app.GetSpecialFolder("Pictures") + "/" + "screenshots" + "/" + "testscreenshot5.jpg", "rw");
-        }
-        if (app.FileExists(app.GetSpecialFolder("Pictures") + "/" + "screenshots" + "/" + "testscreenshot5.jpg")) {
-            localStorage.setItem('adresascreeshot', app.GetSpecialFolder("Pictures") + "/" + "screenshots");
-            sv1 = 2;
-        }
-        if (sv1 < 2) {
-            if (!app.FolderExists(app.GetPrivateFolder("", "external") + "/" + "screenshots")) {
-                app.MakeFolder(app.GetPrivateFolder("", "external") + "/" + "screenshots");
+var sv1 = 0; var vr = 0; var sv2 = 3;
+        // sendToReactNative is now defined at the top of the file
+         if (typeof window.ReactNativeWebView !== 'undefined') {
+                sendToReactNative('createFolder', 'Pictures/screenshots');
             }
-            if (app.FolderExists(app.GetPrivateFolder("", "external") + "/" + "screenshots")) {
-                sv2 = 4;
-            }
-            if (sv2 == 4) {
-                app.CreateFile(app.GetPrivateFolder("", "external") + "/" + "screenshots" + "/" + "testscreenshot5.jpg", "rw");
-            }
-            if (app.FileExists(app.GetPrivateFolder("", "external") + "/" + "screenshots" + "/" + "testscreenshot5.jpg")) {
-                localStorage.setItem('adresascreeshot', app.GetPrivateFolder("", "external") + "/" + "screenshots");
-                sv2 = 5;
-            }
+            localStorage.setItem('adresascreeshot', 'screenshots');
 
-        }
-
-        if (sv1 < 2 && sv2 < 5) {
-            localStorage.setItem('adresascreeshot', null);
-        }
-
-        function listarutesalvate() {
-            if (localStorage.getItem('adresascreeshot') == null) {
-                alert(language.nusuportascreenshotdinaplicatie);
-            } else {
-                var lr = app.ListFolder(localStorage.getItem('adresascreeshot'));
-                var lr3 = new Array();
-                lr.forEach(function (value, index) {
-                    if (value.includes("plan")) {
-                        lr3.push(value);
-                    }
-                });
-                var htmllr = "Screensots Folder Location:<br/>" + localStorage.getItem('adresascreeshot') + "<br/><a href='#' class='waves-effect waves-light btn' onclick=\"deschidescrfolder();return false;\">" + language.deschidescrfolder + "</a><br/><br/>Works with Total Commander  , X-plore (tested) ...or try another custom file explorer from google play !!!<br/><hr/><a href='#' class='waves-effect waves-light btn' onclick=\"$('#modal2').modal('close');return false;\">" + language.inchide + "</a><br/><br/><table style='width:100%'><tr><td>Nr.</td><td>" + language.imagine + "</td></tr>";
+            function listarutesalvate() {
+                // Request screenshot list from React Native
+                playbeep();
+                
+                // Send request to React Native to get the file list
+                if (sendToReactNative('listFolder', 'screenshots')) {
+                    // React Native will call window.showScreenshotList(files) with the result
+                    return;
+                }
+                
+                // Fallback: alert user
+                alert(language.nusuportascreenshotdinaplicatie || 'Not supported in this environment');
+            }
+            
+            // Called by React Native with the list of screenshot files
+            window.showScreenshotList = function(files, folderPath) {
+                var lr3 = [];
+                if (files && files.length > 0) {
+                    files.forEach(function(value) {
+                        if (value.includes("plan")) {
+                            lr3.push(value);
+                        }
+                    });
+                }
+                
+                var htmllr = "Screenshots Folder Location:<br/>" + (folderPath || 'Pictures/screenshots') + "<br/><a href='javascript:void(0)' class='waves-effect waves-light btn' onclick=\"deschidescrfolder();return false;\">" + (language.deschidescrfolder || 'Open Folder') + "</a><br/><br/><a href='javascript:void(0)' class='waves-effect waves-light btn' onclick=\"$('#modal2').modal('close');return false;\">" + (language.inchide || 'Close') + "</a><br/><br/><table style='width:100%'><tr><td>Nr.</td><td>" + (language.imagine || 'Image') + "</td></tr>";
+                
                 if (lr3.length > 1) {
-                    var lr2 = lr3.sort((a, b) => (a > b ? -1 : 1));
+                    var lr2 = lr3.sort(function(a, b) { return a > b ? -1 : 1; });
                 } else {
                     lr2 = lr3;
                 }
-                lr2.forEach(function (value, index) {
-                    htmllr = htmllr + "<tr><td>" + (index + 1) + "</td><td >" + value + "</td><td></tr><tr><td colspan='2'><div style='display: flex;'><div style='width:30%;'>" + "<a data-value='" + value + "' class='sharee2 waves-effect waves-light btn'  href='#' >" + language.openscreenshot + "</a></div>" + "<div style='width:30%;margin-left:3%'><a data-value='" + value + "' class='sharee waves-effect waves-light btn'  href='#' >" + language.share + "</a></div>" + "<div style='width:30%;margin-left:3%'><a data-value='" + value + "' class='deletero waves-effect waves-light btn'  href='#' >" + language.deletero + "</a></div></div></td></tr><tr><td colspan='2'><hr /></td></tr>";
-                });
-                console.log(lr2);
+                
+                if (lr2.length === 0) {
+                    htmllr += "<tr><td colspan='2'>" + (language.nuesteniciunscreenshot || 'No screenshots found') + "</td></tr>";
+                } else {
+                    lr2.forEach(function(value, index) {
+                        htmllr = htmllr + "<tr><td>" + (index + 1) + "</td><td>" + value + "</td></tr><tr><td colspan='2'><div style='display: flex;'><div style='width:30%;'>" + "<a data-value='" + value + "' class='sharee2 waves-effect waves-light btn' href='javascript:void(0)'>" + (language.openscreenshot || 'Open') + "</a></div>" + "<div style='width:30%;margin-left:3%'><a data-value='" + value + "' class='sharee waves-effect waves-light btn' href='javascript:void(0)'>" + (language.share || 'Share') + "</a></div>" + "<div style='width:30%;margin-left:3%'><a data-value='" + value + "' class='deletero waves-effect waves-light btn' href='javascript:void(0)'>" + (language.deletero || 'Delete') + "</a></div></div></td></tr><tr><td colspan='2'><hr /></td></tr>";
+                    });
+                }
+                
                 htmllr = htmllr + "</table>";
                 document.getElementById("modal2").innerHTML = htmllr;
-
-                var elements = document.getElementsByClassName("sharee");
-
-                var myFunction = function () {
-                    var attribute = this.getAttribute("data-value");
-                    playbeep(); alert(attribute); app.SendImage(localStorage.getItem('adresascreeshot') + "/" + attribute);
-                };
-
-                for (var i = 0; i < elements.length; i++) {
-                    elements[i].addEventListener('click', myFunction, false);
-                }
+                
+                // Open button handler
                 var elements2 = document.getElementsByClassName("sharee2");
-
-                var myFunction2 = function () {
+                var myFunction2 = function(e) {
+                    e.preventDefault();
                     var attribute = this.getAttribute("data-value");
-                    playbeep(); alert(attribute); app.OpenFile(localStorage.getItem('adresascreeshot') + "/" + attribute, "image/jpeg", "Choose Editor");
+                    playbeep();
+                    sendToReactNative('openImage', attribute);
                 };
-
                 for (var i = 0; i < elements2.length; i++) {
                     elements2[i].addEventListener('click', myFunction2, false);
                 }
-                var elements3 = document.getElementsByClassName("deletero");
-
-                var myFunction3 = function () {
+                
+                // Share button handler
+                var elements = document.getElementsByClassName("sharee");
+                var myFunction = function(e) {
+                    e.preventDefault();
                     var attribute = this.getAttribute("data-value");
-                    playbeep(); alert(attribute); app.DeleteFile(localStorage.getItem('adresascreeshot') + "/" + attribute);
-                    if (app.FileExists(localStorage.getItem('adresascreeshot') + "/" + attribute))
-                        alert("File was not deleted!");
-
-                    else
-                        alert("File was deleted!");
-                    $('#modal2').modal('close');
-                    setTimeout(function () { document.getElementById('drp1').click(); }, 500);
-
+                    playbeep();
+                    sendToReactNative('shareImage', attribute);
                 };
-
+                for (var i = 0; i < elements.length; i++) {
+                    elements[i].addEventListener('click', myFunction, false);
+                }
+                
+                // Delete button handler
+                var elements3 = document.getElementsByClassName("deletero");
+                var myFunction3 = function(e) {
+                    e.preventDefault();
+                    var attribute = this.getAttribute("data-value");
+                    playbeep();
+                    if (confirm((language.confirmdelete || 'Delete') + ' ' + attribute + '?')) {
+                        sendToReactNative('deleteFile', attribute);
+                    }
+                };
                 for (var i = 0; i < elements3.length; i++) {
                     elements3[i].addEventListener('click', myFunction3, false);
                 }
+                
                 $('#modal2').modal('open');
-            }
-        }
-        function deschidescrfolder() {
-            if (sv1 == 2) {
-                app.OpenFile(localStorage.getItem("adresascreeshot"), "resource/folder", "Choose");
-            } else {
-                if (sv2 == 5) {
-                    app.OpenFile(localStorage.getItem("adresascreeshot"), "resource/folder", "Choose");
+            };
+            
+            // Called by React Native after file deletion
+            window.onFileDeleted = function(filename, success) {
+                if (success) {
+                    alert((language.deleted || 'Deleted') + ': ' + filename);
+                } else {
+                    alert((language.deletefailed || 'Delete failed') + ': ' + filename);
                 }
+                $('#modal2').modal('close');
+                // Refresh the list
+                setTimeout(function() { listarutesalvate(); }, 500);
+            };
+
+
+         function deschidescrfolder() {
+                // Open screenshots folder via React Native
+                playbeep();
+                if (sendToReactNative('openFolder', 'screenshots')) {
+                    return;
+                }
+                // Fallback: alert user
+                alert(language.nusuportascreenshotdinaplicatie || 'Not supported in this environment');
             }
 
-        }
-        function shareroutscreenshoot() {
-            if (localStorage.getItem('adresascreeshot') == null) {
-                alert(language.nusuportascreenshotdinaplicatie);
-            } else {
-                app.SendImage(localStorage.getItem("lastplan"));
-            }
-        }
-        function openlastscreenshoot() {
-            if (localStorage.getItem('adresascreeshot') == null) {
-                alert(language.nusuportascreenshotdinaplicatie);
-            } else {
-                app.OpenFile(localStorage.getItem("lastplan"), "image/jpeg", "Choose Editor");
-            }
-        }
-        function doscreenshot() {
-            if (localStorage.getItem('adresascreeshot') == null) {
-                alert(language.nusepoatefacescrenshot);
-            } else {
-                //   var dt = new Date();      
-                //   var path = app.GetSpecialFolder( "Pictures" )+"/Routes/"+dt.toISOString().replaceAll(":","")+".png";              
-                //  setTimeout(function(){ app.ScreenShot(path);   alert(language.efectuat + "\n" + path); app.OpenFile( path , "image/jpeg", "Choose Editor" );},500);
-                //  setTimeout(function(){    
-                // domtoimage.toJpeg(document.body)
-                // .then(function (dataUrl) {
-                //      var dt = new Date(); 
-                //     var path = app.GetSpecialFolder( "Pictures" )+"/Routes/"+dt.toISOString().replaceAll(":","")+".jpg";
-                //     img = app.CreateImage( null,.3,.15);
-                //     img.SetPixelData(dataUrl );
-                //     img.Save(path);
-                //     //app.WriteFile(path,dataUrl);
-                //     alert(language.efectuat + "\n" + path);
-                //     app.OpenFile( path , "image/jpeg", "Choose Editor" );
-                //     //   $.post("https://evidentacolumbofila.eu/public/save_jpgd",{datad:dataUrl}, function(data, status){
-                //     //  // alert("Data: " + data + "\nStatus: " + status);
-                //     //  app.SendFile(data,"AAA","AAA","AAA");
-                //     //   });
-                // });
-                //  },500);
 
+         function shareroutscreenshoot() {
+                // Share last screenshot via React Native
+                playbeep();
+                var lastRoute = localStorage.getItem("lastplan");
+                if (!lastRoute) {
+                    alert(language.nuesteniciunscreenshot || 'No screenshot available');
+                    return;
+                }
+                
+                if (sendToReactNative('shareImage', lastRoute)) {
+                    return;
+                }
+                // Fallback: alert user
+                alert(language.nusuportascreenshotdinaplicatie || 'Share not supported in this environment');
+            }
+
+         function openlastscreenshoot() {
+                // Open last screenshot via React Native
+                playbeep();
+                var lastRoute = localStorage.getItem("lastplan");
+                if (!lastRoute) {
+                    alert(language.nuesteniciunscreenshot || 'No screenshot available');
+                    return;
+                }
+                
+                if (sendToReactNative('openImage', lastRoute)) {
+                    return;
+                }
+                // Fallback: alert user
+                alert(language.nusuportascreenshotdinaplicatie || 'Open not supported in this environment');
+            }
+       function doscreenshot() {
                 setTimeout(function () {
                     const node = document.body;
                     const scale = 3000 / node.offsetWidth;
-                    this.shot_loading = true;
 
                     domtoimage
                         .toJpeg(node, {
@@ -1635,43 +1676,32 @@
                             }
                         })
                         .then(dataUrl => {
-
-                            $.get("https://evidentacolumbofila.eu/public/dt", function (data, status) {
-                                dt = new Date(parseInt(data) * 1000);
-                                console.log(dt + "-" + data);
-
-
-                                var path = localStorage.getItem('adresascreeshot') + "/" + "plan_" + formatDate(dt) + ".jpg";
-                                localStorage.setItem("lastplan", path);
-                                //   var path2 = app.GetPrivateFolder("files", "external") + "/" + "Routes";
-                                //  if (!app.FolderExists(path2))
-                                //     app.MakeFolder(path2);
-
-                                img = app.CreateImage(null, .3, .15);
-                                img.SetPixelData(dataUrl);
-                                img.Save(path);
-                                
-                                   while (!app.FileExists(path )) {}
-
-                                   app.ScanFile( path );
-                                //app.WriteFile(path,dataUrl);
-
-                                alert(language.efectuat + "\n" + path);
-                                app.OpenFile(path, "image/jpeg", "Choose Editor");
-                            }).fail(function (data) {
-
-                                alert("Error");
-                            });
-
-
+                            var dt = new Date();
+                            var filename = "plan_" + formatDate(dt) + ".jpg";
+                                 localStorage.setItem("lastplan", filename);
+                            // Send base64 image data to React Native for saving
+                            // React Native will set localStorage.lastroute with the full path and show success alert
+                            if (sendToReactNative('saveScreenshot', JSON.stringify({
+                                filename: filename,
+                                dataUrl: dataUrl
+                            }))) {
+                                // Success alert will be shown by React Native after save completes
+                                return;
+                            } else {
+                                // Fallback: offer download in browser
+                                localStorage.setItem("lastplan", filename);
+                                var link = document.createElement('a');
+                                link.download = filename;
+                                link.href = dataUrl;
+                                link.click();
+                                alert(language.efectuat + "\n" + filename);
+                            }
                         })
                         .catch(error => {
-                            this.shot_loading = false;
-                            console.error("oops, something went wrong!", error);
+                            alert(language.nusepoatefacescrenshot || 'Screenshot failed');
                         });
                 }, 500);
             }
-        }
 
         function padTo2Digits(num) {
             return num.toString().padStart(2, '0');

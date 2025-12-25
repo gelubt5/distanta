@@ -70,20 +70,28 @@
 	</script>
 	<script>
 
-		function goforward() {
-			$('.btn').sideNav('hide');
-			loc2 = app.CreateLocator("GPS");
-			loc2.SetOnChange(function (pos) {
-				localStorage.setItem("lat6", pos.latitude);
-				localStorage.setItem("lng6", pos.longitude);
-				localStorage.setItem("lat42", "0");
-				localStorage.setItem("lng42", "0");
-				loc2.Stop();
-				window.location.href = "locatiacurenta.html";
-			});
-			loc2.SetRate(1);
-			loc2.Start();
-		}
+	function goforward() {
+            $('.btn').sideNav('hide');
+            // Use browser geolocation API instead of app.CreateLocator
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        localStorage.setItem("lat6", position.coords.latitude);
+                        localStorage.setItem("lng6", position.coords.longitude);
+                        localStorage.setItem("lat42", "0");
+                        localStorage.setItem("lng42", "0");
+                        window.location.href = "locatiacurenta.html";
+                    },
+                    function(error) {
+                        console.error('Geolocation error:', error);
+                        alert(language.activeazagpsul || 'Please enable GPS');
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } else {
+                alert(language.locationnotsupported || 'Geolocation not supported');
+            }
+        }
 	</script>
 	<script>
 		function activeazagpsul() {
@@ -132,21 +140,21 @@
 					} else {
 						var lista = data_sv[0];
 						var utilizator = data_sv[1];
-						var html = "<a name='comentarii'></a><h5 style='background-color:white;text-align:center;'><b>" + language.adaugacomentariu + ":</b></h5><div class='card'><div class='container'> <div class='form-group'><label for='comentariunou' style='font-size:20px;'>" + language.adaugacomentariu + ":</label><textarea  class='form-control' id='comentariunou' ></textarea><br/><br/></div><a id='salveazacomentariunou' href='#' class='btn btn-primary' role='button' onclick='return salveazacomentariunou();'>" + language.salveaza + "</a><br/><br/></div></div><br/><h5 style='background-color:white;text-align:center;'><b>" + language.listacomentarii + ":</b></h5>";
+						var html = "<a name='comentarii'></a><h5 style='background-color:white;text-align:center;'><b>" + language.adaugacomentariu + ":</b></h5><div class='card'><div class='container'> <div class='form-group'><label for='comentariunou' style='font-size:20px;'>" + language.adaugacomentariu + ":</label><textarea  class='form-control' id='comentariunou' ></textarea><br/><br/></div><a id='salveazacomentariunou' href='javascript:void(0)' class='btn btn-primary' role='button' onclick='return salveazacomentariunou();'>" + language.salveaza + "</a><br/><br/></div></div><br/><h5 style='background-color:white;text-align:center;'><b>" + language.listacomentarii + ":</b></h5>";
 						lista.forEach(function (item, index) {
 							var data_mesaj = new Date(item.created_at * 1000);
 							html = html + "<div class='card' style='border:1px solid blue;margin:2px;'><div class='container'><div style='font-size:20px;'>" + (index + 1) + ". &nbsp;<b>" + language.nume + ":" + item.numecrescator + "</b></div><div style='font-size:17px;'><b>" + language.email + ":" + item.emailcrescator + "</b></div> <div style='font-size:17px;'><b>" + language.data + ": " + item.created_at + "</div></b><hr/><br/><h5>" + item.comentariu.replace(/\n/g, "<br />") + "</h5> </div>";
-							html = html + "<div style='display:none;border:1px solid orange;margin:5px;' id='editeazacomentariu_card" + item.id + "' class='editeazacomentariu_card'><h5 style='background-color:white;text-align:center;'><b>" + language.editeazacomentariu + ":</b></h5><div class='card'><div class='container'> <div class='form-group'><label for='comentariunou' style='font-size:20px;'>" + language.comentariu + ":</label><textarea  class='form-control' id='comentariunou" + item.id + "'  >" + item.comentariu + "</textarea><br/><br/></div><a class='salveazacomentariunou' id='editeazacomentariunou" + item.id + "' href='#'  role='button' onclick=\"return editeazacomentariu('" + item.id + "');\">" + language.editeaza + "</a><br/><br/><a class='salveazacomentariunou' id='inchidecomentariunou" + item.id + "' href='#'  role='button' onclick=\"$('#editeazacomentariu_card" + item.id + "').css('display','none');return false;\">" + language.inchideeditarea + "</a><br/></div></div></div>";
+							html = html + "<div style='display:none;border:1px solid orange;margin:5px;' id='editeazacomentariu_card" + item.id + "' class='editeazacomentariu_card'><h5 style='background-color:white;text-align:center;'><b>" + language.editeazacomentariu + ":</b></h5><div class='card'><div class='container'> <div class='form-group'><label for='comentariunou' style='font-size:20px;'>" + language.comentariu + ":</label><textarea  class='form-control' id='comentariunou" + item.id + "'  >" + item.comentariu + "</textarea><br/><br/></div><a class='salveazacomentariunou' id='editeazacomentariunou" + item.id + "' href='javascript:void(0)'  role='button' onclick=\"return editeazacomentariu('" + item.id + "');\">" + language.editeaza + "</a><br/><br/><a class='salveazacomentariunou' id='inchidecomentariunou" + item.id + "' href='javascript:void(0)'  role='button' onclick=\"$('#editeazacomentariu_card" + item.id + "').css('display','none');return false;\">" + language.inchideeditarea + "</a><br/></div></div></div>";
 							if (item.emailcrescator == localStorage.getItem("email") && utilizator.tip.localeCompare("utilizator") == 0) {
-								html = html + "<div id='combtn'><div><a href='#' class='btn btn-primary' role='button' onclick=\"$('.editeazacomentariu_card').css('display','none');$('#editeazacomentariu_card" + item.id + "').css('display','block');$('#comentariunou" + item.id + "').css({'border':'2px solid #84D7FF','height':'140px','border-radius': '10px','font-size':'20px','color':'blue'});$('#editeazacomentariunou" + item.id + "').removeClass();$('#editeazacomentariunou" + item.id + "').addClass('btn btn-primary');$('#inchidecomentariunou" + item.id + "').removeClass();$('#inchidecomentariunou" + item.id + "').addClass('btn btn-primary');return false;\">" + language.editeaza + "</a></div>";
+								html = html + "<div id='combtn'><div><a href='javascript:void(0)' class='btn btn-primary' role='button' onclick=\"$('.editeazacomentariu_card').css('display','none');$('#editeazacomentariu_card" + item.id + "').css('display','block');$('#comentariunou" + item.id + "').css({'border':'2px solid #84D7FF','height':'140px','border-radius': '10px','font-size':'20px','color':'blue'});$('#editeazacomentariunou" + item.id + "').removeClass();$('#editeazacomentariunou" + item.id + "').addClass('btn btn-primary');$('#inchidecomentariunou" + item.id + "').removeClass();$('#inchidecomentariunou" + item.id + "').addClass('btn btn-primary');return false;\">" + language.editeaza + "</a></div>";
 
 							}
 							if (item.emailcrescator == localStorage.getItem("email") && utilizator.tip.localeCompare("admin") == 0) {
-								html = html + "<div id='combtn'><div style='width:50%;'><a href='#' style='width:70%;' class='btn btn-primary' role='button' onclick=\"$('.editeazacomentariu_card').css('display','none');$('#editeazacomentariu_card" + item.id + "').css('display','block');$('#comentariunou" + item.id + "').css({'border':'2px solid #84D7FF','height':'140px','border-radius': '10px','font-size':'20px','color':'blue'});$('#editeazacomentariunou" + item.id + "').removeClass();$('#editeazacomentariunou" + item.id + "').addClass('btn btn-primary');$('#inchidecomentariunou" + item.id + "').removeClass();$('#inchidecomentariunou" + item.id + "').addClass('btn btn-primary');return false;\">" + language.editeaza + "</a></div>";
+								html = html + "<div id='combtn'><div style='width:50%;'><a href='javascript:void(0)' style='width:70%;' class='btn btn-primary' role='button' onclick=\"$('.editeazacomentariu_card').css('display','none');$('#editeazacomentariu_card" + item.id + "').css('display','block');$('#comentariunou" + item.id + "').css({'border':'2px solid #84D7FF','height':'140px','border-radius': '10px','font-size':'20px','color':'blue'});$('#editeazacomentariunou" + item.id + "').removeClass();$('#editeazacomentariunou" + item.id + "').addClass('btn btn-primary');$('#inchidecomentariunou" + item.id + "').removeClass();$('#inchidecomentariunou" + item.id + "').addClass('btn btn-primary');return false;\">" + language.editeaza + "</a></div>";
 
 							}
 							if (utilizator.tip == "admin") {
-								html = html + "<div></div><div style='width:50%;text-align:right;'><a href='#' style='width:70%;' class='btn btn-success' role='button' onclick=\"return stergecomentariu('" + item.id + "')\">" + language.sterge + "</a></div><div></div>";
+								html = html + "<div></div><div style='width:50%;text-align:right;'><a href='javascript:void(0)' style='width:70%;' class='btn btn-success' role='button' onclick=\"return stergecomentariu('" + item.id + "')\">" + language.sterge + "</a></div><div></div>";
 							}
 							html = html + "</div></div><br/><hr/>";
 						});
@@ -159,10 +167,10 @@
 					console.log(data.responseJSON["error"]);
 					if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
 						alert(language.nuestilogat);
-						window.location.href = "_main_.html";
+						window.location.href = "distanta.html";
 					} else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
 						alert(language.nuestilogat);
-						window.location.href = "_main_.html";
+						window.location.href = "distanta.html";
 					} else {
 						alert(language.eroare);
 					}
@@ -200,10 +208,10 @@
 					console.log(data.responseJSON["error"]);
 					if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
 						alert(language.nuestilogat);
-						window.location.href = "_main_.html";
+						window.location.href = "distanta.html";
 					} else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
 						alert(language.nuestilogat);
-						window.location.href = "_main_.html";
+						window.location.href = "distanta.html";
 					} else {
 						alert(language.eroare);
 					}
@@ -246,10 +254,10 @@
 					console.log(data.responseJSON["error"]);
 					if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
 						alert(language.nuestilogat);
-						window.location.href = "_main_.html";
+						window.location.href = "distanta.html";
 					} else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
 						alert(language.nuestilogat);
-						window.location.href = "_main_.html";
+						window.location.href = "distanta.html";
 					} else {
 						alert(language.eroare);
 					}
@@ -297,10 +305,10 @@
 						console.log(data.responseJSON["error"]);
 						if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
 							alert(language.nuestilogat);
-							window.location.href = "_main_.html";
+							window.location.href = "distanta.html";
 						} else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
 							alert(language.nuestilogat);
-							window.location.href = "_main_.html";
+							window.location.href = "distanta.html";
 						} else {
 							alert(language.eroare);
 						}
@@ -439,7 +447,8 @@
 	</style>
 	<script>
 
-		if (localStorage.getItem("idata") != "" && localStorage.getItem("idata").includes("https://da.me/")) {
+		var idataVal = localStorage.getItem("idata");
+		if (idataVal && idataVal !== "" && idataVal.includes("https://da.me/")) {
 			setTimeout(function () { openModal(); }, 200);
 			setTimeout(function () {
 
@@ -481,7 +490,7 @@
 		}
 
 
-	if (localStorage.getItem("idata") != "" && localStorage.getItem("idata").includes("geo")) {
+	if (localStorage.getItem("idata") != null && localStorage.getItem("idata") != "" && localStorage.getItem("idata").includes("geo")) {
 			setTimeout(function () { openModal(); }, 200);
 			setTimeout(function () {
                 //alert(localStorage.getItem("idata"));
@@ -513,10 +522,10 @@
 	<div id="fb-root"></div>
 	<nav class="light-blue lighten-3 ">
 		<div class="nav-wrapper">
-			<a href="#" class="brand-logo center">
+			<a href="javascript:void(0)" class="brand-logo center">
 				<script>document.write(language.titlu)</script></a>
 			<ul class="left">
-				<li> <a href="#" style="width:100px;" data-activates="slide-out"
+				<li> <a href="javascript:void(0)" style="width:100px;" data-activates="slide-out"
 						class="sidenav-trigger orange darken-4 btn"><i class="material-icons">menu</i></a></li>
 			</ul>
 			<ul class="right">
@@ -945,7 +954,7 @@
 			<div class="row">
 
 				<div class="col s12  m12 l12 xl12">
-					<a class="waves-effect waves-light btn-large" href="#" onclick="return logare();">
+					<a class="waves-effect waves-light btn-large" href="javascript:void(0)" onclick="return logare();">
 						<script>document.write(language.comentarii)</script></a>
 
 				</div>

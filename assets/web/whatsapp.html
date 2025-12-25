@@ -36,11 +36,23 @@
 		}
 	</script>
 	<script>
-   function playbeep() {
-            var x = document.getElementById("myAudio");
-            x.currentTime = 0;
-            x.volume = 0.05;
-            x.play();
+function playbeep() {
+            try {
+                var x = document.getElementById("myAudio");
+                if (x) {
+                    x.currentTime = 0;
+                    x.volume = 0.05;
+                    var playPromise = x.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(function(error) {
+                            // Autoplay was prevented, ignore silently
+                            console.log('Audio playback failed:', error);
+                        });
+                    }
+                }
+            } catch(e) {
+                console.log('Playbeep error:', e);
+            }
         }
 		
 		// Handle back button - go back to distanta2.html
@@ -193,10 +205,10 @@
 	</audio>
 	<nav class="light-blue lighten-3 ">
 		<div class="nav-wrapper">
-			<a href="#" class="brand-logo center">
+			<a href="javascript:void(0)" class="brand-logo center">
 				<script>document.write(language.titlu)</script></a>
 			<ul class="left">
-				<li> <a href="#" style="width:100px;" data-activates="slide-out"
+				<li> <a href="javascript:void(0)" style="width:100px;" data-activates="slide-out"
 						class="sidenav-trigger orange darken-4 btn"><i class="material-icons">menu</i></a></li>
 			</ul>
 			<ul class="right">

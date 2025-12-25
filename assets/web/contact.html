@@ -1,7 +1,9 @@
 <html>
 	<head>
-
-  <script src='file:///android_asset/app.js'></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>Distanta</title>
   	<link href="font.css" rel="stylesheet">
 	<link rel="stylesheet" href="materialize.min.css">
 <script src="jquery-3.4.1.min.js"></script>
@@ -21,9 +23,7 @@ try {
   alert("Nu esti conectat la internet!!!");
 }
 }
-app.SetOnError(function(){
 
-});
 
  </script>
 	<script>
@@ -37,32 +37,50 @@ app.SetOnError(function(){
 		}
 	</script>
    <script>
-     function playbeep() {
-            var x = document.getElementById("myAudio");
-            x.currentTime = 0;
-            x.volume = 0.05;
-            x.play();
-        }
-        app.SetOnKey(OnKey);
-        function OnKey(action, name, code, extra) {
-            if (code == 4 && action == "Up") {
-                playbeep();
-                setTimeout(function(){
-                    window.location.href="distanta2.html";
-                    },350);
-                  
+  function playbeep() {
+            try {
+                var x = document.getElementById("myAudio");
+                if (x) {
+                    x.currentTime = 0;
+                    x.volume = 0.05;
+                    var playPromise = x.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(function(error) {
+                            // Autoplay was prevented, ignore silently
+                            console.log('Audio playback failed:', error);
+                        });
+                    }
+                }
+            } catch(e) {
+                console.log('Playbeep error:', e);
             }
-        }   
-            function exit()
-     {
-                var yesNo = app.CreateYesNoDialog("Exit App?");
-				yesNo.SetOnTouch(yesNo_OnTouch);
-				yesNo.Show();  
-     }
-     		function yesNo_OnTouch(result) {
-			if (result == "Yes") app.Exit();
+        }
+		
+		// Handle back button - go back to distanta2.html
+		function goBack() {
+			playbeep();
+			setTimeout(function () {
+				window.location.href = "distanta2.html";
+			}, 350);
 		}
-    </script>
+		
+		// Listen for back button via popstate
+		window.addEventListener('popstate', function(event) {
+			event.preventDefault();
+			goBack();
+			history.pushState(null, null, window.location.href);
+		});
+		
+		// Push initial state to enable popstate handling
+		history.pushState(null, null, window.location.href);
+		
+		function exit() {
+			// Send message to React Native to show exit dialog
+			if (window.ReactNativeWebView) {
+				window.ReactNativeWebView.postMessage('showExitDialog');
+			}
+		}
+		</script>
 <script>
 
 window["raspuns"]="";
@@ -107,21 +125,21 @@ window["raspuns"]="";
 }
 
    
-         function goforward()
-         {      
-         $('.btn').sideNav('hide');             
-         loc2 = app.CreateLocator("GPS");
-         loc2.SetOnChange(function(pos){
-         localStorage.setItem("lat6", pos.latitude);
-         localStorage.setItem("lng6", pos.longitude);
-         localStorage.setItem("lat42","0");
-         localStorage.setItem("lng42","0");
-         loc2.Stop();
-         window.location.href="locatiacurenta.html";
-         });
-         loc2.SetRate( 1 );
-         loc2.Start();     
-         }
+        //  function goforward()
+        //  {      
+        //  $('.btn').sideNav('hide');             
+        //  loc2 = app.CreateLocator("GPS");
+        //  loc2.SetOnChange(function(pos){
+        //  localStorage.setItem("lat6", pos.latitude);
+        //  localStorage.setItem("lng6", pos.longitude);
+        //  localStorage.setItem("lat42","0");
+        //  localStorage.setItem("lng42","0");
+        //  loc2.Stop();
+        //  window.location.href="locatiacurenta.html";
+        //  });
+        //  loc2.SetRate( 1 );
+        //  loc2.Start();     
+        //  }
 </script>
 <style>
 		.btn {
@@ -178,16 +196,16 @@ window["raspuns"]="";
 	
 	</style>
 </head>
-<body onload="app.Start();contact();">
+<body onload="contact();">
 <audio id="myAudio">
   <source src="Snd/a.ogg" type="audio/ogg">  
 </audio>
 <nav class="light-blue lighten-3 ">
 		<div class="nav-wrapper">
-			<a href="#" class="brand-logo center">
+			<a href="javascript:void(0)" class="brand-logo center">
 				<script>document.write(language.titlu)</script></a>
 			<ul class="left" >
-				<li> <a href="#" style="width:100px;" data-activates="slide-out" class="sidenav-trigger orange darken-4 btn"><i 
+				<li> <a href="javascript:void(0)" style="width:100px;" data-activates="slide-out" class="sidenav-trigger orange darken-4 btn"><i 
 							class="material-icons">menu</i></a></li>
 			</ul>
 				<ul class="right">
@@ -223,7 +241,7 @@ window["raspuns"]="";
 
 				<div class="col s12  m4 l4 xl4"></div>
 				<div class="col s12  m4 l4 xl4">
-					<p><a class="waves-effect waves-light btn-large" href="_main_.html">
+					<p><a class="waves-effect waves-light btn-large" href="distanta.html">
 							<script>document.write(language.login)</script></a></p>
 				</div>
 				<div class="col s12  m4 l4 xl4"></div>

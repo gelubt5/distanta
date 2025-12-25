@@ -1,8 +1,8 @@
 <html>
 <head>    
 	<title>Distanta</title>
-	<meta name="viewport" content="width=device-width">
-	<script src='file:///android_asset/app.js'></script>
+	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+=
 	<!-- Compiled and minified CSS -->
 	<link href="font.css" rel="stylesheet">
 	<link rel="stylesheet" href="materialize.min.css">
@@ -26,14 +26,24 @@ try {
   alert("Nu esti conectat la internet!!!");
 }
 }
-app.SetOnError(function(){
-  
-});
+
 function playbeep() {
-            var x = document.getElementById("myAudio");
-            x.currentTime = 0;
-            x.volume = 0.05;
-            x.play();
+            try {
+                var x = document.getElementById("myAudio");
+                if (x) {
+                    x.currentTime = 0;
+                    x.volume = 0.05;
+                    var playPromise = x.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(function(error) {
+                            // Autoplay was prevented, ignore silently
+                            console.log('Audio playback failed:', error);
+                        });
+                    }
+                }
+            } catch(e) {
+                console.log('Playbeep error:', e);
+            }
         }
  </script>
 	<script>
@@ -47,15 +57,40 @@ function playbeep() {
 		}
 	</script>
     <script>
-        app.SetOnKey(OnKey);
-        function OnKey(action, name, code, extra) {
-            if (code == 4 && action == "Up") {
-                playbeep();
-                setTimeout(function(){
-                    window.location.href="distanta2.html";
-                    },350);
+      function goBack() {
+            playbeep();
+            setTimeout(function () {
+                window.location.href = "distanta2.html";
+            }, 350);
+        }
+        
+        // Listen for back button events
+        window.addEventListener('popstate', function(e) {
+            e.preventDefault();
+            goBack();
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                e.preventDefault();
+                goBack();
             }
-        }         
+        });
+        
+        document.addEventListener('backbutton', function(e) {
+            e.preventDefault();
+            goBack();
+        });
+        
+        function exit() {
+			if (window.ReactNativeWebView) {
+				window.ReactNativeWebView.postMessage('showExitDialog');
+			} else {
+				if (confirm("Exit App?")) {
+					window.close();
+				}
+			}
+		}             
     </script>
 	 
     <script>
@@ -82,7 +117,7 @@ function playbeep() {
              } else {
              var lista=data_sv[0];
              var utilizator=data_sv[1];
-             var html="<h5 style='background-color:white;text-align:center;'><b>"+language.adaugaruta+"</b></h5><div class='card orange lighten-5'><div class='container'> <div class='form-group'><label for='rutanoua' style='font-size:20px;'>"+language.rutanoua+":</label><input  class='form-control' id='rutanoua' /></div><div class='form-group'><label for='lat1' style='font-size:20px;'>"+language.latitudine1+":</label><table><tr><td><input  class='form-control' id='lat1' /></td><td><button onclick='document.getElementById(\"lat1\").value=localStorage.getItem(\"var1\");return false;' class='btn btn-large'>"+language.copiedinvar1+"</button></td></tr></table></div><div class='form-group'><label for='lng1' style='font-size:20px;'>"+language.longitudine1+":</label><table><tr><td><input  class='form-control' id='lng1' /></td><td><button onclick='document.getElementById(\"lng1\").value=localStorage.getItem(\"var2\");return false;' class='btn btn-large'>"+language.copiedinvar2+"</button></td></tr></table></div><div class='form-group'><label for='lat2' style='font-size:20px;'>"+language.latitudine2+":</label><table><tr><td><input  class='form-control' id='lat2' /></td><td><button onclick='document.getElementById(\"lat2\").value=localStorage.getItem(\"var3\");return false;' class='btn btn-large'>"+language.copiedinvar3+"</button></td></tr></table></div><div class='form-group'><label for='lng2' style='font-size:20px;'>"+language.longitudine2+":</label><table><tr><td><input  class='form-control' id='lng2' /></td><td><button onclick='document.getElementById(\"lng2\").value=localStorage.getItem(\"var4\");return false;' class='btn btn-large'>"+language.copiedinvar4+"</button></td></tr></table></div><p id='radiogroup1'><input name='group1' type='radio' id='test1' name='tiplinie' checked value='da' /><label for='test1'>"+language.radio1+"</label><input name='group1' type='radio' id='test2' name='tiplinie' value='nu' /><label for='test2'>"+language.radio2+"</label></p><a id='salveazarutanoua' href='#' class='btn btn-primary' role='button' onclick='return salveazarutanoua();'>"+language.salveaza+"</a><br/><br/><a id='reset' href='#' class='btn btn-primary' role='button' onclick='reset();return false;'>"+language.reset+"</a><br/><br/></div></div><br/><h5 style='background-color:white;text-align:center;'><b>"+language.listarute+":</b></h5>";
+             var html="<h5 style='background-color:white;text-align:center;'><b>"+language.adaugaruta+"</b></h5><div class='card orange lighten-5'><div class='container'> <div class='form-group'><label for='rutanoua' style='font-size:20px;'>"+language.rutanoua+":</label><input  class='form-control' id='rutanoua' /></div><div class='form-group'><label for='lat1' style='font-size:20px;'>"+language.latitudine1+":</label><table><tr><td><input  class='form-control' id='lat1' /></td><td><button onclick='document.getElementById(\"lat1\").value=localStorage.getItem(\"var1\");return false;' class='btn btn-large'>"+language.copiedinvar1+"</button></td></tr></table></div><div class='form-group'><label for='lng1' style='font-size:20px;'>"+language.longitudine1+":</label><table><tr><td><input  class='form-control' id='lng1' /></td><td><button onclick='document.getElementById(\"lng1\").value=localStorage.getItem(\"var2\");return false;' class='btn btn-large'>"+language.copiedinvar2+"</button></td></tr></table></div><div class='form-group'><label for='lat2' style='font-size:20px;'>"+language.latitudine2+":</label><table><tr><td><input  class='form-control' id='lat2' /></td><td><button onclick='document.getElementById(\"lat2\").value=localStorage.getItem(\"var3\");return false;' class='btn btn-large'>"+language.copiedinvar3+"</button></td></tr></table></div><div class='form-group'><label for='lng2' style='font-size:20px;'>"+language.longitudine2+":</label><table><tr><td><input  class='form-control' id='lng2' /></td><td><button onclick='document.getElementById(\"lng2\").value=localStorage.getItem(\"var4\");return false;' class='btn btn-large'>"+language.copiedinvar4+"</button></td></tr></table></div><p id='radiogroup1'><input name='group1' type='radio' id='test1' name='tiplinie' checked value='da' /><label for='test1'>"+language.radio1+"</label><input name='group1' type='radio' id='test2' name='tiplinie' value='nu' /><label for='test2'>"+language.radio2+"</label></p><a id='salveazarutanoua' href='javascript:void(0)' class='btn btn-primary' role='button' onclick='return salveazarutanoua();'>"+language.salveaza+"</a><br/><br/><a id='reset' href='javascript:void(0)' class='btn btn-primary' role='button' onclick='reset();return false;'>"+language.reset+"</a><br/><br/></div></div><br/><h5 style='background-color:white;text-align:center;'><b>"+language.listarute+":</b></h5>";
              lista.forEach(function(item, index){
                  if (item.tip==1)
                  {
@@ -97,16 +132,16 @@ function playbeep() {
                  
                  var data_locatie=new Date(item.created_at*1000) ;
                  html=html+"<div class='card' style='border:1px solid blue;margin:2px;'><div class='container'><div style='font-size:20px;'>"+(index+1)+". &nbsp;<b>"+language.numeruta+":&nbsp;&nbsp;"+item.nume+"</b></div><div style='font-size:17px;'><b>Latitudine_1:<span id='latv1"+item.id+"'>"+item.lat1+"</span></b></div><div style='font-size:17px;'><b>Longitudine_1:<span id='lngv1"+item.id+"'>"+item.lng1+"</span></b></div> <div style='font-size:17px;'><b>Latitudine_2:<span id='latv2"+item.id+"'>"+item.lat2+"</span></b></div><div style='font-size:17px;'><b>Longitudine_2:<span id='lngv2"+item.id+"'>"+item.lng2+"</span></b></div><div style='font-size:17px;'><b>"+tip+"</b></div><div style='font-size:17px;'><b>"+language.data2+": "+item.updated_at+"</b></div><hr/> </div>";
-                 html=html+"<div style='display:none;border:1px solid orange;margin:5px;' id='editeazaruta_card"+item.id+"' class='editeazaruta_card'><h5 style='background-color:white;text-align:center;'><b>"+language.editeazaruta+":</b></h5><div class='card'><div class='card-content'><div></div> <div class='form-group'><label for='rutanoua' style='font-size:20px;'>"+language.numeruta+"</label><input  class='form-control'  id='rutanoua"+item.id+"' value='"+item.nume+"' /></div><div class='form-group'><label for='lat1' style='font-size:20px;'>"+language.latitudine1+":&nbsp;&nbsp;&nbsp;</label><input  class='form-control lattoate' style='border:2px solid #84D7FF;height:50px;border-radius:10px;font-size:20px;color:blue;' id='lat1"+item.id+"' value='"+item.lat1+"' /></div><div class='form-group'><label for='lng1' style='font-size:20px;'>"+language.longitudine1+":&nbsp;&nbsp;&nbsp;</label><input  class='form-control lngtoate' style='border:2px solid #84D7FF;height:50px;border-radius:10px;font-size:20px;color:blue;' id='lng1"+item.id+"' value='"+item.lng1+"' /></div><div class='form-group'><label for='lat2' style='font-size:20px;'>"+language.latitudine2+":&nbsp;&nbsp;&nbsp;</label><input  class='form-control lattoate' style='border:2px solid #84D7FF;height:50px;border-radius:10px;font-size:20px;color:blue;' id='lat2"+item.id+"' value='"+item.lat2+"' /></div><div class='form-group'><label for='lng2' style='font-size:20px;'>"+language.longitudine2+":&nbsp;&nbsp;&nbsp;</label><input  class='form-control lngtoate' style='border:2px solid #84D7FF;height:50px;border-radius:10px;font-size:20px;color:blue;' id='lng2"+item.id+"' value='"+item.lng2+"' /></div>"+tipr+"  <a class='salveazarutanoua' id='editeazarutanoua"+item.id+"' href='#'  role='button' onclick=\"return editeazaruta('"+item.id+"');\">"+language.editeaza+"</a><br/><br/><a class='salveazarutanoua' id='inchiderutanoua"+item.id+"' href='#'  role='button' onclick=\"$('#editeazaruta_card"+item.id+"').css('display','none');return false;\">"+language.inchideeditarea+"</a><br/></div></div></div>";
+                 html=html+"<div style='display:none;border:1px solid orange;margin:5px;' id='editeazaruta_card"+item.id+"' class='editeazaruta_card'><h5 style='background-color:white;text-align:center;'><b>"+language.editeazaruta+":</b></h5><div class='card'><div class='card-content'><div></div> <div class='form-group'><label for='rutanoua' style='font-size:20px;'>"+language.numeruta+"</label><input  class='form-control'  id='rutanoua"+item.id+"' value='"+item.nume+"' /></div><div class='form-group'><label for='lat1' style='font-size:20px;'>"+language.latitudine1+":&nbsp;&nbsp;&nbsp;</label><input  class='form-control lattoate' style='border:2px solid #84D7FF;height:50px;border-radius:10px;font-size:20px;color:blue;' id='lat1"+item.id+"' value='"+item.lat1+"' /></div><div class='form-group'><label for='lng1' style='font-size:20px;'>"+language.longitudine1+":&nbsp;&nbsp;&nbsp;</label><input  class='form-control lngtoate' style='border:2px solid #84D7FF;height:50px;border-radius:10px;font-size:20px;color:blue;' id='lng1"+item.id+"' value='"+item.lng1+"' /></div><div class='form-group'><label for='lat2' style='font-size:20px;'>"+language.latitudine2+":&nbsp;&nbsp;&nbsp;</label><input  class='form-control lattoate' style='border:2px solid #84D7FF;height:50px;border-radius:10px;font-size:20px;color:blue;' id='lat2"+item.id+"' value='"+item.lat2+"' /></div><div class='form-group'><label for='lng2' style='font-size:20px;'>"+language.longitudine2+":&nbsp;&nbsp;&nbsp;</label><input  class='form-control lngtoate' style='border:2px solid #84D7FF;height:50px;border-radius:10px;font-size:20px;color:blue;' id='lng2"+item.id+"' value='"+item.lng2+"' /></div>"+tipr+"  <a class='salveazarutanoua' id='editeazarutanoua"+item.id+"' href='javascript:void(0)'  role='button' onclick=\"return editeazaruta('"+item.id+"');\">"+language.editeaza+"</a><br/><br/><a class='salveazarutanoua' id='inchiderutanoua"+item.id+"' href='javascript:void(0)'  role='button' onclick=\"$('#editeazaruta_card"+item.id+"').css('display','none');return false;\">"+language.inchideeditarea+"</a><br/></div></div></div>";
                  
-                    html=html+"<div id='combtn'><div><a href='#' class='btn btn-primary' role='button' onclick=\"$('.editeazaruta_card').css('display','none');$('#editeazaruta_card"+item.id+"').css('display','block');$('#rutanoua"+item.id+"').css({'border':'2px solid #84D7FF','height':'50px','border-radius': '10px','font-size':'20px','color':'blue'});$('#editeazarutanoua"+item.id+"').removeClass();$('#editeazarutanoua"+item.id+"').addClass('btn btn-primary');$('#inchiderutanoua"+item.id+"').removeClass();$('#inchiderutanoua"+item.id+"').addClass('btn btn-primary');return false;\">"+language.editeaza+"</a></div>";
+                    html=html+"<div id='combtn'><div><a href='javascript:void(0)' class='btn btn-primary' role='button' onclick=\"$('.editeazaruta_card').css('display','none');$('#editeazaruta_card"+item.id+"').css('display','block');$('#rutanoua"+item.id+"').css({'border':'2px solid #84D7FF','height':'50px','border-radius': '10px','font-size':'20px','color':'blue'});$('#editeazarutanoua"+item.id+"').removeClass();$('#editeazarutanoua"+item.id+"').addClass('btn btn-primary');$('#inchiderutanoua"+item.id+"').removeClass();$('#inchiderutanoua"+item.id+"').addClass('btn btn-primary');return false;\">"+language.editeaza+"</a></div>";
                     
                 
            
                  
-                     html=html+"<div><a href='#' class='btn btn-success' role='button' onclick=\"return vizualizeazaruta('"+item.id+"')\">"+language.vizualizeaza+"</a></div>";
+                     html=html+"<div><a href='javascript:void(0)' class='btn btn-success' role='button' onclick=\"return vizualizeazaruta('"+item.id+"')\">"+language.vizualizeaza+"</a></div>";
                  
-                 html=html+"</div><br/><div id='combtn2'><div></div><div style='width:80%;' ><a href='#' class='btn btn-success'  role='button' onclick=\"return stergeruta('"+item.id+"')\">"+language.sterge+"</a></div><div></div><br/></div></div><br/><hr/>";
+                 html=html+"</div><br/><div id='combtn2'><div></div><div style='width:80%;' ><a href='javascript:void(0)' class='btn btn-success'  role='button' onclick=\"return stergeruta('"+item.id+"')\">"+language.sterge+"</a></div><div></div><br/></div></div><br/><hr/>";
                  });
                  $("#com").html(html);
                  if (data_sv[3]==1)
@@ -435,30 +470,29 @@ function vizualizeazaruta(id){
     window.location.href="distantadintredouaadresehartamap.html";
 });
 }
-         function goforward()
-         {              
-         $('.btn').sideNav('hide');             
-         loc2 = app.CreateLocator("GPS");
-         loc2.SetOnChange(function(pos){
-         localStorage.setItem("lat6", pos.latitude);
-         localStorage.setItem("lng6", pos.longitude);
-         localStorage.setItem("lat42","0");
-         localStorage.setItem("lng42","0");
-         loc2.Stop();
-         window.location.href="locatiacurenta.html";
-         });
-         loc2.SetRate( 1 );
-         loc2.Start();     
-         }
-  function exit()
-             {
-                var yesNo = app.CreateYesNoDialog("Exit App?");
-				yesNo.SetOnTouch(yesNo_OnTouch);
-				yesNo.Show();  
+        function goforward() {
+            $('.btn').sideNav('hide');
+            // Use browser geolocation API instead of app.CreateLocator
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        localStorage.setItem("lat6", position.coords.latitude);
+                        localStorage.setItem("lng6", position.coords.longitude);
+                        localStorage.setItem("lat42", "0");
+                        localStorage.setItem("lng42", "0");
+                        window.location.href = "locatiacurenta.html";
+                    },
+                    function(error) {
+                        console.error('Geolocation error:', error);
+                        alert(language.activeazagpsul || 'Please enable GPS');
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } else {
+                alert(language.locationnotsupported || 'Geolocation not supported');
             }
-     		function yesNo_OnTouch(result) {
-			if (result == "Yes") app.Exit();
-		}
+        }   
+
     </script>
 	<style>
 		.btn {
@@ -533,17 +567,17 @@ function vizualizeazaruta(id){
 	</style>
 </head>
 
-<body style="background-color:white;" onload="app.Start();logare(1);">
+<body style="background-color:white;" onload="logare(1);">
 <audio id="myAudio">
   <source src="Snd/a.ogg" type="audio/ogg">  
 </audio>
 <div id="fb-root"></div>
 <nav class="light-blue lighten-3 ">
 		<div class="nav-wrapper">
-			<a href="#" class="brand-logo center">
+			<a href="javascript:void(0)" class="brand-logo center">
 				<script>document.write(language.titlu)</script></a>
 			<ul class="left" >
-				<li> <a href="#" style="width:100px;" data-activates="slide-out" class="sidenav-trigger orange darken-4 btn"><i 
+				<li> <a href="javascript:void(0)" style="width:100px;" data-activates="slide-out" class="sidenav-trigger orange darken-4 btn"><i 
 							class="material-icons">menu</i></a></li>
 			</ul>
 				<ul class="right">

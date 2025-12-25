@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <script src='file:///android_asset/app.js'></script>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="font.css" rel="stylesheet">
     <link rel="stylesheet" href="materialize.min.css">
 
@@ -22,19 +22,34 @@
                 alert("Nu esti conectat la internet!!!");
             }
         }
-        app.SetOnError(function () {
-
-        });
+       
         var sti;
         function hk(x) {
             clearInterval(sti);
-            sti = setInterval(function () { app.HideKeyboard(); clearInterval(sti); }, 1000);
+            // HideKeyboard - blur the active element to dismiss keyboard
+            sti = setInterval(function () { 
+                if (document.activeElement) {
+                    document.activeElement.blur();
+                }
+                clearInterval(sti); 
+            }, 1000);
         }
         function playbeep() {
-            var x = document.getElementById("myAudio");
-            x.currentTime = 0;
-            x.volume = 0.05;
-            x.play();
+            try {
+                var x = document.getElementById("myAudio");
+                if (x) {
+                    x.currentTime = 0;
+                    x.volume = 0.05;
+                    var playPromise = x.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(function(error) {
+                            console.log('Audio playback failed:', error);
+                        });
+                    }
+                }
+            } catch(e) {
+                console.log('Playbeep error:', e);
+            }
         }
     </script>
     <script>
@@ -124,23 +139,41 @@
     </script>
 
     <script>
-        app.SetOnKey(OnKey);
-        function OnKey(action, name, code, extra) {
-            if (code == 4 && action == "Up") {
-                playbeep();
-                setTimeout(function () {
-                    window.location.href = "distanta2.html";
-                }, 350);
+        // Back button handling for React Native
+        function goBack() {
+            playbeep();
+            setTimeout(function () {
+                window.location.href = "distanta2.html";
+            }, 350);
+        }
+        
+        // Listen for back button events
+        window.addEventListener('popstate', function(e) {
+            e.preventDefault();
+            goBack();
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                e.preventDefault();
+                goBack();
             }
-        }
+        });
+        
+        document.addEventListener('backbutton', function(e) {
+            e.preventDefault();
+            goBack();
+        });
+        
         function exit() {
-            var yesNo = app.CreateYesNoDialog("Exit App?");
-            yesNo.SetOnTouch(yesNo_OnTouch);
-            yesNo.Show();
-        }
-        function yesNo_OnTouch(result) {
-            if (result == "Yes") app.Exit();
-        }
+			if (window.ReactNativeWebView) {
+				window.ReactNativeWebView.postMessage('showExitDialog');
+			} else {
+				if (confirm("Exit App?")) {
+					window.close();
+				}
+			}
+		}
     </script>
     <script>
         window["cautaloc"] = "";
@@ -437,17 +470,25 @@
 
         function goforward() {
             $('.btn').sideNav('hide');
-            loc2 = app.CreateLocator("GPS");
-            loc2.SetOnChange(function (pos) {
-                localStorage.setItem("lat6", pos.latitude);
-                localStorage.setItem("lng6", pos.longitude);
-                localStorage.setItem("lat42", "0");
-                localStorage.setItem("lng42", "0");
-                loc2.Stop();
-                window.location.href = "locatiacurenta.html";
-            });
-            loc2.SetRate(1);
-            loc2.Start();
+            // Use browser geolocation API instead of app.CreateLocator
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        localStorage.setItem("lat6", position.coords.latitude);
+                        localStorage.setItem("lng6", position.coords.longitude);
+                        localStorage.setItem("lat42", "0");
+                        localStorage.setItem("lng42", "0");
+                        window.location.href = "locatiacurenta.html";
+                    },
+                    function(error) {
+                        console.error('Geolocation error:', error);
+                        alert(language.activeazagpsul || 'Please enable GPS');
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } else {
+                alert(language.locationnotsupported || 'Geolocation not supported');
+            }
         }
 
         function salveazatip() {
@@ -782,7 +823,7 @@
     </style>
 </head>
 
-<body onload="app.Start();incarcaLocatii();" style="background-color:white;">
+<body onload="incarcaLocatii();" style="background-color:white;">
     <audio id="myAudio">
         <source src="Snd/a.ogg" type="audio/ogg">
     </audio>

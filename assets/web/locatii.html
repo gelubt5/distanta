@@ -1,8 +1,8 @@
 <html>
 <head>    
 	<title>Distanta</title>
-	<meta name="viewport" content="width=device-width">
-	<script src='file:///android_asset/app.js'></script>
+	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
 	<!-- Compiled and minified CSS -->
 	<link href="font.css" rel="stylesheet">
 	<link rel="stylesheet" href="materialize.min.css">
@@ -26,14 +26,24 @@ try {
   alert("Nu esti conectat la internet!!!");
 }
 }
-app.SetOnError(function(){
-    
-});
+
 function playbeep() {
-            var x = document.getElementById("myAudio");
-            x.currentTime = 0;
-            x.volume = 0.05;
-            x.play();
+            try {
+                var x = document.getElementById("myAudio");
+                if (x) {
+                    x.currentTime = 0;
+                    x.volume = 0.05;
+                    var playPromise = x.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(function(error) {
+                            // Autoplay was prevented, ignore silently
+                            console.log('Audio playback failed:', error);
+                        });
+                    }
+                }
+            } catch(e) {
+                console.log('Playbeep error:', e);
+            }
         }
  </script>
 	<script>
@@ -49,15 +59,40 @@ function playbeep() {
 		}
 	</script>
     <script>
-        app.SetOnKey(OnKey);
-        function OnKey(action, name, code, extra) {
-            if (code == 4 && action == "Up") {
-                playbeep();
-                setTimeout(function(){
-                    window.location.href="distanta2.html";
-                    },350);
+      function goBack() {
+            playbeep();
+            setTimeout(function () {
+                window.location.href = "distanta2.html";
+            }, 350);
+        }
+        
+        // Listen for back button events
+        window.addEventListener('popstate', function(e) {
+            e.preventDefault();
+            goBack();
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                e.preventDefault();
+                goBack();
             }
-        }         
+        });
+        
+        document.addEventListener('backbutton', function(e) {
+            e.preventDefault();
+            goBack();
+        });
+        
+        function exit() {
+			if (window.ReactNativeWebView) {
+				window.ReactNativeWebView.postMessage('showExitDialog');
+			} else {
+				if (confirm("Exit App?")) {
+					window.close();
+				}
+			}
+		}       
     </script>
 	 
     <script>
@@ -84,13 +119,13 @@ function playbeep() {
              } else {
              var lista=data_sv[0];
              var utilizator=data_sv[1];
-             var html="<h5 style='background-color:white;text-align:center;'><b>"+language.adaugalocatie+":</b></h5><div class='card orange lighten-5'><div class='container'> <div class='form-group'><label for='locatienoua' style='font-size:20px;'>"+language.locatienoua+":</label><input  class='form-control' id='locatienoua' /></div><div class='form-group'><label for='lat' style='font-size:20px;'>"+language.latitudine+":</label><table><tr><td><input  class='form-control' id='lat' /></td><td><button onclick='document.getElementById(\"lat\").value=localStorage.getItem(\"var1\");return false;' class='btn btn-large'>"+language.copiedinvar1+"</button></td></tr></table></div><div class='form-group'><label for='lng' style='font-size:20px;'>"+language.longitudine+":</label><table><tr><td><input  class='form-control' id='lng' /></td><td><button onclick='document.getElementById(\"lng\").value=localStorage.getItem(\"var2\");return false;' class='btn btn-large'>"+language.copiedinvar2+"</button></td></tr></table><br/><br/></div><a id='salveazalocatienoua' href='#' class='btn btn-primary' role='button' onclick='return salveazalocatienoua();'>"+language.salveaza+"</a><br/><br/><a id='reset' href='#' class='btn btn-primary' role='button' onclick='reset();return false;'>"+language.reset+"</a></div></div><br/><h5 style='background-color:white;text-align:center;'><b>"+language.listalocatii+":</b></h5>";
+             var html="<h5 style='background-color:white;text-align:center;'><b>"+language.adaugalocatie+":</b></h5><div class='card orange lighten-5'><div class='container'> <div class='form-group'><label for='locatienoua' style='font-size:20px;'>"+language.locatienoua+":</label><input  class='form-control' id='locatienoua' /></div><div class='form-group'><label for='lat' style='font-size:20px;'>"+language.latitudine+":</label><table><tr><td><input  class='form-control' id='lat' /></td><td><button onclick='document.getElementById(\"lat\").value=localStorage.getItem(\"var1\");return false;' class='btn btn-large'>"+language.copiedinvar1+"</button></td></tr></table></div><div class='form-group'><label for='lng' style='font-size:20px;'>"+language.longitudine+":</label><table><tr><td><input  class='form-control' id='lng' /></td><td><button onclick='document.getElementById(\"lng\").value=localStorage.getItem(\"var2\");return false;' class='btn btn-large'>"+language.copiedinvar2+"</button></td></tr></table><br/><br/></div><a id='salveazalocatienoua' href='javascript:void(0)' class='btn btn-primary' role='button' onclick='return salveazalocatienoua();'>"+language.salveaza+"</a><br/><br/><a id='reset' href='javascript:void(0)' class='btn btn-primary' role='button' onclick='reset();return false;'>"+language.reset+"</a></div></div><br/><h5 style='background-color:white;text-align:center;'><b>"+language.listalocatii+":</b></h5>";
              lista.forEach(function(item, index){
                  var data_locatie=new Date(item.created_at*1000) ;
                  html=html+"<div class='card' style='border:1px solid blue;margin:2px;'><div class='container'><div style='font-size:20px;'>"+(index+1)+". &nbsp;<b>"+language.locatie+":&nbsp;&nbsp;"+item.nume+"</b></div><div style='font-size:17px;'><b>"+language.latitudine+":<span id='latv"+item.id+"'>"+item.lat+"</span></b></div><div style='font-size:17px;'><b>"+language.longitudine+":<span id='lngv"+item.id+"'>"+item.lng+"</span></b></div> <div style='font-size:17px;'><b>"+language.data2+": "+item.created_at+"</div></b><hr/> </div>";
-                 html=html+"<div style='display:none;border:1px solid orange;margin:5px;' id='editeazalocatie_card"+item.id+"' class='editeazalocatie_card'><h5 style='background-color:white;text-align:center;'><b>Editeaza Locatie:</b></h5><div class='card'><div class='card-content'><div></div> <div class='form-group'><label for='locatienoua' style='font-size:20px;'>"+language.numelocatie+":</label><input  class='form-control'  id='locatienoua"+item.id+"' value='"+item.nume+"' /></div><div class='form-group'><label for='lat' style='font-size:20px;'>"+language.latitudine+":&nbsp;&nbsp;&nbsp;</label><input  class='form-control lattoate' style='border:2px solid #84D7FF;height:50px;border-radius:10px;font-size:20px;color:blue;' id='lat"+item.id+"' value='"+item.lat+"' /></div><div class='form-group'><label for='lng' style='font-size:20px;'>"+language.longitudine+":&nbsp;&nbsp;&nbsp;</label><input  class='form-control lngtoate' style='border:2px solid #84D7FF;height:50px;border-radius:10px;font-size:20px;color:blue;' id='lng"+item.id+"' value='"+item.lng+"' /></div><a class='salveazalocatienoua' id='editeazalocatienoua"+item.id+"' href='#'  role='button' onclick=\"return editeazalocatie('"+item.id+"');\">"+language.editeaza+"</a><br/><br/><a class='salveazalocatienoua' id='inchidelocatienoua"+item.id+"' href='#'  role='button' onclick=\"$('#editeazalocatie_card"+item.id+"').css('display','none');return false;\">"+language.inchideeditarea+"</a><br/></div></div></div>";
+                 html=html+"<div style='display:none;border:1px solid orange;margin:5px;' id='editeazalocatie_card"+item.id+"' class='editeazalocatie_card'><h5 style='background-color:white;text-align:center;'><b>Editeaza Locatie:</b></h5><div class='card'><div class='card-content'><div></div> <div class='form-group'><label for='locatienoua' style='font-size:20px;'>"+language.numelocatie+":</label><input  class='form-control'  id='locatienoua"+item.id+"' value='"+item.nume+"' /></div><div class='form-group'><label for='lat' style='font-size:20px;'>"+language.latitudine+":&nbsp;&nbsp;&nbsp;</label><input  class='form-control lattoate' style='border:2px solid #84D7FF;height:50px;border-radius:10px;font-size:20px;color:blue;' id='lat"+item.id+"' value='"+item.lat+"' /></div><div class='form-group'><label for='lng' style='font-size:20px;'>"+language.longitudine+":&nbsp;&nbsp;&nbsp;</label><input  class='form-control lngtoate' style='border:2px solid #84D7FF;height:50px;border-radius:10px;font-size:20px;color:blue;' id='lng"+item.id+"' value='"+item.lng+"' /></div><a class='salveazalocatienoua' id='editeazalocatienoua"+item.id+"' href='javascript:void(0)'  role='button' onclick=\"return editeazalocatie('"+item.id+"');\">"+language.editeaza+"</a><br/><br/><a class='salveazalocatienoua' id='inchidelocatienoua"+item.id+"' href='javascript:void(0)'  role='button' onclick=\"$('#editeazalocatie_card"+item.id+"').css('display','none');return false;\">"+language.inchideeditarea+"</a><br/></div></div></div>";
                  
-                     html=html+"<div id='combtn'><div><a href='#' class='btn btn-primary' role='button' onclick=\"$('.editeazalocatie_card').css('display','none');$('#editeazalocatie_card"+item.id+"').css('display','block');$('#locatienoua"+item.id+"').css({'border':'2px solid #84D7FF','height':'50px','border-radius': '10px','font-size':'20px','color':'blue'});$('#editeazalocatienoua"+item.id+"').removeClass();$('#editeazalocatienoua"+item.id+"').addClass('btn btn-primary');$('#inchidelocatienoua"+item.id+"').removeClass();$('#inchidelocatienoua"+item.id+"').addClass('btn btn-primary');return false;\">"+language.editeaza+"</a></div>";
+                     html=html+"<div id='combtn'><div><a href='javascript:void(0)' class='btn btn-primary' role='button' onclick=\"$('.editeazalocatie_card').css('display','none');$('#editeazalocatie_card"+item.id+"').css('display','block');$('#locatienoua"+item.id+"').css({'border':'2px solid #84D7FF','height':'50px','border-radius': '10px','font-size':'20px','color':'blue'});$('#editeazalocatienoua"+item.id+"').removeClass();$('#editeazalocatienoua"+item.id+"').addClass('btn btn-primary');$('#inchidelocatienoua"+item.id+"').removeClass();$('#inchidelocatienoua"+item.id+"').addClass('btn btn-primary');return false;\">"+language.editeaza+"</a></div>";
                     
                 
             //         if (item.emailcrescator==localStorage.getItem("email") && utilizator.tip.localeCompare("admin")==0)
@@ -99,7 +134,7 @@ function playbeep() {
                     
             //      }
                  
-                     html=html+"<div></div><div><a href='#' class='btn btn-success' role='button' onclick=\"return vizualizeaza('"+item.id+"','"+item.nume+"')\">"+language.vizualizeaza2+"</a></div><br/><br/></div><div style='margin-left:10%;margin-right:10%;'><div></div><div><a href='#' class='btn btn-success' role='button' onclick=\"return stergelocatie('"+item.id+"')\">"+language.sterge+"</a></div><div></div><br/><br/>";
+                     html=html+"<div></div><div><a href='javascript:void(0)' class='btn btn-success' role='button' onclick=\"return vizualizeaza('"+item.id+"','"+item.nume+"')\">"+language.vizualizeaza2+"</a></div><br/><br/></div><div style='margin-left:10%;margin-right:10%;'><div></div><div><a href='javascript:void(0)' class='btn btn-success' role='button' onclick=\"return stergelocatie('"+item.id+"')\">"+language.sterge+"</a></div><div></div><br/><br/>";
                  
                  html=html+"</div></div><br/><hr/>";
                  });
@@ -379,31 +414,28 @@ function vizualizeaza(id,nume){
     window.location.href="locatiacurenta.html";
 });
 }
-
-         function goforward()
-         {              
-         $('.btn').sideNav('hide');             
-         loc2 = app.CreateLocator("GPS");
-         loc2.SetOnChange(function(pos){
-         localStorage.setItem("lat6", pos.latitude);
-         localStorage.setItem("lng6", pos.longitude);
-         localStorage.setItem("lat42","0");
-         localStorage.setItem("lng42","0");
-         loc2.Stop();
-         window.location.href="locatiacurenta.html";
-         });
-         loc2.SetRate( 1 );
-         loc2.Start();     
-         }
-  function exit()
-             {
-                var yesNo = app.CreateYesNoDialog("Exit App?");
-				yesNo.SetOnTouch(yesNo_OnTouch);
-				yesNo.Show();  
+function goforward() {
+            $('.btn').sideNav('hide');
+            // Use browser geolocation API instead of app.CreateLocator
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        localStorage.setItem("lat6", position.coords.latitude);
+                        localStorage.setItem("lng6", position.coords.longitude);
+                        localStorage.setItem("lat42", "0");
+                        localStorage.setItem("lng42", "0");
+                        window.location.href = "locatiacurenta.html";
+                    },
+                    function(error) {
+                        console.error('Geolocation error:', error);
+                        alert(language.activeazagpsul || 'Please enable GPS');
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } else {
+                alert(language.locationnotsupported || 'Geolocation not supported');
             }
-     		function yesNo_OnTouch(result) {
-			if (result == "Yes") app.Exit();
-		}         
+        }    
     </script>
 	<style>
 		.btn {
@@ -475,17 +507,17 @@ function vizualizeaza(id,nume){
 	</style>
 </head>
 
-<body style="background-color:white;" onload="app.Start();logare(1);">
+<body style="background-color:white;" onload="logare(1);">
 <audio id="myAudio">
   <source src="Snd/a.ogg" type="audio/ogg">  
 </audio>
 <div id="fb-root"></div>
 <nav class="light-blue lighten-3 ">
 		<div class="nav-wrapper">
-			<a href="#" class="brand-logo center">
+			<a href="javascript:void(0)" class="brand-logo center">
 				<script>document.write(language.titlu)</script></a>
 			<ul class="left" >
-				<li> <a href="#" style="width:100px;" data-activates="slide-out" class="sidenav-trigger orange darken-4 btn"><i 
+				<li> <a href="javascript:void(0)" style="width:100px;" data-activates="slide-out" class="sidenav-trigger orange darken-4 btn"><i 
 							class="material-icons">menu</i></a></li>
 			</ul>
 				<ul class="right">

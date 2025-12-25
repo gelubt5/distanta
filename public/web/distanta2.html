@@ -3,7 +3,7 @@
 <head>
 	<title>Distanta</title>
 	<meta name="viewport" content="width=device-width">
-	<script src='file:///android_asset/app.js'></script>
+	<!-- Web version - DroidScript app.js removed -->
 	<!-- Compiled and minified CSS -->
 	<link href="font.css" rel="stylesheet">
 	<link rel="stylesheet" href="materialize.min.css">
@@ -14,13 +14,9 @@
 
 	<script src="language.js"></script>
 	<script>
-		//  window.addEventListener("error", function (e) {
-		//   location.reload();alert();
-		//   return false;
-		// });
-		app.HideProgress();
+		// Web version - connection check simplified
 		var that = new XMLHttpRequest();
-		that.open('GET', 'http://google.com', false);
+		that.open('GET', 'https://google.com', false);
 		try {
 			that.send();
 		} catch (exception) {
@@ -28,9 +24,10 @@
 				alert("Nu esti conectat la internet!!!");
 			}
 		}
-		app.SetOnError(function () {
-
-		});
+		// Web version - error handler
+		window.onerror = function(msg, url, line) {
+			console.error('Error:', msg, 'at line', line);
+		};
 
 	</script>
 
@@ -49,23 +46,19 @@
 	</script>
 	<script>
 		function OnStart() {
-			app.EnableBackKey(false);
+			// Web version - no DroidScript
 		}
-		app.SetOnKey(OnKey);
+		// Web version - DroidScript functions removed
 		function yesNo_OnTouch(result) {
-			if (result == "Yes") app.Exit();
+			if (result == "Yes") window.close();
 		}
 		function OnKey(action, name, code, extra) {
-			if (code == 4 && action == "Up") {
-				var yesNo = app.CreateYesNoDialog("Exit App?");
-				yesNo.SetOnTouch(yesNo_OnTouch);
-				yesNo.Show();
-			}
+			// Not applicable for web
 		}
 		function exit() {
-			var yesNo = app.CreateYesNoDialog("Exit App?");
-			yesNo.SetOnTouch(yesNo_OnTouch);
-			yesNo.Show();
+			if (confirm("Exit App?")) {
+				window.close();
+			}
 		}
 
 	</script>
@@ -73,23 +66,30 @@
 
 		function goforward() {
 			$('.btn').sideNav('hide');
-			loc2 = app.CreateLocator("GPS");
-			loc2.SetOnChange(function (pos) {
-				localStorage.setItem("lat6", pos.latitude);
-				localStorage.setItem("lng6", pos.longitude);
-				localStorage.setItem("lat42", "0");
-				localStorage.setItem("lng42", "0");
-				loc2.Stop();
-				window.location.href = "locatiacurenta.html";
-			});
-			loc2.SetRate(1);
-			loc2.Start();
+			// Web version - use browser geolocation
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function(pos) {
+					localStorage.setItem("lat6", pos.coords.latitude);
+					localStorage.setItem("lng6", pos.coords.longitude);
+					localStorage.setItem("lat42", "0");
+					localStorage.setItem("lng42", "0");
+					window.location.href = "locatiacurenta.html";
+				}, function(error) {
+					alert('GPS error: ' + error.message);
+				});
+			} else {
+				alert('Geolocation not supported');
+			}
 		}
 	</script>
 	<script>
 		function activeazagpsul() {
-			var locEnabled = app.IsLocationEnabled('GPS');
-			if (locEnabled == true) {
+			// Web version - use browser geolocation
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+					function(position) { console.log('GPS enabled'); },
+					function(error) { alert(language.activeazagpsul); }
+				);
 			} else {
 				alert(language.activeazagpsul);
 			}
@@ -425,8 +425,8 @@
 		}
 	</style>
 	<script>
-
-		if (localStorage.getItem("idata") != "" && localStorage.getItem("idata").includes("https://da.me/")) {
+		var idataVal = localStorage.getItem("idata");
+		if (idataVal && idataVal !== "" && idataVal.includes("https://da.me/")) {
 			setTimeout(function () { openModal(); }, 200);
 			setTimeout(function () {
 
@@ -468,7 +468,7 @@
 		}
 
 
-	if (localStorage.getItem("idata") != "" && localStorage.getItem("idata").includes("geo")) {
+	if (localStorage.getItem("idata") != null && localStorage.getItem("idata") != "" && localStorage.getItem("idata").includes("geo")) {
 			setTimeout(function () { openModal(); }, 200);
 			setTimeout(function () {
                 //alert(localStorage.getItem("idata"));
@@ -496,7 +496,7 @@
 	</script>
 </head>
 
-<body style="background-color:white;" onload="app.Start();activeazagpsul();detaliicont();">
+<body style="background-color:white;" onload="activeazagpsul();detaliicont();">
 	<div id="fb-root"></div>
 	<nav class="light-blue lighten-3 ">
 		<div class="nav-wrapper">

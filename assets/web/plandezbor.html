@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <script src='file:///android_asset/app.js'></script>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link href="font.css" rel="stylesheet">
     <link rel="stylesheet" href="materialize.min.css">
 
@@ -16,7 +16,7 @@
         var sti;
         function hk(x) {
             clearInterval(sti);
-            sti = setInterval(function () { app.HideKeyboard(); clearInterval(sti); }, 1000);
+            sti = setInterval(function () {  if (document.activeElement) {document.activeElement.blur();}  clearInterval(sti); }, 1000);
         }
         if (localStorage.getItem("frompl1") == null) {
             localStorage.setItem("frompl1", "nu");
@@ -35,9 +35,7 @@
                 alert("Nu esti conectat la internet!!!");
             }
         }
-        app.SetOnError(function () {
-           
-        });
+      
 
     </script>
     <script>
@@ -329,19 +327,27 @@
                 location.href = "plandezbor2.html";
             }
         }
-        function goforward() {
+            function goforward() {
             $('.btn').sideNav('hide');
-            loc2 = app.CreateLocator("GPS");
-            loc2.SetOnChange(function (pos) {
-                localStorage.setItem("lat6", pos.latitude);
-                localStorage.setItem("lng6", pos.longitude);
-                localStorage.setItem("lat42", "0");
-                localStorage.setItem("lng42", "0");
-                loc2.Stop();
-                window.location.href = "locatiacurenta.html";
-            });
-            loc2.SetRate(1);
-            loc2.Start();
+            // Use browser geolocation API instead of app.CreateLocator
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        localStorage.setItem("lat6", position.coords.latitude);
+                        localStorage.setItem("lng6", position.coords.longitude);
+                        localStorage.setItem("lat42", "0");
+                        localStorage.setItem("lng42", "0");
+                        window.location.href = "locatiacurenta.html";
+                    },
+                    function(error) {
+                        console.error('Geolocation error:', error);
+                        alert(language.activeazagpsul || 'Please enable GPS');
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } else {
+                alert(language.locationnotsupported || 'Geolocation not supported');
+            }
         }
 
 
@@ -846,23 +852,40 @@
     </script>
 
     <script>
-        app.SetOnKey(OnKey);
-        function OnKey(action, name, code, extra) {
-            if (code == 4 && action == "Up") {
-                playbeep();
-                setTimeout(function () {
-                    window.location.href = "distanta2.html";
-                }, 350);
+     function goBack() {
+            playbeep();
+            setTimeout(function () {
+                window.location.href = "distanta2.html";
+            }, 350);
+        }
+        
+        // Listen for back button events
+        window.addEventListener('popstate', function(e) {
+            e.preventDefault();
+            goBack();
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                e.preventDefault();
+                goBack();
             }
-        }
+        });
+        
+        document.addEventListener('backbutton', function(e) {
+            e.preventDefault();
+            goBack();
+        });
+        
         function exit() {
-            var yesNo = app.CreateYesNoDialog("Exit App?");
-            yesNo.SetOnTouch(yesNo_OnTouch);
-            yesNo.Show();
-        }
-        function yesNo_OnTouch(result) {
-            if (result == "Yes") app.Exit();
-        }
+			if (window.ReactNativeWebView) {
+				window.ReactNativeWebView.postMessage('showExitDialog');
+			} else {
+				if (confirm("Exit App?")) {
+					window.close();
+				}
+			}
+		}
     </script>
     <script>
         function reset() {
@@ -1174,11 +1197,22 @@
         console.log(localStorage.getItem("webmapadresalatlng26") + "\n");
         console.log(localStorage.getItem("webmapadresalatlng27") + "\n");
         console.log(localStorage.getItem("webmapadresalatlng28") + "\n");
-        function playbeep() {
-            var x = document.getElementById("myAudio");
-            x.currentTime = 0;
-            x.volume = 0.05;
-            x.play();
+           function playbeep() {
+            try {
+                var x = document.getElementById("myAudio");
+                if (x) {
+                    x.currentTime = 0;
+                    x.volume = 0.05;
+                    var playPromise = x.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(function(error) {
+                            console.log('Audio playback failed:', error);
+                        });
+                    }
+                }
+            } catch(e) {
+                console.log('Playbeep error:', e);
+            }
         }
     </script>
     <style>
@@ -1315,16 +1349,16 @@
     </style>
 </head>
 
-<body onload="app.Start();incarcaLocatii();" style="background-color:white;">
+<body onload="incarcaLocatii();" style="background-color:white;">
     <audio id="myAudio">
         <source src="Snd/a.ogg" type="audio/ogg">
     </audio>
     <nav class="light-blue lighten-3 ">
         <div class="nav-wrapper">
-            <a href="#" class="brand-logo center">
+            <a href="javascript:void(0)" class="brand-logo center">
                 <script>document.write(language.titlu)</script></a>
             <ul class="left">
-                <li> <a href="#" style="width:100px;" data-activates="slide-out"
+                <li> <a href="javascript:void(0)" style="width:100px;" data-activates="slide-out"
                         class="sidenav-trigger orange darken-4 btn"><i class="material-icons">menu</i></a></li>
             </ul>
             <ul class="right">
@@ -1342,7 +1376,7 @@
                 onclick="localStorage.setItem('lang','en');alert('Selected Language:English');">English</a></li>
     </ul>
     <div class="container">
-        <p><a class="waves-effect waves-light btn-large" href="#" onclick="return reset();">
+        <p><a class="waves-effect waves-light btn-large" href="javascript:void(0)" onclick="return reset();">
                 <script>document.write(language.buton8)</script></a></p>
     </div>
     <ul id="slide-out" class="side-nav light-blue lighten-3">
@@ -1531,7 +1565,7 @@
                             <td>Schema 1 :
                                 <script>document.write("<input placeholder=\"" + language.start + "\" id=\"planadresa41\" type=\"text\" class=\"validate\"   onkeyup=\"cautaadresa(this,1);\" value=\"" + localStorage.getItem("planadresa1") + "\" oninput=\"hk(this);\" />");</script>
                             </td>
-                            <td><a href="#" id="rst1" class="btn btn-large"
+                            <td><a href="javascript:void(0)" id="rst1" class="btn btn-large"
                                     onclick="playbeep();localStorage.setItem('planadresa1lat', 0);localStorage.setItem('planadresa1lng', 0);localStorage.setItem('planadresa1', '');$('#adresa51').html('');document.getElementById('planadresa41').value='';return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1547,7 +1581,7 @@
                                 </select>
                             </td>
                             <td>
-                                <a href="#" id="rstw1" class="btn btn-large"
+                                <a href="javascript:void(0)" id="rstw1" class="btn btn-large"
                                     onclick="localStorage.setItem('webmapadresa1lat', 0);localStorage.setItem('webmapadresa1lng', 0);localStorage.setItem('webmapadresa1', '');document.getElementById('webmaplocatie1').value='0'; $('#webmaplocatie1').trigger('change'); $('#webmaplocatie1').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1566,7 +1600,7 @@
                             <td>Schema 1 :
                                 <script>document.write("<input placeholder=\"" + language.placeholderadresa2 + "\" id=\"planadresa42\" type=\"text\" onkeyup=\"cautaadresa(this,2);\" class=\"validate\"   value=\"" + localStorage.getItem("planadresa2") + "\"  oninput=\"hk(this);\" />");</script>
                             </td>
-                            <td><a href="#" id="rst2" class="btn btn-large"
+                            <td><a href="javascript:void(0)" id="rst2" class="btn btn-large"
                                     onclick="playbeep();localStorage.setItem('planadresa2lat', 0);localStorage.setItem('planadresa2lng', 0);localStorage.setItem('planadresa2', '');$('#adresa52').html('');document.getElementById('planadresa42').value='';return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1582,7 +1616,7 @@
                                 </select>
                             </td>
                             <td>
-                                <a href="#" id="rstw2" class="btn btn-large"
+                                <a href="javascript:void(0)" id="rstw2" class="btn btn-large"
                                     onclick="localStorage.setItem('webmapadresa2lat', 0);localStorage.setItem('webmapadresa2lng', 0);localStorage.setItem('webmapadresa2', '');document.getElementById('webmaplocatie2').value='0';$('#webmaplocatie2').trigger('change');  $('#webmaplocatie2').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1601,7 +1635,7 @@
                             <td>Schema 1 :
                                 <script>document.write("<input placeholder=\"" + language.placeholderadresa3 + "\" id=\"planadresa43\" type=\"text\" class=\"validate\" onkeyup=\"cautaadresa(this,3);\"  value=\"" + localStorage.getItem("planadresa3") + "\" oninput=\"hk(this);\"  />");</script>
                             </td>
-                            <td><a href="#" id="rst3" class="btn btn-large"
+                            <td><a href="javascript:void(0)" id="rst3" class="btn btn-large"
                                     onclick="playbeep();localStorage.setItem('planadresa3lat', 0);localStorage.setItem('planadresa3lng', 0);localStorage.setItem('planadresa3', '');$('#adresa53').html('');document.getElementById('planadresa43').value='';return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1617,7 +1651,7 @@
                                 </select>
                             </td>
                             <td>
-                                <a href="#" id="rstw3" class="btn btn-large"
+                                <a href="javascript:void(0)" id="rstw3" class="btn btn-large"
                                     onclick="localStorage.setItem('webmapadresa3lat', 0);localStorage.setItem('webmapadresa3lng', 0);localStorage.setItem('webmapadresa3', '');document.getElementById('webmaplocatie3').value='0'; $('#webmaplocatie3').trigger('change'); $('#webmaplocatie3').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1637,7 +1671,7 @@
                             <td>Schema 1 :
                                 <script>document.write("<input placeholder=\"" + language.placeholderadresa4 + "\" id=\"planadresa44\" type=\"text\" class=\"validate\"  onkeyup=\"cautaadresa(this,4);\"  value=\"" + localStorage.getItem("planadresa4") + "\"  oninput=\"hk(this);\" />");</script>
                             </td>
-                            <td><a href="#" id="rst4" class="btn btn-large"
+                            <td><a href="javascript:void(0)" id="rst4" class="btn btn-large"
                                     onclick="playbeep();localStorage.setItem('planadresa4lat', 0);localStorage.setItem('planadresa4lng', 0);localStorage.setItem('planadresa4', '');$('#adresa54').html('');document.getElementById('planadresa44').value='';return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1653,7 +1687,7 @@
                                 </select>
                             </td>
                             <td>
-                                <a href="#" id="rstw4" class="btn btn-large"
+                                <a href="javascript:void(0)" id="rstw4" class="btn btn-large"
                                     onclick="localStorage.setItem('webmapadresa4lat', 0);localStorage.setItem('webmapadresa4lng', 0);localStorage.setItem('webmapadresa4', '');document.getElementById('webmaplocatie4').value='0'; $('#webmaplocatie4').trigger('change'); $('#webmaplocatie4').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1671,7 +1705,7 @@
                             <td>Schema 1 :
                                 <script>document.write("<input placeholder=\"" + language.placeholderadresa5 + "\" id=\"planadresa45\" type=\"text\" class=\"validate\"  onkeyup=\"cautaadresa(this,5);\"  value=\"" + localStorage.getItem("planadresa5") + "\"  oninput=\"hk(this);\" />");</script>
                             </td>
-                            <td><a href="#" id="rst5" class="btn btn-large"
+                            <td><a href="javascript:void(0)" id="rst5" class="btn btn-large"
                                     onclick="playbeep();localStorage.setItem('planadresa5lat', 0);localStorage.setItem('planadresa5lng', 0);localStorage.setItem('planadresa5', '');$('#adresa55').html('');document.getElementById('planadresa45').value='';return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1687,7 +1721,7 @@
                                 </select>
                             </td>
                             <td>
-                                <a href="#" id="rstw5" class="btn btn-large"
+                                <a href="javascript:void(0)" id="rstw5" class="btn btn-large"
                                     onclick="localStorage.setItem('webmapadresa5lat', 0);localStorage.setItem('webmapadresa5lng', 0);localStorage.setItem('webmapadresa5', '');document.getElementById('webmaplocatie5').value='0';$('#webmaplocatie5').trigger('change');  $('#webmaplocatie5').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1706,7 +1740,7 @@
                             <td>Schema 1 :
                                 <script>document.write("<input placeholder=\"" + language.placeholderadresa6 + "\" id=\"planadresa46\" type=\"text\" class=\"validate\"  onkeyup=\"cautaadresa(this,6);\"  value=\"" + localStorage.getItem("planadresa6") + "\" oninput=\"hk(this);\" />");</script>
                             </td>
-                            <td><a href="#" id="rst6" class="btn btn-large"
+                            <td><a href="javascript:void(0)" id="rst6" class="btn btn-large"
                                     onclick="playbeep();localStorage.setItem('planadresa6lat', 0);localStorage.setItem('planadresa6lng', 0);localStorage.setItem('planadresa6', '');$('#adresa56').html('');document.getElementById('planadresa46').value='';return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1722,7 +1756,7 @@
                                 </select>
                             </td>
                             <td>
-                                <a href="#" id="rstw6" class="btn btn-large"
+                                <a href="javascript:void(0)" id="rstw6" class="btn btn-large"
                                     onclick="localStorage.setItem('webmapadresa6lat', 0);localStorage.setItem('webmapadresa6lng', 0);localStorage.setItem('webmapadresa6', '');document.getElementById('webmaplocatie6').value='0';$('#webmaplocatie6').trigger('change');  $('#webmaplocatie6').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1739,7 +1773,7 @@
                             <td>Schema 1 :
                                 <script>document.write("<input placeholder=\"" + language.placeholderadresa7 + "\" id=\"planadresa47\" type=\"text\" class=\"validate\"  onkeyup=\"cautaadresa(this,7);\"  value=\"" + localStorage.getItem("planadresa7") + "\" oninput=\"hk(this);\" />");</script>
                             </td>
-                            <td><a href="#" id="rst7" class="btn btn-large"
+                            <td><a href="javascript:void(0)" id="rst7" class="btn btn-large"
                                     onclick="playbeep();localStorage.setItem('planadresa7lat', 0);localStorage.setItem('planadresa7lng', 0);localStorage.setItem('planadresa7', '');$('#adresa57').html('');document.getElementById('planadresa47').value='';return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1755,7 +1789,7 @@
                                 </select>
                             </td>
                             <td>
-                                <a href="#" id="rstw7" class="btn btn-large"
+                                <a href="javascript:void(0)" id="rstw7" class="btn btn-large"
                                     onclick="localStorage.setItem('webmapadresa7lat', 0);localStorage.setItem('webmapadresa7lng', 0);localStorage.setItem('webmapadresa7', '');document.getElementById('webmaplocatie7').value='0'; $('#webmaplocatie7').trigger('change'); $('#webmaplocatie7').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1774,7 +1808,7 @@
                             <td>Schema 1 :
                                 <script>document.write("<input placeholder=\"" + language.placeholderadresa8 + "\" id=\"planadresa48\" type=\"text\" class=\"validate\"  onkeyup=\"cautaadresa(this,8);\"  value=\"" + localStorage.getItem("planadresa8") + "\"  oninput=\"hk(this);\" />");</script>
                             </td>
-                            <td><a href="#" id="rst8" class="btn btn-large"
+                            <td><a href="javascript:void(0)" id="rst8" class="btn btn-large"
                                     onclick="playbeep();localStorage.setItem('planadresa8lat', 0);localStorage.setItem('planadresa8lng', 0);localStorage.setItem('planadresa8', '');$('#adresa58').html('');document.getElementById('planadresa48').value='';return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1790,7 +1824,7 @@
                                 </select>
                             </td>
                             <td>
-                                <a href="#" id="rstw8" class="btn btn-large"
+                                <a href="javascript:void(0)" id="rstw8" class="btn btn-large"
                                     onclick="localStorage.setItem('webmapadresa8lat', 0);localStorage.setItem('webmapadresa8lng', 0);localStorage.setItem('webmapadresa8', '');document.getElementById('webmaplocatie8').value='0';$('#webmaplocatie8').trigger('change');  $('#webmaplocatie8').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -1802,9 +1836,9 @@
 
                 <!--<div class="input-field col s1  m1 l2 xl3"></div>-->
                 <div class="input-field col s12  m12 l12 xl12">
-                    <p><a class="waves-effect waves-light btn-large" href="#" onclick="salveazatip()">
+                    <p><a class="waves-effect waves-light btn-large" href="javascript:void(0)" onclick="salveazatip()">
                             <script>document.write(language.buton13)</script></a></p>
-                    <p><a class="waves-effect waves-light btn-large" href="#" onclick="return reset();">
+                    <p><a class="waves-effect waves-light btn-large" href="javascript:void(0)" onclick="return reset();">
                             <script>document.write(language.buton8)</script></a></p>
                 </div>
                 <!--<div class="input-field col s1  m1 l2 xl3"></div>-->

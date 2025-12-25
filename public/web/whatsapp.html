@@ -2,19 +2,16 @@
 
 <head>
 
-	<script src='file:///android_asset/app.js'></script>
+	<!-- Web version - DroidScript app.js removed -->
 	<link href="font.css" rel="stylesheet">
 	<link rel="stylesheet" href="materialize.min.css">
 	<script src="jquery-3.4.1.min.js"></script>
 	<script src="materialize.min.js"></script>
 	<script src="language.js"></script>
 	<script>
-		//  window.addEventListener("error", function (e) {
-		//   location.reload();alert();
-		//   return false;
-		// });
+		// Web version - connection check simplified
 		var that = new XMLHttpRequest();
-		that.open('GET', 'http://google.com', false);
+		that.open('GET', 'https://google.com', false);
 		try {
 			that.send();
 		} catch (exception) {
@@ -22,10 +19,10 @@
 				alert("Nu esti conectat la internet!!!");
 			}
 		}
-		app.SetOnError(function (msg, line, file) {
-			// window.location.href="distanta.html";
-			
-		});
+		// Web version - error handler
+		window.onerror = function(msg, url, line) {
+			console.error('Error:', msg, 'at line', line);
+		};
 
 	</script>
 	<script>
@@ -45,23 +42,17 @@
             x.volume = 0.05;
             x.play();
         }
-		app.SetOnKey(OnKey);
+		// Web version - DroidScript functions removed
 		function OnKey(action, name, code, extra) {
-			if (code == 4 && action == "Up") {
-				playbeep();
-				setTimeout(function () {
-					window.location.href = "distanta2.html";
-				}, 350);
-
-			}
+			// Not applicable for web
 		}
 		function exit() {
-			var yesNo = app.CreateYesNoDialog("Exit App?");
-			yesNo.SetOnTouch(yesNo_OnTouch);
-			yesNo.Show();
+			if (confirm("Exit App?")) {
+				window.close();
+			}
 		}
 		function yesNo_OnTouch(result) {
-			if (result == "Yes") app.Exit();
+			if (result == "Yes") window.close();
 		}
 	</script>
 	<script>
@@ -104,17 +95,20 @@
 
 		function goforward() {
 			$('.btn').sideNav('hide');
-			loc2 = app.CreateLocator("GPS");
-			loc2.SetOnChange(function (pos) {
-				localStorage.setItem("lat6", pos.latitude);
-				localStorage.setItem("lng6", pos.longitude);
-				localStorage.setItem("lat42", "0");
-				localStorage.setItem("lng42", "0");
-				loc2.Stop();
-				window.location.href = "locatiacurenta.html";
-			});
-			loc2.SetRate(1);
-			loc2.Start();
+			// Web version - use browser geolocation
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function(pos) {
+					localStorage.setItem("lat6", pos.coords.latitude);
+					localStorage.setItem("lng6", pos.coords.longitude);
+					localStorage.setItem("lat42", "0");
+					localStorage.setItem("lng42", "0");
+					window.location.href = "locatiacurenta.html";
+				}, function(error) {
+					alert('GPS error: ' + error.message);
+				});
+			} else {
+				alert('Geolocation not supported');
+			}
 		}
 	</script>
 	<style>
@@ -175,7 +169,7 @@
 	</style>
 </head>
 
-<body onload="app.Start();contact();">
+<body onload="contact();">
 	<audio id="myAudio">
 		<source src="Snd/a.ogg" type="audio/ogg">
 	</audio>
@@ -364,7 +358,7 @@
 					<li>
 
 						<a class="waves-effect waves-light btn"
-							onclick="app.OpenUrl('https://chat.whatsapp.com/JZReZyZwpmo4qq7JO5bKmZ');return false;">Whatsapp
+							href="https://chat.whatsapp.com/JZReZyZwpmo4qq7JO5bKmZ" target="_blank">Whatsapp
 							Group Distance</a>
 					</li>
 				</ul>

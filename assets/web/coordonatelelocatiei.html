@@ -1,9 +1,9 @@
 <html>
 
 <head>
-    <script src='file:///android_asset/app.js'></script>
+   
 
-
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="font.css" rel="stylesheet">
     <link rel="stylesheet" href="materialize.min.css">
 
@@ -25,19 +25,27 @@
             }
         }
         var sti;
-        app.SetOnError(function (msg, line, file) {
-            console.log('Message: "' + msg + '"\n' + 'Line: ' + line + '\n');
-            
-        });
+     
         function hk(x) {
             clearInterval(sti);
-            sti = setInterval(function () { app.HideKeyboard(); clearInterval(sti); }, 1000);
+            sti = setInterval(function () {  if (document.activeElement) {document.activeElement.blur();} clearInterval(sti); }, 1000);
         }
-        function playbeep() {
-            var x = document.getElementById("myAudio");
-            x.currentTime = 0;
-            x.volume = 0.05;
-            x.play();
+      function playbeep() {
+            try {
+                var x = document.getElementById("myAudio");
+                if (x) {
+                    x.currentTime = 0;
+                    x.volume = 0.05;
+                    var playPromise = x.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(function(error) {
+                            console.log('Audio playback failed:', error);
+                        });
+                    }
+                }
+            } catch(e) {
+                console.log('Playbeep error:', e);
+            }
         }
     </script>
     <script>
@@ -76,14 +84,28 @@
 
     <script src="language.js"></script>
     <script>
-        function activeazagpsul() {
-            var locEnabled = app.IsLocationEnabled('GPS');
-            if (locEnabled == true) {
-            } else {
-                alert(language.activeazagpsul);
-                window.location.href = "distanta2.html";
+      function activeazagpsul() {
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage('checkGPS');
+      } else {
+        // Fallback for web - try to get location
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            function(position) {
+              console.log('GPS is enabled');
+            },
+            function(error) {
+              if (error.code === error.PERMISSION_DENIED) {
+                alert('Please enable GPS/Location services');
+              }
             }
+          );
+        } else {
+          alert('Geolocation is not supported by this browser');
+		    window.location.href = "distanta2.html";
         }
+      }
+    }
         var selectedLanguage = localStorage.getItem('lang');
         var language = "";
         if (selectedLanguage == "ro") {
@@ -97,24 +119,40 @@
 
 
     <script>
-        app.SetOnKey(OnKey);
-        function OnKey(action, name, code, extra) {
-            if (code == 4 && action == "Up") {
-                playbeep();
-                setTimeout(function () {
-                    window.location.href = "distanta2.html";
-                }, 350);
-
+         function goBack() {
+            playbeep();
+            setTimeout(function () {
+                window.location.href = "distanta2.html";
+            }, 350);
+        }
+        
+        // Listen for back button events
+        window.addEventListener('popstate', function(e) {
+            e.preventDefault();
+            goBack();
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                e.preventDefault();
+                goBack();
             }
-        }
-        function exit() {
-            var yesNo = app.CreateYesNoDialog("Exit App?");
-            yesNo.SetOnTouch(yesNo_OnTouch);
-            yesNo.Show();
-        }
-        function yesNo_OnTouch(result) {
-            if (result == "Yes") app.Exit();
-        }
+        });
+        
+        document.addEventListener('backbutton', function(e) {
+            e.preventDefault();
+            goBack();
+        });
+       	function exit() {
+			if (window.ReactNativeWebView) {
+				window.ReactNativeWebView.postMessage('showExitDialog');
+			} else {
+				if (confirm("Exit App?")) {
+					window.close();
+				}
+			}
+		}
+      
     </script>
 
     <script>
@@ -197,10 +235,10 @@
                     console.log(data.responseJSON["error"]);
                     if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
                         alert(language.nuestilogat);
-                        window.location.href = "_main_.html";
+                        window.location.href = "distanta.html";
                     } else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
                         alert(language.nuestilogat);
-                        window.location.href = "_main_.html";
+                        window.location.href = "distanta.html";
                     } else {
                         alert(language.eroare);
                     }
@@ -246,10 +284,10 @@
                     console.log(data.responseJSON["error"]);
                     if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
                         alert(language.nuestilogat);
-                        window.location.href = "_main_.html";
+                        window.location.href = "distanta.html";
                     } else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
                         alert(language.nuestilogat);
-                        window.location.href = "_main_.html";
+                        window.location.href = "distanta.html";
                     } else {
                         alert(language.eroare);
                     }
@@ -340,10 +378,10 @@
                     console.log(data.responseJSON["error"]);
                     if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
                         alert(language.nuestilogat);
-                        window.location.href = "_main_.html";
+                        window.location.href = "distanta.html";
                     } else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
                         alert(language.nuestilogat);
-                        window.location.href = "_main_.html";
+                        window.location.href = "distanta.html";
                     } else {
                         alert(language.eroare);
                     }
@@ -493,7 +531,7 @@
     </style>
 </head>
 
-<body onload="app.Start();incarcaLocatii();activeazagpsul();" style="background-color:white;">
+<body onload="incarcaLocatii();activeazagpsul();" style="background-color:white;">
     <audio id="myAudio">
         <source src="Snd/a.ogg" type="audio/ogg">
     </audio>
@@ -542,7 +580,7 @@
 
                     <div class="col s12  m4 l4 xl4"></div>
                     <div class="col s12  m4 l4 xl4">
-                        <p><a class="waves-effect waves-light btn-large" href="_main_.html">
+                        <p><a class="waves-effect waves-light btn-large" href="distanta.html">
                                 <script>document.write(language.login)</script></a></p>
                     </div>
                     <div class="col s12  m4 l4 xl4"></div>

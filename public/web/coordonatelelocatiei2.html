@@ -1,9 +1,26 @@
 <html>
 
 <head>
+    <script>
+        // Define sendToReactNative FIRST - before any other code uses it
+        function sendToReactNative(action, data) {
+            if (typeof window.ReactNativeWebView !== 'undefined' && window.ReactNativeWebView) {
+                try {
+                    var message = action + ':' + (typeof data === 'object' ? JSON.stringify(data) : data);
+                    window.ReactNativeWebView.postMessage(message);
+                    return true;
+                } catch(e) {
+                    console.error('sendToReactNative error:', e);
+                    return false;
+                }
+            }
+            console.log('[sendToReactNative] Not in React Native environment:', action, data);
+            return false;
+        }
+    </script>
 
     <title>Mobile tutorial - Leaflet</title>
-    <script src='file:///android_asset/app.js'></script>
+   
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 

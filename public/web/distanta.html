@@ -44,10 +44,10 @@
     //   });
     //   });
       
-   app.SetOnError(function (msg, line, file) {
-      // window.location.href="distanta.html";
-
-    });
+   // Web version - error handler removed
+   window.onerror = function(msg, url, line) {
+      console.error('Error:', msg, 'at line', line);
+   };
   </script>
   <script>
     //localStorage.clear();
@@ -67,41 +67,34 @@
   </script>
   <script>
     function OnStart() {
-      _AddPermissions("Share, Network, Location, Storage");
-      app.EnableBackKey(false);
-      app.GetPermission("Location");
+      // Web version - DroidScript removed
 
 
 
 
 
     }
-    app.SetOnKey(OnKey);
+    // Web version - DroidScript functions removed
     function yesNo_OnTouch(result) {
-      if (result == "Yes") app.Exit();
+      if (result == "Yes") window.close();
     }
     function OnKey(action, name, code, extra) {
-      if (code == 4 && action == "Up") {
-        var yesNo = app.CreateYesNoDialog("Exit App?");
-        yesNo.SetOnTouch(yesNo_OnTouch);
-        yesNo.Show();
-      }
+      // Not applicable for web
     }
 
-    var path2 = app.GetSpecialFolder("Pictures") + "/" + "Locations";
-    if (!app.FolderExists(path2))
-      app.MakeFolder(path2);
-    var path2 = app.GetSpecialFolder("Pictures") + "/" + "Routes";
-    if (!app.FolderExists(path2))
-      app.MakeFolder(path2);
+    // Web version - folder creation not needed
   </script>
 
   <script>
     function activeazagpsul() {
-      var locEnabled = app.IsLocationEnabled('GPS');
-      if (locEnabled == true) {
+      // Web version - use browser geolocation
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) { console.log('GPS enabled'); },
+          function(error) { alert('Please enable GPS/Location services'); }
+        );
       } else {
-        alert('Activeaza GPS-ul');
+        alert('Geolocation not supported');
       }
     }
     function reset() {
@@ -147,8 +140,13 @@
           console.log(data);
           
         console.log(window["raspuns"]);
-        var data = JSON.parse(window["raspuns"]);
-
+        try {
+          var data = JSON.parse(window["raspuns"]);
+        } catch(e) {
+          console.error('JSON parse error:', e, 'Response:', window["raspuns"]);
+          alert(language.eroare || 'Invalid server response. Please try again.');
+          return;
+        }
 
         if (data[1].includes("succes")) {
           localStorage.setItem("cheie", data[10]);
@@ -183,7 +181,7 @@
               var alerta = language.alertalogare2;
               // localStorage.setItem("cheie",data[7]);
             }
-            app.HideProgress();
+            // Web version - no progress to hide
             if (data[2] == 3) {
 
               window.location.href = "distanta2.html";
@@ -215,7 +213,10 @@
       }
       
       
-        });
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Login request failed:', textStatus, errorThrown);
+        alert(language.eroare || 'Network error. Please check your internet connection and try again.');
+      });
     
     }
 
@@ -515,10 +516,11 @@
   </style>
 
   <script>
-    localStorage.setItem("idata", app.GetIntent().data);     
+    // Web version - no intent data
+    localStorage.setItem("idata", "");     
   </script>
 
-<body onload="app.Start();detaliicont();contact();localStorage.setItem('v','2');">
+<body onload="detaliicont();contact();localStorage.setItem('v','2');">
   <nav class="light-blue lighten-3 ">
     <div class="nav-wrapper">
       <a href="#" class="brand-logo center">
@@ -616,7 +618,7 @@
       </label>
     </div>
     <p style="margin-left:5%;margin-right:5%;"><a class="waves-effect waves-light btn-large " id="log" href="#"
-        onclick="salveazadatele();  app.ShowProgress( 'Loading...','Modal,Solid'); logare();  ">
+        onclick="salveazadatele(); logare();">
         <script>document.write(language.buton7)</script>
       </a></p>
     <p style="margin-left:5%;margin-right:5%;"><a class="waves-effect waves-light btn-large" href="#"
@@ -696,7 +698,7 @@
             <li>
 
               <a style="display:block;width:100%;" class="waves-effect waves-light btn"
-                onclick="app.OpenUrl('https://chat.whatsapp.com/JZReZyZwpmo4qq7JO5bKmZ');return false;">
+                href="https://chat.whatsapp.com/JZReZyZwpmo4qq7JO5bKmZ" target="_blank">
                 <script>
                   document.write(language.whatsappgroup);
                 </script>

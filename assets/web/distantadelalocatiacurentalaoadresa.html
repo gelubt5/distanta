@@ -1,6 +1,9 @@
 <html>
 <head>
-    <script src='file:///android_asset/app.js'></script>
+    <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+            <title>Distanta</title>
+   
  
    
  <link href="font.css" rel="stylesheet">
@@ -24,13 +27,17 @@ try {
 }
 }
 var sti;
-app.SetOnError(function(){
 
-});
 function hk(x)
 {
  clearInterval(sti);
- sti=setInterval(function(){ app.HideKeyboard();clearInterval(sti); },1000);
+ sti=setInterval(function(){ 
+   // Hide keyboard by removing focus from active element
+   if (document.activeElement) {
+     document.activeElement.blur();
+   }
+   clearInterval(sti); 
+ },1000);
 }
 function playbeep() {
             var x = document.getElementById("myAudio");
@@ -92,13 +99,37 @@ function playbeep() {
    
     <script src="language.js"></script>
     <script>
-        function activeazagpsul(){
-        var locEnabled = app.IsLocationEnabled('GPS');
-        if (locEnabled==true){
-            } else {
-            alert(language.activeazagpsul);
-             window.history.back();
+    function activeazagpsul() {
+      // Wait for ReactNativeWebView to be available
+      setTimeout(function() {
+        if (window.ReactNativeWebView) {
+          try {
+            window.ReactNativeWebView.postMessage(JSON.stringify({type: 'checkGPS'}));
+            console.log('Sent checkGPS message');
+          } catch (e) {
+            console.error('Error sending message to React Native:', e);
+          }
+        } else {
+          console.log('ReactNativeWebView not available');
+          // Fallback for web - try to get location
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              function(position) {
+                console.log('GPS is enabled');
+              },
+              function(error) {
+                if (error.code === error.PERMISSION_DENIED) {
+                  alert(language.activeazagpsul);
+				  goBack();
+                }
+              }
+            );
+          } else {
+            alert('Geolocation is not supported by this browser');
+			goBack();
+          }
         }
+      }, 100);
     }
         var selectedLanguage = localStorage.getItem('lang');
         var language = "";
@@ -111,25 +142,55 @@ function playbeep() {
     </script>
 
     <script>
-        app.SetOnKey(OnKey);
-        function OnKey(action, name, code, extra) {
-            if (code == 4 && action == "Up") {
-                playbeep();
-                 setTimeout(function(){
-                    window.location.href="distanta2.html";
-                    },350);
+ function playbeep() {
+            try {
+                var x = document.getElementById("myAudio");
+                if (x) {
+                    x.currentTime = 0;
+                    x.volume = 0.05;
+                    var playPromise = x.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(function(error) {
+                            // Autoplay was prevented, ignore silently
+                            console.log('Audio playback failed:', error);
+                        });
+                    }
+                }
+            } catch(e) {
+                console.log('Playbeep error:', e);
             }
-        }    
-            function exit()
-            {
-                var yesNo = app.CreateYesNoDialog("Exit App?");
-				yesNo.SetOnTouch(yesNo_OnTouch);
-				yesNo.Show();  
-            }
-     		function yesNo_OnTouch(result) {
-			if (result == "Yes") app.Exit();
+        }
+
+		
+		// Handle back button - go back to distanta2.html
+		function goBack() {
+			playbeep();
+			setTimeout(function () {
+				window.location.href = "distanta2.html";
+			}, 350);
 		}
-    </script>
+		
+		// Listen for back button via popstate
+		window.addEventListener('popstate', function(event) {
+			event.preventDefault();
+			goBack();
+			history.pushState(null, null, window.location.href);
+		});
+		
+		// Push initial state to enable popstate handling
+		history.pushState(null, null, window.location.href);
+		
+function exit() {
+			if (window.ReactNativeWebView) {
+				window.ReactNativeWebView.postMessage('showExitDialog');
+			} else {
+				if (confirm("Exit App?")) {
+					window.close();
+				}
+			}
+		}
+
+		</script>
     
          <script>
           $(document).ready(function() {
@@ -185,21 +246,31 @@ function playbeep() {
     </script>
         	  <script>
    
-         function goforward()
-         {
-         $('.btn').sideNav('hide');             
-         loc2 = app.CreateLocator("GPS");
-         loc2.SetOnChange(function(pos){
-         localStorage.setItem("lat6", pos.latitude);
-         localStorage.setItem("lng6", pos.longitude);
-         localStorage.setItem("lat42","0");
+       function goforward() {
+            $('.btn').sideNav('hide');
+            // Use browser geolocation API instead of app.CreateLocator
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        localStorage.setItem("lat6", position.coords.latitude);
+                        localStorage.setItem("lng6", position.coords.longitude);
+                       
+localStorage.setItem("lat42","0");
          localStorage.setItem("lng42","0");
-         loc2.Stop();
-         window.location.href="locatiacurenta.html";
-         });
-         loc2.SetRate( 1 );
-         loc2.Start();     
-         }
+                        window.location.href = "locatiacurenta.html";
+                    },
+                    function(error) {
+                        console.error('Geolocation error:', error);
+                        alert(language.activeazagpsul || 'Please enable GPS');
+							goBack();
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } else {
+                alert(language.locationnotsupported || 'Geolocation not supported');
+					goBack();
+            }
+        }
     </script>
         	  <script>
         function salveazatip() {
@@ -281,15 +352,20 @@ function playbeep() {
             $('select').material_select();
             if (x==2)
             {
-                  loc2 = app.CreateLocator("GPS");
-         loc2.SetOnChange(function(pos){
-         localStorage.setItem("lat4", pos.latitude);
-         localStorage.setItem("lng4", pos.longitude);
-         loc2.Stop();
-         window.location.href="distantadintredouaadresehartamap2.html";
-         });
-         loc2.SetRate( 1 );
-         loc2.Start();                 
+              // Use browser Geolocation API
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                  function(position) {
+                    localStorage.setItem("lat4", position.coords.latitude);
+                    localStorage.setItem("lng4", position.coords.longitude);
+                    window.location.href = "distantadintredouaadresehartamap2.html";
+                  },
+                  function(error) {
+                    alert("Error getting location: " + error.message);
+                  },
+                  { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                );
+              }
             }
             } else if (localStorage.getItem("mode")==2)
             {            
@@ -303,15 +379,20 @@ function playbeep() {
             
             if (x==2)
             {
-                    loc2 = app.CreateLocator("GPS");
-         loc2.SetOnChange(function(pos){
-         localStorage.setItem("lat4", pos.latitude);
-         localStorage.setItem("lng4", pos.longitude);
-         loc2.Stop();
-         window.location.href="distantadintredouaadresehartamap2.html";
-         });
-         loc2.SetRate( 1 );
-         loc2.Start(); 
+              // Use browser Geolocation API
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                  function(position) {
+                    localStorage.setItem("lat4", position.coords.latitude);
+                    localStorage.setItem("lng4", position.coords.longitude);
+                    window.location.href = "distantadintredouaadresehartamap2.html";
+                  },
+                  function(error) {
+                    alert("Error getting location: " + error.message);
+                  },
+                  { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                );
+              }
             }        
             } else {
               
@@ -625,7 +706,7 @@ function playbeep() {
     </style>
 </head>
 
-<body onload="app.Start();incarcaLocatii();activeazagpsul();" style="background-color:white;">
+<body onload="incarcaLocatii();activeazagpsul();" style="background-color:white;">
 <audio id="myAudio" >
   <source src="Snd/a.ogg" type="audio/ogg">  
 </audio>
