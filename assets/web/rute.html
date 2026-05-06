@@ -2,7 +2,7 @@
 <head>    
 	<title>Distanta</title>
 	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-=
+
 	<!-- Compiled and minified CSS -->
 	<link href="font.css" rel="stylesheet">
 	<link rel="stylesheet" href="materialize.min.css">
@@ -17,15 +17,7 @@
 //   location.reload();alert();
 //   return false;
 // });
-var that = new XMLHttpRequest();
-that.open('GET', 'http://google.com', false);
-try {
-  that.send();
-} catch(exception) {
- if(exception.name == 'NetworkError'){
-  alert("Nu esti conectat la internet!!!");
-}
-}
+
 
 function playbeep() {
             try {
@@ -168,10 +160,10 @@ function playbeep() {
          if (data.responseJSON["error"]!=null && data.responseJSON["error"].includes("time"))
              {
                  alert(language.nuestilogat);
-                 window.location.href="_main_.html";
+                 window.location.href="distanta.html";
              } else if(data.responseJSON["error"]!=null && data.responseJSON["error"].includes("csrf")){
                    alert(language.nuestilogat);
-                 window.location.href="_main_.html";
+                 window.location.href="distanta.html";
                  } else {
                 alert( language.eroare ); 
              }
@@ -272,10 +264,10 @@ function salveazarutanoua()
          if (data.responseJSON["error"]!=null && data.responseJSON["error"].includes("time"))
              {
                  alert(language.nuestilogat);
-                 window.location.href="_main_.html";
+                 window.location.href="distanta.html";
              } else if(data.responseJSON["error"]!=null && data.responseJSON["error"].includes("csrf")){
                    alert(language.nuestilogat);
-                 window.location.href="_main_.html";
+                 window.location.href="distanta.html";
                  } else {
                 alert( language.eroare ); 
              }
@@ -379,10 +371,10 @@ function editeazaruta(id)
          if (data.responseJSON["error"]!=null && data.responseJSON["error"].includes("time"))
              {
                  alert(language.nuestilogat);
-                 window.location.href="_main_.html";
+                 window.location.href="distanta.html";
              } else if(data.responseJSON["error"]!=null && data.responseJSON["error"].includes("csrf")){
                    alert(language.nuestilogat);
-                 window.location.href="_main_.html";
+                 window.location.href="distanta.html";
                  } else {
                 alert( language.eroare ); 
              }
@@ -434,10 +426,10 @@ function stergeruta(id)
          if (data.responseJSON["error"]!=null && data.responseJSON["error"].includes("time"))
              {
                  alert(language.nuestilogat);
-                 window.location.href="_main_.html";
+                 window.location.href="distanta.html";
              } else if(data.responseJSON["error"]!=null && data.responseJSON["error"].includes("csrf")){
                    alert(language.nuestilogat);
-                 window.location.href="_main_.html";
+                 window.location.href="distanta.html";
                  } else {
                 alert( language.eroare ); 
              }
@@ -614,7 +606,7 @@ function vizualizeazaruta(id){
 
 				<div class="col s12  m4 l4 xl4"></div>
 				<div class="col s12  m4 l4 xl4">
-					<p><a class="waves-effect waves-light btn-large" href="_main_.html">
+					<p><a class="waves-effect waves-light btn-large" href="distanta.html">
 							<script>document.write(language.login)</script></a></p>
 				</div>
 				<div class="col s12  m4 l4 xl4"></div>

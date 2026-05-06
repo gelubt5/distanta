@@ -10,7 +10,19 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.gelubt5.distanta"
+      "bundleIdentifier": "com.gelubt5.distanta",
+      "associatedDomains": [
+        "applinks:distanta.biz",
+        "applinks:*.distanta.biz"
+      ],
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": ["geo"],
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": ["geo"]
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +33,35 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.gelubt5.distanta"
+      "package": "com.gelubt5.distanta",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "distanta.biz",
+              "pathPrefix": "/"
+            },
+            {
+              "scheme": "https",
+              "host": "*.distanta.biz",
+              "pathPrefix": "/"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        },
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "geo"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "output": "static",
@@ -42,14 +82,6 @@
         }
       ],
       "expo-asset",
-      [
-        "expo-media-library",
-        {
-          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos to save locations and routes.",
-          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos to your gallery.",
-          "isAccessMediaLocationEnabled": true
-        }
-      ],
       [
         "expo-location",
         {

@@ -27,15 +27,7 @@
         //   location.reload();alert();
         //   return false;
         // });
-        var that = new XMLHttpRequest();
-        that.open('GET', 'http://google.com', false);
-        try {
-            that.send();
-        } catch (exception) {
-            if (exception.name == 'NetworkError') {
-                alert("Nu esti conectat la internet!!!");
-            }
-        }
+       
         // DroidScript app.SetOnError removed - using window.onerror instead
         window.onerror = function(msg, url, line) {
             console.error('Error: ' + msg + ' at ' + url + ':' + line);
@@ -863,7 +855,7 @@
             shareTextNative(url);
         }
         function shareroute() {
-            var url = "https://da.me/distantadintredouaadresehartamap/" + window["lat4"] + "/" + window["lng4"] + "/" + window["lat5"] + "/" + window["lng5"] + "/" + localStorage.getItem("tiplinie");
+            var url = "https://distanta.biz/distantadintredouaadresehartamap/" + window["lat4"] + "/" + window["lng4"] + "/" + window["lat5"] + "/" + window["lng5"] + "/" + localStorage.getItem("tiplinie");
             shareTextNative(url);
         }
         if (localStorage.getItem("tiplinie") == "da") {

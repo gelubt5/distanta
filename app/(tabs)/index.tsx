@@ -186,7 +186,42 @@ export default function HomeScreen() {
       }
     }
     
-    if (message === 'showSpinner') {
+    if (message === 'getIntentData') {
+      // Handle request for intent data (deep link, shared data, etc.)
+      console.log('=== GET INTENT DATA REQUEST ===');
+      try {
+        const initialUrl = await Linking.getInitialURL();
+        console.log('Initial URL:', initialUrl);
+        
+        // Send intent data back to WebView
+        if (webViewRef.current) {
+          const intentData = {
+            type: 'intentData',
+            url: initialUrl,
+            timestamp: Date.now()
+          };
+          webViewRef.current.injectJavaScript(`
+            if (window.onIntentData) {
+              window.onIntentData(${JSON.stringify(intentData)});
+            }
+            if (window.handleIntentData) {
+              window.handleIntentData(${JSON.stringify(intentData)});
+            }
+            console.log('Intent data received:', ${JSON.stringify(JSON.stringify(intentData))});
+            true;
+          `);
+        }
+      } catch (err) {
+        console.error('Failed to get intent data:', err);
+        if (webViewRef.current) {
+          webViewRef.current.injectJavaScript(`
+            console.error('Failed to get intent data: ${(err as Error).message}');
+            true;
+          `);
+        }
+      }
+      return;
+    } else if (message === 'showSpinner') {
       setShowSpinner(true);
     } else if (message === 'hideSpinner') {
       setShowSpinner(false);

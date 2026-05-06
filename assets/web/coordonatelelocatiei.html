@@ -15,15 +15,7 @@
         //   location.reload();alert();
         //   return false;
         // });
-        var that = new XMLHttpRequest();
-        that.open('GET', 'http://google.com', false);
-        try {
-            that.send();
-        } catch (exception) {
-            if (exception.name == 'NetworkError') {
-                alert("Nu esti conectat la internet!!!");
-            }
-        }
+       
         var sti;
      
         function hk(x) {
@@ -537,10 +529,10 @@
     </audio>
     <nav class="light-blue lighten-3 ">
         <div class="nav-wrapper">
-            <a href="#" class="brand-logo center">
+            <a href="javascript:void(0)" class="brand-logo center">
                 <script>document.write(language.titlu)</script></a>
             <ul class="left">
-                <li> <a href="#" style="width:100px;" data-activates="slide-out"
+                <li> <a href="javascript:void(0)" style="width:100px;" data-activates="slide-out"
                         class="sidenav-trigger orange darken-4 btn"><i class="material-icons">menu</i></a></li>
             </ul>
             <ul class="right">
@@ -729,7 +721,7 @@
                             <td>
                                 <script>document.write("<input placeholder=\"" + language.placeholderadresa1 + "\" id=\"adresa61\" type=\"text\" class=\"validate\"  oninput=\"hk();\" value=\"" + adresaadr2 + "\" />");</script>
                             </td>
-                            <td><a href="#" id="rst1" class="btn btn-large"
+                            <td><a href="javascript:void(0)" id="rst1" class="btn btn-large"
                                     onclick=" latadr=0;lngadr=0;adresaadr='';localStorage.setItem('latadr', 0);localStorage.setItem('lngadr', 0);localStorage.setItem('adresaadr','');$('#adresa71').html('');document.getElementById('adresa61').value='';playbeep();return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -744,7 +736,7 @@
                             </td>
                             </td>
                             <td>
-                                <a href="#" id="rstw4" class="btn btn-large"
+                                <a href="javascript:void(0)" id="rstw4" class="btn btn-large"
                                     onclick="latadr2=0;lngadr2=0;localStorage.setItem('latadr2', 0);localStorage.setItem('lngadr2', 0);localStorage.setItem('adresaadr','');adresaadr='';document.getElementById('locatie1').value='0'; $('#locatie1').trigger('change'); $('#locatie1').trigger('contentChanged');  return false;">&nbsp;[X]&nbsp;</a>
                             </td>
                         </tr>
@@ -761,7 +753,7 @@
                 <p><a class="waves-effect waves-light btn-large modal-trigger"
                         onclick="playbeep();if ((localStorage.getItem('latadr')!='0' && localStorage.getItem('lngadr')!='0') || (localStorage.getItem('latadr2')!='0' && localStorage.getItem('lngadr2')!='0')){ setInterval(function(){location.href='coordonatelelocatiei2.html';},300);} else { alert(language.nuaiintrodusniciolocatie);}">
                         <script>document.write(language.buton13)</script></a></p>
-                <p><a class="waves-effect waves-light btn-large" href="#" onclick="playbeep();return reset();">
+                <p><a class="waves-effect waves-light btn-large" href="javascript:void(0)" onclick="playbeep();return reset();">
                         <script>document.write(language.buton8)</script></a></p>
             </div>
             <div id="modal1" class="modal" style="width:100%;height:50%;padding-top:30%;">

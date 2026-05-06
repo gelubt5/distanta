@@ -19,15 +19,7 @@
 		//   return false;
 		// });
 		//app.HideProgress();
-		var that = new XMLHttpRequest();
-		that.open('GET', 'http://google.com', false);
-		try {
-			that.send();
-		} catch (exception) {
-			if (exception.name == 'NetworkError') {
-				alert("Nu esti conectat la internet!!!");
-			}
-		}
+		
 		
 
 	</script>
@@ -448,13 +440,13 @@
 	<script>
 
 		var idataVal = localStorage.getItem("idata");
-		if (idataVal && idataVal !== "" && idataVal.includes("https://da.me/")) {
+		if (idataVal && idataVal !== "" && idataVal.includes("https://distanta.biz/")) {
 			setTimeout(function () { openModal(); }, 200);
 			setTimeout(function () {
 
 				var idata1 = localStorage.getItem("idata");
 				//var idata2=idata1.split("https://da.me/coordonatelelocatiei2/22/44");
-				var idata2 = idata1.split("https://da.me/");
+				var idata2 = idata1.split("https://distanta.biz/");
 				var vari = idata2[1].split("/");
 
 				var page = vari[0];
@@ -847,6 +839,15 @@
 			</div> -->
 
 
+	       <div class="row">
+
+				<div class="col s12  m4 l4 xl4"></div>
+				<div class="col s12  m4 l4 xl4">
+					<p><a class="waves-effect waves-light btn-large" href="https://hartaconcurs.online">
+							<script>document.write(language.hartaconcurs)</script></a></p>
+				</div>
+				<div class="col s12  m4 l4 xl4"></div>
+			</div>
 
 			<div class="row">
 

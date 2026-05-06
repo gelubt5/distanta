@@ -236,6 +236,7 @@ var lang = {
         'locationnotsupported':'Locatia nu este suportata.',
         'listaplanurisalvate':'Lista Planuri Salvate',
         'distribuieultimulplan':'Distribuie Ultimul Plan',
+        'hartaconcurs':'Harta Concurs',
     },
     "en":
     {
@@ -474,5 +475,6 @@ var lang = {
         'locationnotsupported':'Location not supported',
          'listaplanurisalvate':'List of Saved Plans',
         'distribuieultimulplan':'Share Last Plan',
+         'hartaconcurs':'Contests on Map',
     },
 };

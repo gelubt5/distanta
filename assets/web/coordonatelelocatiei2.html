@@ -44,15 +44,7 @@
         //   location.reload();alert();
         //   return false;
         // });
-        var that = new XMLHttpRequest();
-        that.open('GET', 'http://google.com', false);
-        try {
-            that.send();
-        } catch (exception) {
-            if (exception.name == 'NetworkError') {
-                alert("Nu esti conectat la internet!!!");
-            }
-        }
+       
       
 
      function playbeep() {
@@ -201,7 +193,7 @@
         }
 
         function sharelocation() {
-            var url="https://da.me/coordonatelelocatiei2/" + window["latadr"] + "/" + window["lngadr"];
+            var url="https://distanta.biz/coordonatelelocatiei2/" + window["latadr"] + "/" + window["lngadr"];
               shareTextNative(url);
         }  
     
@@ -399,10 +391,10 @@
                         console.log(data.responseJSON["error"]);
                         if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("time")) {
                             alert(language.nuestilogat);
-                            window.location.href = "_main_.html";
+                            window.location.href = "distanta.html";
                         } else if (data.responseJSON["error"] != null && data.responseJSON["error"].includes("csrf")) {
                             alert(language.nuestilogat);
-                            window.location.href = "_main_.html";
+                            window.location.href = "distanta.html";
                         } else {
                             alert(language.eroare);
                         }
@@ -681,7 +673,7 @@
 
                     <div class="col s12  m4 l4 xl4"></div>
                     <div class="col s12  m4 l4 xl4">
-                        <p><a class="waves-effect waves-light btn-large" href="_main_.html">
+                        <p><a class="waves-effect waves-light btn-large" href="distanta.html">
                                 <script>document.write(language.login)</script></a></p>
                     </div>
                     <div class="col s12  m4 l4 xl4"></div>
